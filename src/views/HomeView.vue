@@ -5,7 +5,8 @@ import EducationPage from '@/components/Page/EducationPage.vue'
 import SkillsPage from '@/components/Page/SkillsPage.vue'
 import ExperiencePage from '@/components/Page/ExperiencePage.vue'
 import ProjectPage from '@/components/Page/ProjectPage.vue'
-import ConnectPage from '@/components/Page/ConnectPage.vue'
+import ContactPage from '@/components/Page/ContactPage.vue'
+
 const skills = [
   'HTML',
   'CSS',
@@ -18,154 +19,163 @@ const skills = [
   'MongoDB',
 ]
 </script>
+
 <template>
-  <div class="all bg-gradient-to-br from-slate-950 via-blue-950 to-slate-900 overflow-hidden">
-  <!-- top bar -->
-  <div class="menu-bar fixed top-0 left-0 w-screen z-50 bg-zinc-900 py-2">
-    <Homepage />
-  </div>
-
-  <!-- body page -->
-  <div class="body-page w-screen grid grid-cols-2 justify-center mt-22 gap-10">
-    <div class="left w-full flex flex-col justify-center items-center mx-5">
-      <div class="left-contener mx-auto bg-black-300 rounded-3xl text-white px-5 py-4">
-        <div class="avable flex items-center gap-2">
-          <i class="fa-solid fa-circle text-red-500 text-[10px]"></i>
-          <h3 class="text-blue-600 text-[15px] font-bold">Avable now for work</h3>
-        </div>
-        <div class="descrip mt-2 flex flex-col gap-2">
-          <div class="des-head">
-            <h1 class="text-white text-2xl font-bold">Hello, I'm Kun Vinthien</h1>
-            <h1 class="text-white text-lg">Web Developer</h1>
-          </div>
-          <div class="des-body">
-            <p class="text-white text-lg">
-              I am a web developer with experience in building responsive and user-friendly
-              websites. I have a strong background in HTML, CSS, JavaScript, and Vue.js. I am
-              passionate about creating beautiful and functional web applications that provide a
-              great user experience.
-            </p>
-          </div>
-        </div>
-      </div>
-      <div class="btn flex mt-6 gap-2">
-        <button class="text-white px-4 py-2 rounded-3xl bg-blue-500 hover:bg-blue-600">
-          Contact Me
-        </button>
-        <button class="text-white px-4 py-2 rounded-3xl bg-red-400 hover:bg-red-600 ml-4">
-          <a href="https://github.com/robertoferreira/ecommerce-frontend" target="_blank">
-            View GitHub</a
-          >
-        </button>
-      </div>
-    </div>
-    <div class="right w-full flex flex-col justify-center items-center mx-5">
-      <div class="img">
-        <img
-          src="@/assets/IMG/image.png"
-          alt="avable"
-          class="w-[400px] h-[400px] object-cover rounded-full"
-        />
-      </div>
-    </div>
-  </div>
-  <!-- menu of skill -->
-  <div class="menu-skill w-screen flex justify-center items-center mt-15">
-    <div class="menu-skill-contener w-[80%] mx-auto bg-zinc-300 text-white px-5 py-2 rounded-3xl">
-      <!-- <div class="overflow-hidden w-full">
-  <div class="skill-slider flex gap-4 whitespace-nowrap">
-    <div class="skill-item bg-gray-800 px-4 py-2 rounded-3xl">
-      <h3 class="text-white text-lg font-bold">HTML</h3>
-    </div>
-    <div class="skill-item bg-gray-800 px-4 py-2 rounded-3xl">
-      <h3 class="text-white text-lg font-bold">CSS</h3>
-    </div>
-    <div class="skill-item bg-gray-800 px-4 py-2 rounded-3xl">
-      <h3 class="text-white text-lg font-bold">JavaScript</h3>
-    </div>
-    <div class="skill-item bg-gray-800 px-4 py-2 rounded-3xl">
-      <h3 class="text-white text-lg font-bold">Vue.js</h3>
-    </div>
-    <div class="skill-item bg-gray-800 px-4 py-2 rounded-3xl">
-      <h3 class="text-white text-lg font-bold">Git</h3>
+  <div
+    class="min-h-screen w-full flex flex-col bg-gradient-to-br from-slate-950 via-blue-950 to-slate-900 overflow-x-hidden"
+  >
+    <!-- NAVBAR -->
+    <div
+      class="menu-bar fixed top-0 left-0 w-full z-50 bg-zinc-900 py-2 shadow-md"
+    >
+      <Homepage class="w-full" />
     </div>
 
-    <div class="skill-item bg-gray-800 px-4 py-2 rounded-3xl">
-      <h3 class="text-white text-lg font-bold">HTML</h3>
-    </div>
-    <div class="skill-item bg-gray-800 px-4 py-2 rounded-3xl">
-      <h3 class="text-white text-lg font-bold">CSS</h3>
-    </div>
-    <div class="skill-item bg-gray-800 px-4 py-2 rounded-3xl">
-      <h3 class="text-white text-lg font-bold">JavaScript</h3>
-    </div>
-  </div>
-</div> -->
-      <div class="relative overflow-hidden py-4">
-        <div class="flex w-max animate-scroll gap-4">
-          <!-- First Set -->
-          <div
-            v-for="(skill, index) in skills"
-            :key="'first-' + index"
-            class="bg-gray-800 px-4 py-2 rounded-3xl flex-shrink-0"
-          >
-            <h3 class="text-white font-bold">
-              {{ skill }}
-            </h3>
-          </div>
+    <!-- BODY -->
+    <div class="pt-24 w-full flex flex-col">
 
-          <!-- Duplicate Set -->
-          <div
-            v-for="(skill, index) in skills"
-            :key="'second-' + index"
-            class="bg-gray-800 px-4 py-2 rounded-3xl flex-shrink-0"
-          >
-            <h3 class="text-white font-bold">
-              {{ skill }}
-            </h3>
+      <!-- HERO SECTION -->
+      <div
+        class="body-page w-full flex flex-col-reverse md:grid md:grid-cols-2 justify-center gap-6 md:gap-10 px-4 md:px-8"
+      >
+        <!-- LEFT -->
+        <div class="left w-full flex flex-col justify-center items-center md:items-start">
+          <div class="w-full max-w-lg rounded-3xl text-white px-5 py-4">
+
+            <!-- Badge -->
+            <div class="flex items-center gap-2">
+              <i class="fa-solid fa-circle text-red-500 text-[10px]"></i>
+              <h3 class="text-blue-600 text-[15px] font-bold">
+                Available now for work
+              </h3>
+            </div>
+
+            <!-- Text -->
+            <div class="mt-2 flex flex-col gap-2">
+
+              <div class="text-center md:text-left">
+                <h1 class="text-white text-2xl sm:text-3xl lg:text-4xl font-bold">
+                  Hello, I'm Kun Vinthien
+                </h1>
+                <h1 class="text-white text-lg sm:text-xl">Web Developer</h1>
+              </div>
+
+              <p
+                class="text-white text-sm sm:text-base lg:text-lg leading-relaxed text-center md:text-left"
+              >
+                I am a web developer with experience in building responsive and user-friendly
+                websites. I have a strong background in HTML, CSS, JavaScript, and Vue.js.
+                I am passionate about creating beautiful and functional web applications.
+              </p>
+
+              <!-- Buttons -->
+              <div class="flex justify-center md:justify-start mt-6 gap-3 flex-wrap">
+              <a href="#contact " class="px-5 py-2 rounded-3xl bg-blue-500 text-white hover:bg-blue-600 transition relative z-10">
+                  Contact Me
+                </a>
+
+                <a
+  href="https://github.com/kunvinthien-cyber?tab=overview&from=2026-04-01&to=2026-04-30"
+  target="_blank"
+  class="relative z-50 px-5 py-2 rounded-3xl bg-red-500 text-white"
+>
+  GitHub
+</a>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        <!-- RIGHT -->
+        <div class="right w-full flex justify-center items-center">
+          <img
+            src="@/assets/IMG/image.png"
+            class="w-48 h-48 sm:w-64 sm:h-64 md:w-80 md:h-80 lg:w-[400px] lg:h-[400px] object-cover rounded-full shadow-lg"
+          />
+        </div>
+      </div>
+
+      <!-- SKILLS SCROLL -->
+      <div class="w-full flex justify-center mt-12 px-4">
+        <div
+          class="w-full max-w-6xl bg-gradient-to-r from-gray-900 via-black to-gray-900 rounded-3xl p-6 shadow-2xl border border-gray-800"
+        >
+          <div class="relative overflow-hidden">
+            <div class="flex w-max animate-scroll gap-4">
+
+              <div
+                v-for="(skill, index) in skills"
+                :key="'a' + index"
+                class="px-5 py-3 rounded-2xl bg-gray-800/80 border border-gray-700 hover:bg-blue-600 transition flex-shrink-0"
+              >
+                <h3 class="text-white font-semibold">
+                  {{ skill }}
+                </h3>
+              </div>
+
+              <div
+                v-for="(skill, index) in skills"
+                :key="'b' + index"
+                class="px-5 py-3 rounded-2xl bg-gray-800/80 border border-gray-700 hover:bg-blue-600 transition flex-shrink-0"
+              >
+                <h3 class="text-white font-semibold">
+                  {{ skill }}
+                </h3>
+              </div>
+
+            </div>
           </div>
         </div>
       </div>
+
+      <!-- SECTIONS -->
+      <section class="w-full py-16" id="about">
+        <AboutPage />
+      </section>
+
+      <section class="w-full py-16" id="education">
+        <EducationPage />
+      </section>
+
+      <section class="w-full py-16" id="skills">
+        <SkillsPage />
+      </section>
+
+      <section class="w-full py-16" id="experience">
+        <ExperiencePage />
+      </section>
+
+      <section class="w-full py-16" id="projects">
+        <ProjectPage />
+      </section>
+
+      <section class="w-full py-16" id="contact">
+        <ContactPage />
+      </section>
+
     </div>
-  </div>
-  <!-- About Me -->
-  <section class="container mx-auto px-4 py-16" id="about">
-    <AboutPage />
-  </section>
-  <!-- Education -->
-  <section class="container mx-auto px-4 py-5" id="education">
-    <EducationPage />
-  </section>
-  <!-- Skills -->
-  <section class="container mx-auto px-4 py-5" id="skills">
-    <SkillsPage />
-  </section>
-  <!-- Experience -->
-  <section class="container mx-auto px-4 py-5" id="experience">
-    <ExperiencePage />
-  </section>
-  <!-- Project -->
-  <section class="container mx-auto px-4 py-5" id="project">
-    <ProjectPage />
-  </section>
-  <!-- Connect -->
-  <section class="container mx-auto px-4 py-5" id="connect">
-    <ConnectPage />
-  </section>
   </div>
 </template>
+
 <style scoped>
 .animate-scroll {
-  animation: scroll 20s linear infinite;
+  display: flex;
+  width: max-content;
+  animation: scroll 18s linear infinite;
+  will-change: transform;
 }
 
 @keyframes scroll {
   from {
     transform: translateX(0);
   }
-
   to {
     transform: translateX(-50%);
   }
+}
+
+html {
+  scroll-behavior: smooth;
 }
 </style>
