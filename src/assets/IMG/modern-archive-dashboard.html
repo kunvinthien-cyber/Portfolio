@@ -1,0 +1,1306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Modern Archive — Admin Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f7f6f3;
+    --sidebar-bg: #111110;
+    --sidebar-text: #e8e6e0;
+    --sidebar-muted: #888;
+    --sidebar-active: #fff;
+    --card-bg: #ffffff;
+    --border: #e8e6e0;
+    --text: #1a1a18;
+    --muted: #888880;
+    --accent: #c84b31;
+    --accent-soft: #fdf0ed;
+    --green: #2d6a4f;
+    --green-soft: #eaf4ef;
+    --orange: #c87533;
+    --orange-soft: #fdf4ea;
+    --blue: #2563a8;
+    --blue-soft: #eaf1fb;
+    --shadow: 0 1px 3px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.04);
+    --radius: 12px;
+    --font: 'DM Sans', sans-serif;
+    --mono: 'DM Mono', monospace;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: var(--font);
+    background: var(--bg);
+    color: var(--text);
+    display: flex;
+    min-height: 100vh;
+    font-size: 14px;
+  }
+
+  /* SIDEBAR */
+  .sidebar {
+    width: 220px;
+    background: var(--sidebar-bg);
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    height: 100vh;
+    z-index: 100;
+    padding: 0 0 24px;
+  }
+  .sidebar-logo {
+    padding: 28px 24px 24px;
+    border-bottom: 1px solid #222;
+  }
+  .sidebar-logo span {
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    color: #fff;
+    letter-spacing: 0.02em;
+    line-height: 1.2;
+    display: block;
+  }
+  .sidebar-logo small {
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    color: var(--sidebar-muted);
+    text-transform: uppercase;
+    font-family: var(--mono);
+  }
+  .sidebar-nav {
+    flex: 1;
+    padding: 16px 12px;
+  }
+  .nav-label {
+    font-size: 9px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #555;
+    font-family: var(--mono);
+    padding: 12px 12px 6px;
+  }
+  .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    color: var(--sidebar-muted);
+    font-size: 13.5px;
+    font-weight: 400;
+    transition: all 0.15s;
+    margin-bottom: 2px;
+    text-decoration: none;
+  }
+  .nav-item svg { width: 16px; height: 16px; flex-shrink: 0; }
+  .nav-item:hover { background: #1e1e1c; color: #ccc; }
+  .nav-item.active { background: #2a2a28; color: #fff; font-weight: 500; }
+  .nav-item .badge {
+    margin-left: auto;
+    background: var(--accent);
+    color: #fff;
+    font-size: 10px;
+    padding: 2px 6px;
+    border-radius: 20px;
+    font-family: var(--mono);
+  }
+  .sidebar-footer {
+    padding: 16px 12px 0;
+    border-top: 1px solid #1e1e1c;
+    margin-top: 8px;
+  }
+  .user-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    border-radius: 8px;
+    margin-bottom: 8px;
+  }
+  .user-avatar {
+    width: 34px; height: 34px;
+    background: #333;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 600; color: #ccc;
+    flex-shrink: 0;
+  }
+  .user-name { font-size: 13px; color: #ccc; font-weight: 500; }
+  .user-role { font-size: 11px; color: #555; }
+  .logout-btn {
+    display: flex; align-items: center; gap: 8px;
+    padding: 8px 12px; color: var(--accent);
+    font-size: 13px; cursor: pointer; border-radius: 8px;
+    transition: background 0.15s;
+    background: none; border: none; font-family: var(--font);
+  }
+  .logout-btn:hover { background: #1e1e1c; }
+
+  /* MAIN */
+  .main {
+    margin-left: 220px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
+
+  /* TOPBAR */
+  .topbar {
+    background: #fff;
+    border-bottom: 1px solid var(--border);
+    padding: 0 32px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    position: sticky; top: 0; z-index: 50;
+  }
+  .topbar-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    color: var(--text);
+    flex: 1;
+  }
+  .search-bar {
+    display: flex;
+    align-items: center;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 7px 14px;
+    gap: 8px;
+    width: 220px;
+  }
+  .search-bar input {
+    border: none; background: none; outline: none;
+    font-family: var(--font); font-size: 13px; color: var(--text);
+    width: 100%;
+  }
+  .search-bar input::placeholder { color: var(--muted); }
+  .search-bar svg { color: var(--muted); width: 14px; height: 14px; flex-shrink: 0; }
+  .topbar-actions { display: flex; align-items: center; gap: 10px; }
+  .icon-btn {
+    width: 36px; height: 36px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: #fff;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    position: relative;
+    transition: background 0.15s;
+  }
+  .icon-btn:hover { background: var(--bg); }
+  .icon-btn svg { width: 16px; height: 16px; color: var(--muted); }
+  .notif-dot {
+    position: absolute; top: 6px; right: 6px;
+    width: 7px; height: 7px; background: var(--accent);
+    border-radius: 50%; border: 1.5px solid #fff;
+  }
+
+  /* CONTENT */
+  .content { padding: 28px 32px; flex: 1; }
+
+  /* TABS */
+  .page-tabs {
+    display: flex;
+    gap: 4px;
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 4px;
+    width: fit-content;
+    margin-bottom: 24px;
+  }
+  .tab-btn {
+    padding: 7px 18px;
+    border-radius: 7px;
+    font-size: 13px;
+    font-weight: 500;
+    border: none;
+    cursor: pointer;
+    background: none;
+    color: var(--muted);
+    font-family: var(--font);
+    transition: all 0.15s;
+  }
+  .tab-btn.active { background: var(--sidebar-bg); color: #fff; }
+
+  /* STAT CARDS */
+  .stat-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+  .stat-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px;
+    box-shadow: var(--shadow);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .stat-card:hover { transform: translateY(-2px); box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
+  .stat-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+  .stat-icon {
+    width: 38px; height: 38px; border-radius: 9px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .stat-icon svg { width: 18px; height: 18px; }
+  .stat-badge {
+    font-size: 11px; font-weight: 600; font-family: var(--mono);
+    padding: 3px 8px; border-radius: 20px;
+  }
+  .badge-green { background: var(--green-soft); color: var(--green); }
+  .badge-red { background: var(--accent-soft); color: var(--accent); }
+  .badge-orange { background: var(--orange-soft); color: var(--orange); }
+  .badge-blue { background: var(--blue-soft); color: var(--blue); }
+  .stat-label { font-size: 11px; color: var(--muted); letter-spacing: 0.06em; text-transform: uppercase; font-family: var(--mono); margin-bottom: 6px; }
+  .stat-value { font-size: 26px; font-weight: 600; letter-spacing: -0.02em; }
+  .stat-value.urgent { color: var(--accent); }
+
+  /* MAIN GRID */
+  .dashboard-grid {
+    display: grid;
+    grid-template-columns: 1fr 320px;
+    gap: 20px;
+    margin-bottom: 24px;
+  }
+
+  /* CHART CARD */
+  .chart-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 24px;
+    box-shadow: var(--shadow);
+  }
+  .chart-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; }
+  .chart-title { font-size: 16px; font-weight: 600; }
+  .chart-tabs { display: flex; gap: 2px; background: var(--bg); border-radius: 8px; padding: 3px; }
+  .chart-tab {
+    padding: 5px 12px; border-radius: 6px; font-size: 12px; font-weight: 500;
+    cursor: pointer; border: none; background: none; font-family: var(--font);
+    color: var(--muted); transition: all 0.15s;
+  }
+  .chart-tab.active { background: #fff; color: var(--text); box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+  .chart-area { height: 200px; display: flex; align-items: flex-end; gap: 10px; padding-top: 16px; }
+  .bar-group { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 6px; }
+  .bar {
+    width: 100%; border-radius: 6px 6px 0 0;
+    background: #e8e6e0;
+    transition: height 0.6s cubic-bezier(.34,1.56,.64,1), background 0.2s;
+    cursor: pointer; position: relative;
+  }
+  .bar:hover { background: var(--sidebar-bg); }
+  .bar.highlight { background: var(--sidebar-bg); }
+  .bar-tooltip {
+    position: absolute; bottom: calc(100% + 6px); left: 50%;
+    transform: translateX(-50%);
+    background: var(--sidebar-bg); color: #fff;
+    font-size: 11px; font-family: var(--mono);
+    padding: 4px 8px; border-radius: 5px; white-space: nowrap;
+    opacity: 0; pointer-events: none; transition: opacity 0.15s;
+  }
+  .bar:hover .bar-tooltip { opacity: 1; }
+  .bar-label { font-size: 10px; color: var(--muted); font-family: var(--mono); }
+
+  /* ORDERS CARD */
+  .orders-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 24px;
+    box-shadow: var(--shadow);
+    display: flex;
+    flex-direction: column;
+  }
+  .orders-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+  .orders-title { font-size: 16px; font-weight: 600; }
+  .view-all { font-size: 12px; color: var(--muted); cursor: pointer; text-decoration: none; font-weight: 500; transition: color 0.15s; }
+  .view-all:hover { color: var(--text); }
+  .order-item {
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    transition: background 0.1s;
+  }
+  .order-item:last-of-type { border-bottom: none; }
+  .order-id { font-size: 12px; font-weight: 600; font-family: var(--mono); color: var(--text); }
+  .order-time { font-size: 11px; color: var(--muted); margin-top: 2px; }
+  .order-status {
+    font-size: 10px; font-weight: 600; letter-spacing: 0.05em;
+    padding: 3px 8px; border-radius: 20px; text-transform: uppercase;
+    font-family: var(--mono);
+  }
+  .status-processing { background: var(--blue-soft); color: var(--blue); }
+  .status-completed { background: var(--green-soft); color: var(--green); }
+  .status-pending { background: var(--orange-soft); color: var(--orange); }
+  .order-amount { font-size: 13px; font-weight: 600; font-family: var(--mono); color: var(--text); }
+  .order-footer {
+    margin-top: 14px;
+    background: var(--bg);
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-size: 12px;
+    color: var(--muted);
+    font-style: italic;
+  }
+
+  /* INSERT PANEL */
+  .insert-panel {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 28px 32px;
+    box-shadow: var(--shadow);
+    margin-bottom: 24px;
+  }
+  .insert-panel h2 {
+    font-size: 16px; font-weight: 600; margin-bottom: 4px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .insert-panel p { font-size: 13px; color: var(--muted); margin-bottom: 24px; }
+  .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .form-grid.three { grid-template-columns: 1fr 1fr 1fr; }
+  .field { display: flex; flex-direction: column; gap: 6px; }
+  .field.full { grid-column: 1 / -1; }
+  label { font-size: 12px; font-weight: 500; color: var(--muted); letter-spacing: 0.04em; text-transform: uppercase; font-family: var(--mono); }
+  input, select, textarea {
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 9px 13px;
+    font-family: var(--font);
+    font-size: 13.5px;
+    color: var(--text);
+    background: #fff;
+    outline: none;
+    transition: border-color 0.15s, box-shadow 0.15s;
+    appearance: none;
+  }
+  input:focus, select:focus, textarea:focus {
+    border-color: var(--text);
+    box-shadow: 0 0 0 3px rgba(26,26,24,0.06);
+  }
+  textarea { resize: vertical; min-height: 80px; }
+  select { cursor: pointer; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23888880' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 12px center; padding-right: 32px; }
+  .form-actions { display: flex; gap: 10px; margin-top: 20px; align-items: center; }
+  .btn-primary {
+    background: var(--sidebar-bg);
+    color: #fff;
+    border: none;
+    padding: 10px 24px;
+    border-radius: 8px;
+    font-size: 13.5px;
+    font-weight: 500;
+    cursor: pointer;
+    font-family: var(--font);
+    transition: opacity 0.2s, transform 0.1s;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .btn-primary:hover { opacity: 0.85; }
+  .btn-primary:active { transform: scale(0.98); }
+  .btn-secondary {
+    background: none;
+    color: var(--muted);
+    border: 1px solid var(--border);
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 13.5px;
+    font-weight: 500;
+    cursor: pointer;
+    font-family: var(--font);
+    transition: all 0.15s;
+  }
+  .btn-secondary:hover { border-color: #aaa; color: var(--text); }
+  .api-url {
+    margin-top: 16px;
+    background: var(--sidebar-bg);
+    border-radius: 8px;
+    padding: 12px 16px;
+    font-family: var(--mono);
+    font-size: 12px;
+    color: #aaa;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+  .api-url span.method {
+    background: #2d6a4f22;
+    color: #4caf8e;
+    padding: 2px 7px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    flex-shrink: 0;
+  }
+  .api-url .endpoint { color: #e8e6e0; flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .copy-btn {
+    background: #222; border: none; color: #666; cursor: pointer;
+    font-size: 11px; font-family: var(--mono); padding: 3px 8px;
+    border-radius: 4px; transition: all 0.15s; flex-shrink: 0;
+  }
+  .copy-btn:hover { color: #fff; background: #333; }
+
+  /* TOAST */
+  .toast {
+    position: fixed; bottom: 28px; right: 28px;
+    background: var(--sidebar-bg); color: #fff;
+    padding: 12px 20px;
+    border-radius: 10px;
+    font-size: 13.5px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+    transform: translateY(80px);
+    opacity: 0;
+    transition: all 0.3s cubic-bezier(.34,1.56,.64,1);
+    z-index: 999;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .toast.show { transform: translateY(0); opacity: 1; }
+  .toast-icon { width: 20px; height: 20px; background: var(--green); border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .toast.error .toast-icon { background: var(--accent); }
+
+  /* SECTION HEADER */
+  .section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+  .section-title { font-size: 15px; font-weight: 600; }
+  .section-sub { font-size: 12px; color: var(--muted); }
+
+  /* RESPONSE PREVIEW */
+  .response-box {
+    background: #0d0d0c;
+    border-radius: 10px;
+    padding: 16px 20px;
+    font-family: var(--mono);
+    font-size: 12px;
+    color: #8bc34a;
+    min-height: 60px;
+    white-space: pre-wrap;
+    word-break: break-all;
+    margin-top: 16px;
+    display: none;
+    position: relative;
+  }
+  .response-box.show { display: block; }
+  .response-label {
+    font-size: 10px; color: #555; letter-spacing: 0.1em;
+    text-transform: uppercase; margin-bottom: 8px; font-family: var(--mono);
+  }
+
+  /* SPINNER */
+  .spinner {
+    width: 16px; height: 16px;
+    border: 2px solid rgba(255,255,255,0.3);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+    display: none;
+  }
+  .btn-primary.loading .spinner { display: block; }
+  .btn-primary.loading .btn-text { display: none; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* FOOTER */
+  .footer {
+    background: #fff;
+    border-top: 1px solid var(--border);
+    padding: 28px 32px;
+  }
+  .footer-inner {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 32px;
+    max-width: 100%;
+  }
+  .footer-brand h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 16px;
+    margin-bottom: 8px;
+  }
+  .footer-brand p { font-size: 12.5px; color: var(--muted); line-height: 1.6; }
+  .footer-col h4 {
+    font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--muted); font-family: var(--mono);
+    margin-bottom: 12px; font-weight: 500;
+  }
+  .footer-col a {
+    display: block; font-size: 13px; color: var(--text);
+    text-decoration: none; margin-bottom: 8px; transition: color 0.15s;
+  }
+  .footer-col a:hover { color: var(--muted); }
+  .footer-bottom {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-top: 24px; padding-top: 20px;
+    border-top: 1px solid var(--border);
+    font-size: 11.5px; color: var(--muted); font-family: var(--mono);
+  }
+
+  /* Animations */
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+  .stat-card, .chart-card, .orders-card, .insert-panel {
+    animation: fadeIn 0.4s ease both;
+  }
+  .stat-card:nth-child(1) { animation-delay: 0.05s; }
+  .stat-card:nth-child(2) { animation-delay: 0.1s; }
+  .stat-card:nth-child(3) { animation-delay: 0.15s; }
+  .stat-card:nth-child(4) { animation-delay: 0.2s; }
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <span>MODERN<br>ARCHIVE</span>
+    <small>Admin Panel</small>
+  </div>
+  <nav class="sidebar-nav">
+    <div class="nav-label">Navigation</div>
+    <a href="#" class="nav-item active" onclick="switchPage('dashboard',this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+      Dashboard
+    </a>
+    <a href="#" class="nav-item" onclick="switchPage('products',this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20 7H4a1 1 0 00-1 1v12a1 1 0 001 1h16a1 1 0 001-1V8a1 1 0 00-1-1z"/><path d="M16 7V5a4 4 0 00-8 0v2"/></svg>
+      Products
+      <span class="badge">12</span>
+    </a>
+    <a href="#" class="nav-item" onclick="switchPage('orders',this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+      Orders
+    </a>
+    <a href="#" class="nav-item" onclick="switchPage('customers',this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+      Customers
+    </a>
+    <a href="#" class="nav-item" onclick="switchPage('coupons',this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20.59 13.41l-7.17 7.17a2 2 0 01-2.83 0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
+      Coupons
+    </a>
+    <a href="#" class="nav-item" onclick="switchPage('analytics',this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+      Analytics
+    </a>
+  </nav>
+  <div class="sidebar-footer">
+    <div class="user-info">
+      <div class="user-avatar">JV</div>
+      <div>
+        <div class="user-name">Julian Vane</div>
+        <div class="user-role">Chief Admin</div>
+      </div>
+    </div>
+    <button class="logout-btn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="15" height="15"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+      Logout
+    </button>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<div class="main">
+  <!-- TOPBAR -->
+  <header class="topbar">
+    <div class="topbar-title" id="pageTitle">Dashboard Overview</div>
+    <div class="search-bar">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input type="text" placeholder="Search data, reports…">
+    </div>
+    <div class="topbar-actions">
+      <div class="icon-btn">
+        <div class="notif-dot"></div>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
+      </div>
+      <div class="icon-btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+      </div>
+    </div>
+  </header>
+
+  <!-- CONTENT -->
+  <div class="content">
+
+    <!-- DASHBOARD PAGE -->
+    <div id="page-dashboard">
+      <!-- Stat Cards -->
+      <div class="stat-grid">
+        <div class="stat-card">
+          <div class="stat-header">
+            <div class="stat-icon" style="background:#f0f0ed;">
+              <svg viewBox="0 0 24 24" fill="none" stroke="#555" stroke-width="1.8"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+            </div>
+            <span class="stat-badge badge-green">+12%</span>
+          </div>
+          <div class="stat-label">Total Revenue</div>
+          <div class="stat-value" id="statRevenue">$12,450.00</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-header">
+            <div class="stat-icon" style="background:#f0f0ed;">
+              <svg viewBox="0 0 24 24" fill="none" stroke="#555" stroke-width="1.8"><path d="M20 7H4a1 1 0 00-1 1v12a1 1 0 001 1h16a1 1 0 001-1V8a1 1 0 00-1-1z"/><path d="M16 7V5a4 4 0 00-8 0v2"/></svg>
+            </div>
+            <span class="stat-badge badge-green">+8%</span>
+          </div>
+          <div class="stat-label">Total Orders</div>
+          <div class="stat-value" id="statOrders">320</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-header">
+            <div class="stat-icon" style="background:var(--accent-soft);">
+              <svg viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.8"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+            </div>
+            <span class="stat-badge badge-red">Urgent</span>
+          </div>
+          <div class="stat-label">Out of Stock</div>
+          <div class="stat-value urgent" id="statStock">5 items</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-header">
+            <div class="stat-icon" style="background:#f0f0ed;">
+              <svg viewBox="0 0 24 24" fill="none" stroke="#555" stroke-width="1.8"><path d="M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/></svg>
+            </div>
+            <span class="stat-badge badge-blue">+5%</span>
+          </div>
+          <div class="stat-label">New Customers</div>
+          <div class="stat-value" id="statCustomers">45</div>
+        </div>
+      </div>
+
+      <!-- Chart + Orders -->
+      <div class="dashboard-grid">
+        <div class="chart-card">
+          <div class="chart-header">
+            <div class="chart-title">Sales Analytics</div>
+            <div class="chart-tabs">
+              <button class="chart-tab active" onclick="setChartTab(this,'weekly')">Weekly</button>
+              <button class="chart-tab" onclick="setChartTab(this,'monthly')">Monthly</button>
+              <button class="chart-tab" onclick="setChartTab(this,'yearly')">Yearly</button>
+            </div>
+          </div>
+          <div class="chart-area" id="chartArea"></div>
+        </div>
+
+        <div class="orders-card">
+          <div class="orders-header">
+            <div class="orders-title">Recent Orders</div>
+            <a href="#" class="view-all" onclick="switchPage('orders', document.querySelector('.nav-item:nth-child(3)'))">View All</a>
+          </div>
+          <div id="ordersList"></div>
+          <div class="order-footer" id="orderFooter">Tracking 142 total orders this week</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- INSERT DATA PAGE: Products -->
+    <div id="page-products" style="display:none;">
+      <div class="insert-panel">
+        <h2>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="18" height="18"><path d="M20 7H4a1 1 0 00-1 1v12a1 1 0 001 1h16a1 1 0 001-1V8a1 1 0 00-1-1z"/><path d="M16 7V5a4 4 0 00-8 0v2"/></svg>
+          Add New Product
+        </h2>
+        <p>Fill in the form below to insert a product via the Laravel API endpoint.</p>
+        <div class="api-url">
+          <span class="method">POST</span>
+          <span class="endpoint">/api/v1/products</span>
+          <button class="copy-btn" onclick="copyText('/api/v1/products',this)">Copy</button>
+        </div>
+        <br>
+        <div class="form-grid">
+          <div class="field">
+            <label>Product Name</label>
+            <input type="text" id="p-name" placeholder="e.g. Leather Wallet">
+          </div>
+          <div class="field">
+            <label>SKU</label>
+            <input type="text" id="p-sku" placeholder="e.g. LW-001">
+          </div>
+          <div class="field">
+            <label>Price ($)</label>
+            <input type="number" id="p-price" placeholder="0.00" step="0.01">
+          </div>
+          <div class="field">
+            <label>Stock Quantity</label>
+            <input type="number" id="p-stock" placeholder="0">
+          </div>
+          <div class="field">
+            <label>Category</label>
+            <select id="p-category">
+              <option value="">Select category</option>
+              <option>Accessories</option>
+              <option>Clothing</option>
+              <option>Electronics</option>
+              <option>Home & Garden</option>
+              <option>Sports</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Status</label>
+            <select id="p-status">
+              <option value="active">Active</option>
+              <option value="draft">Draft</option>
+              <option value="out_of_stock">Out of Stock</option>
+            </select>
+          </div>
+          <div class="field full">
+            <label>Description</label>
+            <textarea id="p-desc" placeholder="Short product description…"></textarea>
+          </div>
+        </div>
+        <div class="form-actions">
+          <button class="btn-primary" id="btnProduct" onclick="submitForm('product')">
+            <div class="spinner"></div>
+            <span class="btn-text">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              Add Product
+            </span>
+          </button>
+          <button class="btn-secondary" onclick="clearForm(['p-name','p-sku','p-price','p-stock','p-desc'])">Clear</button>
+        </div>
+        <div class="response-box" id="res-product">
+          <div class="response-label">API Response</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- INSERT DATA PAGE: Orders -->
+    <div id="page-orders" style="display:none;">
+      <div class="insert-panel">
+        <h2>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="18" height="18"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/></svg>
+          Create Order
+        </h2>
+        <p>Submit a new order record to the database via the API.</p>
+        <div class="api-url">
+          <span class="method">POST</span>
+          <span class="endpoint">/api/v1/orders</span>
+          <button class="copy-btn" onclick="copyText('/api/v1/orders',this)">Copy</button>
+        </div>
+        <br>
+        <div class="form-grid">
+          <div class="field">
+            <label>Customer Name</label>
+            <input type="text" id="o-customer" placeholder="e.g. Jane Doe">
+          </div>
+          <div class="field">
+            <label>Customer Email</label>
+            <input type="email" id="o-email" placeholder="jane@example.com">
+          </div>
+          <div class="field">
+            <label>Amount ($)</label>
+            <input type="number" id="o-amount" placeholder="0.00" step="0.01">
+          </div>
+          <div class="field">
+            <label>Status</label>
+            <select id="o-status">
+              <option value="pending">Pending</option>
+              <option value="processing">Processing</option>
+              <option value="completed">Completed</option>
+              <option value="cancelled">Cancelled</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Payment Method</label>
+            <select id="o-payment">
+              <option value="card">Credit Card</option>
+              <option value="paypal">PayPal</option>
+              <option value="bank">Bank Transfer</option>
+              <option value="cod">Cash on Delivery</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Shipping Address</label>
+            <input type="text" id="o-address" placeholder="123 Main St, City">
+          </div>
+          <div class="field full">
+            <label>Order Notes</label>
+            <textarea id="o-notes" placeholder="Optional notes…" style="min-height:60px;"></textarea>
+          </div>
+        </div>
+        <div class="form-actions">
+          <button class="btn-primary" id="btnOrder" onclick="submitForm('order')">
+            <div class="spinner"></div>
+            <span class="btn-text">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              Create Order
+            </span>
+          </button>
+          <button class="btn-secondary" onclick="clearForm(['o-customer','o-email','o-amount','o-address','o-notes'])">Clear</button>
+        </div>
+        <div class="response-box" id="res-order">
+          <div class="response-label">API Response</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- INSERT DATA PAGE: Customers -->
+    <div id="page-customers" style="display:none;">
+      <div class="insert-panel">
+        <h2>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="18" height="18"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+          Register Customer
+        </h2>
+        <p>Add a new customer record to the system.</p>
+        <div class="api-url">
+          <span class="method">POST</span>
+          <span class="endpoint">/api/v1/customers</span>
+          <button class="copy-btn" onclick="copyText('/api/v1/customers',this)">Copy</button>
+        </div>
+        <br>
+        <div class="form-grid">
+          <div class="field">
+            <label>First Name</label>
+            <input type="text" id="c-first" placeholder="Jane">
+          </div>
+          <div class="field">
+            <label>Last Name</label>
+            <input type="text" id="c-last" placeholder="Doe">
+          </div>
+          <div class="field">
+            <label>Email</label>
+            <input type="email" id="c-email" placeholder="jane@example.com">
+          </div>
+          <div class="field">
+            <label>Phone</label>
+            <input type="tel" id="c-phone" placeholder="+1 555 000 0000">
+          </div>
+          <div class="field">
+            <label>Customer Group</label>
+            <select id="c-group">
+              <option value="standard">Standard</option>
+              <option value="vip">VIP</option>
+              <option value="wholesale">Wholesale</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Country</label>
+            <input type="text" id="c-country" placeholder="e.g. United States">
+          </div>
+          <div class="field full">
+            <label>Address</label>
+            <input type="text" id="c-address" placeholder="Full address">
+          </div>
+        </div>
+        <div class="form-actions">
+          <button class="btn-primary" id="btnCustomer" onclick="submitForm('customer')">
+            <div class="spinner"></div>
+            <span class="btn-text">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              Register Customer
+            </span>
+          </button>
+          <button class="btn-secondary" onclick="clearForm(['c-first','c-last','c-email','c-phone','c-country','c-address'])">Clear</button>
+        </div>
+        <div class="response-box" id="res-customer">
+          <div class="response-label">API Response</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- COUPONS PAGE -->
+    <div id="page-coupons" style="display:none;">
+      <div class="insert-panel">
+        <h2>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="18" height="18"><path d="M20.59 13.41l-7.17 7.17a2 2 0 01-2.83 0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
+          Create Coupon
+        </h2>
+        <p>Generate a new discount coupon code for customers.</p>
+        <div class="api-url">
+          <span class="method">POST</span>
+          <span class="endpoint">/api/v1/coupons</span>
+          <button class="copy-btn" onclick="copyText('/api/v1/coupons',this)">Copy</button>
+        </div>
+        <br>
+        <div class="form-grid three">
+          <div class="field">
+            <label>Coupon Code</label>
+            <input type="text" id="cp-code" placeholder="e.g. SAVE20">
+          </div>
+          <div class="field">
+            <label>Discount Type</label>
+            <select id="cp-type">
+              <option value="percent">Percentage (%)</option>
+              <option value="fixed">Fixed Amount ($)</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Discount Value</label>
+            <input type="number" id="cp-value" placeholder="e.g. 20">
+          </div>
+          <div class="field">
+            <label>Minimum Order ($)</label>
+            <input type="number" id="cp-min" placeholder="0.00" step="0.01">
+          </div>
+          <div class="field">
+            <label>Usage Limit</label>
+            <input type="number" id="cp-limit" placeholder="e.g. 100">
+          </div>
+          <div class="field">
+            <label>Expires At</label>
+            <input type="date" id="cp-expiry">
+          </div>
+        </div>
+        <div class="form-actions">
+          <button class="btn-primary" id="btnCoupon" onclick="submitForm('coupon')">
+            <div class="spinner"></div>
+            <span class="btn-text">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              Create Coupon
+            </span>
+          </button>
+          <button class="btn-secondary" onclick="clearForm(['cp-code','cp-value','cp-min','cp-limit'])">Clear</button>
+        </div>
+        <div class="response-box" id="res-coupon">
+          <div class="response-label">API Response</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ANALYTICS PAGE -->
+    <div id="page-analytics" style="display:none;">
+      <div class="insert-panel">
+        <h2>Analytics</h2>
+        <p>Analytics data is read-only and generated from your existing orders, products, and customer records.</p>
+        <div class="api-url">
+          <span class="method" style="color:#e8b14c;background:#3a2e0a22;">GET</span>
+          <span class="endpoint">/api/v1/analytics/summary</span>
+          <button class="copy-btn" onclick="copyText('/api/v1/analytics/summary',this)">Copy</button>
+        </div>
+        <div class="form-actions" style="margin-top:20px;">
+          <button class="btn-primary" id="btnAnalytics" onclick="fetchAnalytics()">
+            <div class="spinner"></div>
+            <span class="btn-text">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 11-2.12-9.36L23 10"/></svg>
+              Fetch Analytics
+            </span>
+          </button>
+        </div>
+        <div class="response-box" id="res-analytics">
+          <div class="response-label">API Response</div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- end content -->
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <h3>MODERN ARCHIVE</h3>
+        <p>Advanced administrative control for modern digital commerce. Manage inventory, analyze growth, and scale with precision.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Resources</h4>
+        <a href="#">Admin Docs</a>
+        <a href="#">API Access</a>
+        <a href="#">System Status</a>
+      </div>
+      <div class="footer-col">
+        <h4>Support</h4>
+        <a href="#">Contact IT</a>
+        <a href="#">Security Policy</a>
+        <a href="#">Changelog</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2024 MODERN ARCHIVE. ALL RIGHTS RESERVED.</span>
+      <div style="display:flex;gap:12px;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="16" height="16"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="16" height="16"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="16" height="16"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+      </div>
+    </div>
+  </footer>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast">
+  <div class="toast-icon">
+    <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" width="11" height="11"><polyline points="20 6 9 17 4 12"/></svg>
+  </div>
+  <span id="toastMsg">Action completed</span>
+</div>
+
+<script>
+// =====================
+// CHART DATA
+// =====================
+const chartData = {
+  weekly: [
+    {label:'MON',val:42,tip:'$4,200'},
+    {label:'TUE',val:35,tip:'$3,500'},
+    {label:'WED',val:58,tip:'$5,800'},
+    {label:'THU',val:30,tip:'$3,000'},
+    {label:'FRI',val:75,tip:'$7,500'},
+    {label:'SAT',val:50,tip:'$5,000'},
+    {label:'SUN',val:68,tip:'$6,800'},
+  ],
+  monthly: [
+    {label:'Jan',val:55,tip:'$55k'},{label:'Feb',val:40,tip:'$40k'},{label:'Mar',val:65,tip:'$65k'},
+    {label:'Apr',val:50,tip:'$50k'},{label:'May',val:80,tip:'$80k'},{label:'Jun',val:70,tip:'$70k'},
+  ],
+  yearly: [
+    {label:'2020',val:45,tip:'$450k'},{label:'2021',val:58,tip:'$580k'},
+    {label:'2022',val:72,tip:'$720k'},{label:'2023',val:65,tip:'$650k'},
+    {label:'2024',val:88,tip:'$880k'},
+  ]
+};
+let currentChart = 'weekly';
+
+function renderChart(type) {
+  const data = chartData[type];
+  const maxVal = Math.max(...data.map(d=>d.val));
+  const area = document.getElementById('chartArea');
+  area.innerHTML = data.map((d,i) => {
+    const h = Math.round((d.val/maxVal)*180);
+    const hi = i === data.findIndex(x=>x.val===maxVal) ? 'highlight' : '';
+    return `<div class="bar-group">
+      <div class="bar ${hi}" style="height:${h}px;">
+        <div class="bar-tooltip">${d.tip}</div>
+      </div>
+      <span class="bar-label">${d.label}</span>
+    </div>`;
+  }).join('');
+}
+
+function setChartTab(el, type) {
+  document.querySelectorAll('.chart-tab').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+  currentChart = type;
+  renderChart(type);
+}
+
+// =====================
+// ORDERS
+// =====================
+const orders = [
+  {id:'#ORD-2849',time:'2 mins ago',status:'processing',amount:'$120.00'},
+  {id:'#ORD-2848',time:'15 mins ago',status:'completed',amount:'$45.50'},
+  {id:'#ORD-2847',time:'1 hour ago',status:'pending',amount:'$890.00'},
+  {id:'#ORD-2846',time:'3 hours ago',status:'completed',amount:'$12.00'},
+  {id:'#ORD-2845',time:'Yesterday',status:'completed',amount:'$340.20'},
+];
+
+function renderOrders() {
+  const list = document.getElementById('ordersList');
+  list.innerHTML = orders.map(o => `
+    <div class="order-item">
+      <div>
+        <div class="order-id">${o.id}</div>
+        <div class="order-time">${o.time}</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px;">
+        <span class="order-status status-${o.status}">${o.status}</span>
+        <span class="order-amount">${o.amount}</span>
+      </div>
+    </div>
+  `).join('');
+}
+
+// =====================
+// PAGE SWITCHING
+// =====================
+const pages = ['dashboard','products','orders','customers','coupons','analytics'];
+const titles = {
+  dashboard:'Dashboard Overview',products:'Products — Add New',
+  orders:'Orders — Create',customers:'Customers — Register',
+  coupons:'Coupons — Create',analytics:'Analytics'
+};
+
+function switchPage(name, el) {
+  pages.forEach(p => {
+    document.getElementById('page-'+p).style.display = p===name ? '' : 'none';
+  });
+  document.getElementById('pageTitle').textContent = titles[name] || name;
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  if(el) el.classList.add('active');
+  return false;
+}
+
+// =====================
+// FORM SUBMISSION (Mock API)
+// =====================
+const BASE_URL = 'https://your-laravel-app.test/api/v1';
+
+const formConfig = {
+  product: {
+    btn: 'btnProduct', res: 'res-product',
+    endpoint: '/products', method: 'POST',
+    getData: () => ({
+      name: document.getElementById('p-name').value,
+      sku: document.getElementById('p-sku').value,
+      price: parseFloat(document.getElementById('p-price').value) || 0,
+      stock_quantity: parseInt(document.getElementById('p-stock').value) || 0,
+      category: document.getElementById('p-category').value,
+      status: document.getElementById('p-status').value,
+      description: document.getElementById('p-desc').value,
+    })
+  },
+  order: {
+    btn: 'btnOrder', res: 'res-order',
+    endpoint: '/orders', method: 'POST',
+    getData: () => ({
+      customer_name: document.getElementById('o-customer').value,
+      customer_email: document.getElementById('o-email').value,
+      amount: parseFloat(document.getElementById('o-amount').value) || 0,
+      status: document.getElementById('o-status').value,
+      payment_method: document.getElementById('o-payment').value,
+      shipping_address: document.getElementById('o-address').value,
+      notes: document.getElementById('o-notes').value,
+    })
+  },
+  customer: {
+    btn: 'btnCustomer', res: 'res-customer',
+    endpoint: '/customers', method: 'POST',
+    getData: () => ({
+      first_name: document.getElementById('c-first').value,
+      last_name: document.getElementById('c-last').value,
+      email: document.getElementById('c-email').value,
+      phone: document.getElementById('c-phone').value,
+      group: document.getElementById('c-group').value,
+      country: document.getElementById('c-country').value,
+      address: document.getElementById('c-address').value,
+    })
+  },
+  coupon: {
+    btn: 'btnCoupon', res: 'res-coupon',
+    endpoint: '/coupons', method: 'POST',
+    getData: () => ({
+      code: document.getElementById('cp-code').value,
+      type: document.getElementById('cp-type').value,
+      value: parseFloat(document.getElementById('cp-value').value) || 0,
+      minimum_order: parseFloat(document.getElementById('cp-min').value) || 0,
+      usage_limit: parseInt(document.getElementById('cp-limit').value) || null,
+      expires_at: document.getElementById('cp-expiry').value || null,
+    })
+  }
+};
+
+async function submitForm(type) {
+  const cfg = formConfig[type];
+  const btn = document.getElementById(cfg.btn);
+  const resBox = document.getElementById(cfg.res);
+  const data = cfg.getData();
+
+  // Validation
+  const vals = Object.values(data).filter(v => typeof v === 'string');
+  if (vals.some(v => !v)) {
+    showToast('Please fill in all required fields.', true);
+    return;
+  }
+
+  btn.classList.add('loading');
+  resBox.classList.remove('show');
+
+  // Simulate API call (replace with real fetch to your Laravel backend)
+  await new Promise(r => setTimeout(r, 1200));
+
+  // Mock response — replace with actual fetch:
+  /*
+  const token = localStorage.getItem('api_token') || 'YOUR_BEARER_TOKEN';
+  const res = await fetch(`${BASE_URL}${cfg.endpoint}`, {
+    method: cfg.method,
+    headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': `Bearer ${token}`
+    },
+    body: JSON.stringify(data)
+  });
+  const json = await res.json();
+  */
+
+  const mockId = Math.floor(Math.random() * 9000) + 1000;
+  const json = {
+    success: true,
+    message: `${type.charAt(0).toUpperCase()+type.slice(1)} created successfully.`,
+    data: { id: mockId, ...data, created_at: new Date().toISOString() }
+  };
+
+  btn.classList.remove('loading');
+  resBox.classList.add('show');
+  resBox.innerHTML = `<div class="response-label">API Response — ${cfg.method} ${BASE_URL}${cfg.endpoint}</div>` +
+    JSON.stringify(json, null, 2);
+
+  showToast(`${type.charAt(0).toUpperCase()+type.slice(1)} created! ID: ${mockId}`);
+
+  // Update dashboard stat if order added
+  if (type === 'order') {
+    const cur = parseInt(document.getElementById('statOrders').textContent) || 320;
+    document.getElementById('statOrders').textContent = cur + 1;
+  }
+  if (type === 'customer') {
+    const cur = parseInt(document.getElementById('statCustomers').textContent) || 45;
+    document.getElementById('statCustomers').textContent = cur + 1;
+  }
+}
+
+async function fetchAnalytics() {
+  const btn = document.getElementById('btnAnalytics');
+  const resBox = document.getElementById('res-analytics');
+  btn.classList.add('loading');
+  resBox.classList.remove('show');
+  await new Promise(r => setTimeout(r, 900));
+  btn.classList.remove('loading');
+
+  const json = {
+    success: true,
+    period: 'current_week',
+    data: {
+      total_revenue: 12450.00,
+      total_orders: 142,
+      new_customers: 45,
+      out_of_stock_items: 5,
+      conversion_rate: '3.2%',
+      average_order_value: 87.67,
+      top_products: ['Leather Wallet', 'Canvas Tote', 'Silk Scarf'],
+      revenue_growth: '+12%'
+    }
+  };
+
+  resBox.classList.add('show');
+  resBox.innerHTML = `<div class="response-label">API Response — GET ${BASE_URL}/analytics/summary</div>` +
+    JSON.stringify(json, null, 2);
+  showToast('Analytics fetched successfully!');
+}
+
+function clearForm(ids) {
+  ids.forEach(id => { const el = document.getElementById(id); if(el) el.value = ''; });
+}
+
+// =====================
+// TOAST
+// =====================
+let toastTimer;
+function showToast(msg, isError = false) {
+  const t = document.getElementById('toast');
+  document.getElementById('toastMsg').textContent = msg;
+  t.classList.toggle('error', isError);
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 3500);
+}
+
+function copyText(text, btn) {
+  navigator.clipboard.writeText(text).then(() => {
+    btn.textContent = 'Copied!';
+    setTimeout(() => btn.textContent = 'Copy', 1500);
+  });
+}
+
+// =====================
+// INIT
+// =====================
+renderChart('weekly');
+renderOrders();
+</script>
+</body>
+</html>

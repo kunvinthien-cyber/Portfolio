@@ -1,4 +1,5 @@
 <script setup>
+import { RouterLink } from 'vue-router'
 import { ref } from 'vue'
 const expanded = ref(null)
 
@@ -6,21 +7,21 @@ const toggle = (index) => {
   expanded.value = expanded.value === index ? null : index
 }
 const projects = [
-   {
+  {
     name: 'E-commerce Website',
     img: new URL('@/assets/IMG/e-com.jpg', import.meta.url).href,
     skills: ['Vue.js', 'Node.js', 'MongoDB'],
     link: 'https://nuxt-profile-gamma.vercel.app',
     description:
-      'A responsive e-commerce website built with Vue.js, Node.js, and MongoDB. It features authentication, product management, shopping cart, payment system, admin dashboard and modern UI design.'
+      'A responsive e-commerce website built with Vue.js, Node.js, and MongoDB. It features authentication, product management, shopping cart, payment system, admin dashboard and modern UI design.',
   },
   {
     name: 'Personal Portfolio',
     img: new URL('@/assets/IMG/product.jpg', import.meta.url).href,
     skills: ['Vue.js', 'Tailwind CSS'],
     link: 'https://github.com/robertoferreira/personal-portfolio',
-     description:
-      'A responsive e-commerce website built with Vue.js, Node.js, and MongoDB. It features authentication, product management, shopping cart, payment system, admin dashboard and modern UI design.'
+    description:
+      'A responsive e-commerce website built with Vue.js, Node.js, and MongoDB. It features authentication, product management, shopping cart, payment system, admin dashboard and modern UI design.',
   },
   {
     name: 'Blog Platform',
@@ -28,7 +29,7 @@ const projects = [
     skills: ['Vue.js', 'Express.js'],
     link: 'https://github.com/robertoferreira/blog-platform',
     description:
-      'A responsive e-commerce website built with Vue.js, Node.js, and MongoDB. It features authentication, product management, shopping cart, payment system, admin dashboard and modern UI design.'
+      'A responsive e-commerce website built with Vue.js, Node.js, and MongoDB. It features authentication, product management, shopping cart, payment system, admin dashboard and modern UI design.',
   },
   {
     name: 'Blog Platform 2',
@@ -36,7 +37,7 @@ const projects = [
     skills: ['Vue.js', 'Express.js'],
     link: 'https://github.com/robertoferreira/blog-platform',
     description:
-      'A responsive e-commerce website built with Vue.js, Node.js, and MongoDB. It features authentication, product management, shopping cart, payment system, admin dashboard and modern UI design.'
+      'A responsive e-commerce website built with Vue.js, Node.js, and MongoDB. It features authentication, product management, shopping cart, payment system, admin dashboard and modern UI design.',
   },
 ]
 </script>
@@ -48,9 +49,7 @@ const projects = [
     >
       <!-- Header -->
       <div class="text-center mb-12">
-        <h1 class="text-3xl md:text-4xl font-bold text-white">
-          Featured Work
-        </h1>
+        <h1 class="text-3xl md:text-4xl font-bold text-white">Featured Work</h1>
         <p class="text-gray-400 mt-3 text-sm md:text-base">
           Projects I've built using Vue.js, Node.js, and modern web tools
         </p>
@@ -77,21 +76,18 @@ const projects = [
             <h2 class="text-xl font-bold text-white mb-2">
               {{ project.name }}
             </h2>
-<div class="description grid grid-cols-[70%_auto] items-end gap-2 mb-4 ">
-            <p
-  class="text-gray-400 text-sm leading-relaxed transition-all duration-300"
-  :class="expanded === index ? '' : 'line-clamp-3'"
->
-  {{ project.description }}
-</p>
+            <div class="description grid grid-cols-[70%_auto] items-end gap-2 mb-4">
+              <p
+                class="text-gray-400 text-sm leading-relaxed transition-all duration-300"
+                :class="expanded === index ? '' : 'line-clamp-3'"
+              >
+                {{ project.description }}
+              </p>
 
-<button
-  @click="toggle(index)"
-  class="text-blue-400 text-[10px] mt-2 hover:underline"
->
-  {{ expanded === index ? 'Show Less' : 'See More...' }}
-</button>
-</div>
+              <button @click="toggle(index)" class="text-blue-400 text-[10px] mt-2 hover:underline">
+                {{ expanded === index ? 'Show Less' : 'See More...' }}
+              </button>
+            </div>
             <!-- Skills -->
             <div class="flex flex-wrap gap-2 mb-5">
               <span
@@ -104,14 +100,14 @@ const projects = [
             </div>
 
             <!-- Button -->
-            <a
-              :href="project.link"
+            <RouterLink
+              to="admin-d-pro"
               target="_blank"
-              class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium transition"
+              class="px-4 py-2 rounded-full bg-blue-500 text-white hover:bg-blue-600 transition relative z-10"
             >
               View Project
               <i class="fa-solid fa-arrow-up-right-from-square"></i>
-            </a>
+            </RouterLink>
           </div>
         </div>
       </div>

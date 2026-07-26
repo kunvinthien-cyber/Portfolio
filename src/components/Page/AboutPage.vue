@@ -45,8 +45,10 @@
         <div class="bg-zinc-700 rounded-2xl px-5 py-4 flex items-start gap-3">
           <i class="fa-solid fa-map-marker-alt text-blue-400 mt-1 text-lg"></i>
           <div>
-            <p class="text-zinc-400 text-xs uppercase tracking-wide mb-1">Location</p>
-            <p class="text-white text-sm font-medium">Phnom Penh, Cambodia</p>
+            <a href="https://www.google.com/maps/@11.549371,104.884611,16z?entry=ttu&g_ep=EgoyMDI2MDUyMC4wIKXMDSoASAFQAw%3D%3D" target="_blank" class="text-blue-400 hover:underline">
+              <p class="text-zinc-400 text-xs uppercase tracking-wide mb-1">Location</p>
+              <p class="text-white text-sm font-medium">Phnom Penh, Cambodia</p>
+            </a>
           </div>
         </div>
 

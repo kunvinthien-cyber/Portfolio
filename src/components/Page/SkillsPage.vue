@@ -1,7 +1,11 @@
 <script setup>
 import { ref } from 'vue'
 const activeIndex = ref(0)
+const expanded = ref(null)
 
+const toggle = (index) => {
+  expanded.value = expanded.value === index ? null : index
+}
 const skills = [
   {
     name: 'HTML',
@@ -95,9 +99,21 @@ const skills = [
           </div>
 
           <!-- Description -->
-          <p class="text-gray-300 text-sm sm:text-base leading-relaxed flex-1">
-            {{ skill.description }}
-          </p>
+          <div class="description grid grid-cols-[70%_auto] items-end gap-2 mb-4 ">
+            <p
+  class="text-gray-400 text-sm leading-relaxed transition-all duration-300"
+  :class="expanded === index ? '' : 'line-clamp-3'"
+>
+  {{ skill.description }}
+</p>
+
+<button
+  @click="toggle(index)"
+  class="text-blue-400 text-[10px] mt-2 hover:underline"
+>
+  {{ expanded === index ? 'Show Less' : 'See More...' }}
+</button>
+</div>
 
           <!-- Progress Bar -->
           <div>

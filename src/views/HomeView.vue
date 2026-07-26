@@ -130,27 +130,27 @@ const skills = [
       </div>
 
       <!-- SECTIONS -->
-      <section class="w-full py-16" id="about">
+      <section class="w-full" id="about">
         <AboutPage />
       </section>
 
-      <section class="w-full py-16" id="education">
+      <section class="w-full " id="education">
         <EducationPage />
       </section>
 
-      <section class="w-full py-16" id="skills">
+      <section class="w-full" id="skills">
         <SkillsPage />
       </section>
 
-      <section class="w-full py-16" id="experience">
+      <section class="w-full" id="experience">
         <ExperiencePage />
       </section>
 
-      <section class="w-full py-16" id="projects">
+      <section class="w-full" id="projects">
         <ProjectPage />
       </section>
 
-      <section class="w-full py-16" id="contact">
+      <section class="w-full" id="contact">
         <ContactPage />
       </section>
 
