@@ -8,18 +8,18 @@ const toggle = (index) => {
 }
 const projects = [
   {
-    name: 'E-commerce Website',
-    img: new URL('@/assets/IMG/e-com.jpg', import.meta.url).href,
-    skills: ['Vue.js', 'Node.js', 'MongoDB'],
-    link: 'https://nuxt-profile-gamma.vercel.app',
+    name: 'Personal Portfolio',
+    img: new URL('@/assets/IMG/product.jpg', import.meta.url).href,
+    skills: ['Vue.js', 'Tailwind CSS'],
+    link: 'https://thienweb.vercel.app',
     description:
       'A responsive e-commerce website built with Vue.js, Node.js, and MongoDB. It features authentication, product management, shopping cart, payment system, admin dashboard and modern UI design.',
   },
   {
-    name: 'Personal Portfolio',
-    img: new URL('@/assets/IMG/product.jpg', import.meta.url).href,
-    skills: ['Vue.js', 'Tailwind CSS'],
-    link: 'https://github.com/robertoferreira/personal-portfolio',
+    name: 'E-commerce Website',
+    img: new URL('@/assets/IMG/e-com.jpg', import.meta.url).href,
+    skills: ['Vue.js', 'Node.js', 'MongoDB'],
+    link: 'https://nuxt-profile-gamma.vercel.app',
     description:
       'A responsive e-commerce website built with Vue.js, Node.js, and MongoDB. It features authentication, product management, shopping cart, payment system, admin dashboard and modern UI design.',
   },
@@ -100,14 +100,14 @@ const projects = [
             </div>
 
             <!-- Button -->
-            <RouterLink
-              to="admin-d-pro"
+            <a
+              :href="project.link"
               target="_blank"
               class="px-4 py-2 rounded-full bg-blue-500 text-white hover:bg-blue-600 transition relative z-10"
             >
               View Project
               <i class="fa-solid fa-arrow-up-right-from-square"></i>
-            </RouterLink>
+          </a>
           </div>
         </div>
       </div>

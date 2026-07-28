@@ -1,88 +1,31 @@
 <script setup>
-import { reactive, ref } from 'vue'
+import { ref } from 'vue'
+import emailjs from '@emailjs/browser'
 
-const TELEGRAM_BOT_TOKEN = (import.meta.env.VITE_TELEGRAM_BOT_TOKEN || '').trim()
-const TELEGRAM_CHAT_ID = (import.meta.env.VITE_TELEGRAM_CHAT_ID || '').trim()
-const TELEGRAM_API_BASE_URL = (import.meta.env.VITE_TELEGRAM_API_BASE_URL || '/telegram').trim()
-const TELEGRAM_BOT_ID = TELEGRAM_BOT_TOKEN.split(':')[0] || ''
-
+const form = ref({ name: '', email: '', message: '' })
 const loading = ref(false)
 const status = ref('')
-const form = reactive({ name: '', email: '', message: '' })
 
-function escapeHtml(value) {
-  return String(value)
-    .replaceAll('&', '&amp;')
-    .replaceAll('<', '&lt;')
-    .replaceAll('>', '&gt;')
-}
-
-function validateTelegramConfig() {
-  const usingPlaceholder =
-    TELEGRAM_BOT_TOKEN === '123456789:ABCDEFGHIJKLMNOPQRSTUVWXYZ' ||
-    TELEGRAM_CHAT_ID === '987654321'
-
-  if (!TELEGRAM_BOT_TOKEN || !TELEGRAM_CHAT_ID || usingPlaceholder) {
-    throw new Error(
-      'Telegram is not configured. Add your real VITE_TELEGRAM_BOT_TOKEN and VITE_TELEGRAM_CHAT_ID in frontend/.env.',
-    )
-  }
-
-  if (!TELEGRAM_BOT_TOKEN.includes(':') || !/^[0-9]+$/.test(TELEGRAM_BOT_ID)) {
-    throw new Error('Telegram bot token must use BOT_ID:TOKEN format.')
-  }
-
-  if (TELEGRAM_CHAT_ID === TELEGRAM_BOT_ID) {
-    throw new Error('Telegram chat ID must be your user/group chat ID, not the bot ID.')
-  }
-}
-
-async function sendTelegram() {
-  validateTelegramConfig()
-
-  const text = `
-<b>New Contact Message</b>
-
-<b>Name:</b> ${escapeHtml(form.name)}
-<b>Email:</b> ${escapeHtml(form.email)}
-<b>Message:</b>
-${escapeHtml(form.message)}
-  `.trim()
-
-  const response = await fetch(`${TELEGRAM_API_BASE_URL}/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      chat_id: TELEGRAM_CHAT_ID,
-      text,
-      parse_mode: 'HTML',
-    }),
-  })
-
-  const body = await response.json().catch(() => null)
-
-  if (!response.ok || body?.ok === false) {
-    throw new Error(body?.description || `Telegram request failed with status ${response.status}.`)
-  }
-}
-
-async function sendMessage() {
+const sendMessage = async () => {
+  loading.value = true
   status.value = ''
 
-  if (!form.name.trim() || !form.email.trim() || !form.message.trim()) {
-    status.value = 'Please fill in all fields.'
-    return
-  }
-
-  loading.value = true
-
   try {
-    await sendTelegram()
-    status.value = 'Message sent successfully.'
-    Object.assign(form, { name: '', email: '', message: '' })
-  } catch (error) {
-    console.error('Telegram message failed:', error)
-    status.value = error instanceof Error ? error.message : 'Message failed. Please try again.'
+    await emailjs.send(
+      'service_gmail',   // from EmailJS dashboard
+      'template_jih4lg4',  // from EmailJS dashboard
+      {
+        from_name: form.value.name,
+        from_email: form.value.email,
+        message: form.value.message,
+      },
+      'P62YqtvuJ9SaFayVf'    // from EmailJS dashboard
+    )
+    status.value = 'Message sent successfully!'
+    form.value = { name: '', email: '', message: '' }
+  } catch (err) {
+    status.value = 'Failed to send. Please try again.'
+    console.error(err)
   } finally {
     loading.value = false
   }
@@ -142,7 +85,7 @@ async function sendMessage() {
             <a href="https://www.facebook.com/thean.vin.58" class="social-btn" aria-label="Facebook">
               <i class="fa-brands fa-facebook"></i>
             </a>
-            <a href="https://www.instagram.com/kunvinthien/" class="social-btn" aria-label="Instagram">
+            <a href="https://www.instagram.com/thean.vin" class="social-btn" aria-label="Instagram">
               <i class="fa-brands fa-instagram"></i>
             </a>
           </div>
@@ -151,25 +94,39 @@ async function sendMessage() {
         <div>
           <h2 class="text-2xl md:text-3xl font-bold text-white mb-6">Send Message</h2>
 
-          <form class="space-y-4" @submit.prevent="sendMessage">
-            <input v-model="form.name" type="text" placeholder="Your Name" class="input" required />
-            <input v-model="form.email" type="email" placeholder="Your Email" class="input" required />
-            <textarea
-              v-model="form.message"
-              rows="5"
-              placeholder="Your Message"
-              class="input"
-              required
-            ></textarea>
-
-            <button class="btn" :disabled="loading" type="submit">
-              {{ loading ? 'Sending...' : 'Send Message' }}
-            </button>
-
-            <p v-if="status" class="status-message" aria-live="polite">
-              {{ status }}
-            </p>
-          </form>
+         <form class="space-y-4" @submit.prevent="sendMessage">
+    <input
+      v-model="form.name"
+      type="text"
+      placeholder="Your Name"
+      class="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-blue-500 focus:outline-none"
+      required
+    />
+    <input
+      v-model="form.email"
+      type="email"
+      placeholder="Your Email"
+      class="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-blue-500 focus:outline-none"
+      required
+    />
+    <textarea
+      v-model="form.message"
+      rows="5"
+      placeholder="Your Message"
+      class="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-blue-500 focus:outline-none"
+      required
+    />
+    <button
+      class="w-full rounded-lg bg-blue-600 px-4 py-2 font-medium text-white hover:bg-blue-700 disabled:opacity-50"
+      :disabled="loading"
+      type="submit"
+    >
+      {{ loading ? 'Sending...' : 'Send Message' }}
+    </button>
+    <p v-if="status" class="text-center text-sm" :class="status.includes('success') ? 'text-green-600' : 'text-red-600'">
+      {{ status }}
+    </p>
+  </form>
         </div>
       </div>
     </div>

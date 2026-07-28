@@ -41,7 +41,7 @@ const scrollToSection = (section) => {
 
       <!-- Desktop GitHub Button -->
       <div class="hidden md:block btn-view-github shake">
-        <a href="https://github.com/robertoferreira/ecommerce-frontend"
+        <a href="https://github.com/kunvinthien-cyber?tab=overview&from=2026-04-01&to=2026-04-30"
            target="_blank"
            class="text-white px-4 py-2 rounded-3xl bg-amber-500 hover:bg-amber-600 transition-colors text-sm lg:text-base inline-block">
           View GitHub
