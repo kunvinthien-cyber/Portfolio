@@ -20,7 +20,7 @@ const experiences = [
     type: 'Part-time',
     location: 'Phnom Penh, Cambodia',
     description:
-      'Built RESTful APIs and server-side logic using Node.js and Express.js. Integrated MongoDB databases and managed authentication systems for web applications developed during university coursework.',
+      'Built RESTful APIs and server-side logic using Laravel and MySQL. Integrated MongoDB databases and managed authentication systems for web applications developed during university coursework.',
     tags: ['PHP', 'MySQL', 'Laravel', 'CRUD API'],
     icon: 'fa-solid fa-server',
     color: 'text-purple-400',
