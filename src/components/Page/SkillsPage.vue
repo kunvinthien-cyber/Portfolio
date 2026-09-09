@@ -18,7 +18,7 @@ const skills = [
     name: 'CSS',
     icon: 'fa-brands fa-css3-alt',
     color: 'text-blue-400',
-    rating: 80,
+    rating: 90,
     description: 'Skilled in CSS3, creating visually appealing and responsive designs with a focus on modern styling techniques and browser compatibility.'
   },
   {
@@ -50,25 +50,25 @@ const skills = [
     description: 'Proficient in Git, managing version control and collaborating effectively with team members.'
   },
   {
-    name: 'Node.js',
-    icon: 'fa-brands fa-node-js',
-    color: 'text-green-500',
+    name: 'php',
+    icon: 'fa-brands fa-php',
+    color: 'text-purple-400',
     rating: 80,
-    description: 'Skilled in Node.js, building server-side applications and APIs with a focus on performance and scalability.'
+    description: 'Proficient in php, creating dynamic and interactive web applications with a focus on server-side programming and database integration.'
   },
   {
-    name: 'Express.js',
-    icon: 'fa-solid fa-server',
-    color: 'text-zinc-300',
+    name: 'Laravel',
+    icon: 'fa-brands fa-laravel',
+    color: 'text-red-600',
     rating: 80,
-    description: 'Proficient in Express.js, creating robust and scalable web applications and APIs.'
+    description: 'Experienced in Laravel, building robust and scalable web applications with a focus on MVC architecture and best practices.'
   },
   {
-    name: 'MongoDB',
+    name: 'MySQL',
     icon: 'fa-solid fa-database',
     color: 'text-green-400',
     rating: 90,
-    description: 'Proficient in MongoDB, designing and implementing NoSQL database solutions with a focus on performance and scalability.'
+    description: 'Proficient in MySQL, designing and implementing relational database solutions with a focus on performance and scalability.'
   },
 ]
 </script>

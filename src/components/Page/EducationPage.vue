@@ -12,7 +12,7 @@ const educations = [
   },
   {
     year: '2018 - 2021',
-    school: 'High School',
+    school: 'Kiri Vong High School',
     degree: 'General Education',
     description:
       'Focused on mathematics, science, and technology fundamentals while developing analytical and communication skills.'

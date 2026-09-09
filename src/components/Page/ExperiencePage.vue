@@ -21,7 +21,7 @@ const experiences = [
     location: 'Phnom Penh, Cambodia',
     description:
       'Built RESTful APIs and server-side logic using Node.js and Express.js. Integrated MongoDB databases and managed authentication systems for web applications developed during university coursework.',
-    tags: ['Node.js', 'Express.js', 'MongoDB', 'REST API'],
+    tags: ['PHP', 'MySQL', 'Laravel', 'CRUD API'],
     icon: 'fa-solid fa-server',
     color: 'text-purple-400',
     active: false
@@ -34,7 +34,7 @@ const experiences = [
     location: 'Phnom Penh, Cambodia',
     description:
       'Collaborated with peers on web development projects. Gained hands-on experience in HTML, CSS, JavaScript, and version control using Git. Contributed to the front-end of a student management system.',
-    tags: ['HTML', 'CSS', 'JavaScript', 'Git'],
+    tags: ['HTML', 'CSS', 'JavaScript','Tailwind CSS', 'Git'],
     icon: 'fa-solid fa-code',
     color: 'text-green-400',
     active: false
@@ -48,7 +48,7 @@ const experiences = [
 
       <!-- Header -->
       <div class="text-center mb-10">
-        <h1 class="text-white text-3xl sm:text-4xl font-bold">Experience</h1>
+        <h1 class="text-white text-3xl sm:text-4xl font-bold">Experience Project</h1>
         <div class="w-16 h-1 bg-cyan-400 rounded-full mx-auto mt-2"></div>
         <p class="text-zinc-400 mt-3 text-sm sm:text-base max-w-xl mx-auto">
           A timeline of my professional journey, projects, and growth as a developer.

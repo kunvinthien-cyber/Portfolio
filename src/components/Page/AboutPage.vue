@@ -72,7 +72,7 @@
           <i class="fa-solid fa-code text-blue-400 mt-1 text-lg"></i>
           <div>
             <p class="text-zinc-400 text-xs uppercase tracking-wide mb-1">Experience</p>
-            <p class="text-white text-sm font-medium">2+ Years of Development</p>
+            <p class="text-white text-sm font-medium">Web Development</p>
           </div>
         </div>
 

@@ -14,9 +14,11 @@ const skills = [
   'Vue.js',
   'Tailwind CSS',
   'Git',
-  'Node.js',
-  'Express.js',
-  'MongoDB',
+  'php',
+  'Laravel',
+  'MySQL',
+  'AI Tools',
+
 ]
 </script>
 

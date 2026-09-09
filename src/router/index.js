@@ -18,9 +18,9 @@ const router = createRouter({
       component: () => import('../views/ContactView.vue'),
     },
     {
-      path: '/admin-d-pro',
-      name: 'admin-d-pro',
-      component: () => import('../views/Admin-D-Pro.vue'),
+      path: '/pos',
+      name: 'pos',
+      component: () => import('../views/POSView.vue'),
     },
   ],
 })
