@@ -27,7 +27,7 @@ const projects = [
     name: 'POS System',
     img: new URL('@/assets/IMG/shoping.jpg', import.meta.url).href,
     skills: ['Laravel', 'MySQL', 'Tailwind CSS'],
-    link: '/pos',
+    link: 'https://pos-system-l7b1.onrender.com',
     description:
       'This Project is a Point of Sale (POS) system built with Laravel and MySQL. It allows businesses to manage sales, inventory, and customer data efficiently. The system features a user-friendly interface and robust functionality for seamless operations. but it not to deploy yet.',
   },
