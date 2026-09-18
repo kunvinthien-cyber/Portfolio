@@ -30,6 +30,8 @@ const projects = [
     link: 'https://pos-system-l7b1.onrender.com',
     description:
       'This Project is a Point of Sale (POS) system built with Laravel and MySQL. It allows businesses to manage sales, inventory, and customer data efficiently. The system features a user-friendly interface and robust functionality for seamless operations. but it not to deploy yet.',
+    email: 'admin@gmail.com',
+    pass: 'admin123',
   },
   {
     name: 'Team Assignment Project',
@@ -87,6 +89,9 @@ const projects = [
               <button @click="toggle(index)" class="text-blue-400 text-[10px] mt-2 hover:underline">
                 {{ expanded === index ? 'Show Less' : 'See More...' }}
               </button>
+              <h1>email and pass test</h1>
+              <p> project.email</p>
+              <p> project.pass</p>
             </div>
             <!-- Skills -->
             <div class="flex flex-wrap gap-2 mb-5">
