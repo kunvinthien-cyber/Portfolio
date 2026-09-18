@@ -29,7 +29,7 @@ const projects = [
     skills: ['Laravel', 'MySQL', 'Tailwind CSS'],
     link: 'https://pos-system-l7b1.onrender.com',
     description:
-      'email: admin@gmail.com</br> pass: admin123</br> This Project is a Point of Sale (POS) system built with Laravel and MySQL. It allows businesses to manage sales, inventory, and customer data efficiently. The system features a user-friendly interface and robust functionality for seamless operations. but it not to deploy yet.',
+      'email: admin@gmail.com <br> pass: admin123 <br> This Project is a Point of Sale (POS) system built with Laravel and MySQL. It allows businesses to manage sales, inventory, and customer data efficiently. The system features a user-friendly interface and robust functionality for seamless operations. but it not to deploy yet.',
     
   },
   {
