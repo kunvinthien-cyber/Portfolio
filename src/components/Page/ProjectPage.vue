@@ -88,9 +88,6 @@ const projects = [
               <button @click="toggle(index)" class="text-blue-400 text-[10px] mt-2 hover:underline">
                 {{ expanded === index ? 'Show Less' : 'See More...' }}
               </button>
-              <h1>email and pass test</h1>
-              <p> project.email</p>
-              <p> project.pass</p>
             </div>
             <!-- Skills -->
             <div class="flex flex-wrap gap-2 mb-5">
