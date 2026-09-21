@@ -40,6 +40,14 @@ const projects = [
     description:
       'This project is a collaborative team assignment built with Nuxt.js and Express.js. It showcases our ability to work together, implement features, and deliver a functional web application.',
   },
+   {
+    name: 'chillstudy kh comming soon',
+    img: new URL('@/assets/IMG/shoping.jpg', import.meta.url).href,
+    skills: ['vue.js', 'larave', 'Tailwind CSS','mysql'],
+    link: 'https://nuxt-profile-gamma.vercel.app',
+    description:
+      'I make this project for student in cambodia learning with chill and has new experian',
+  },
 ]
 </script>
 
