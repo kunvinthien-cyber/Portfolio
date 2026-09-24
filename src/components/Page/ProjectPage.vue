@@ -19,7 +19,7 @@ const projects = [
     name: 'E-commerce Website',
     img: new URL('@/assets/IMG/e-com.jpg', import.meta.url).href,
     skills: ['Vue.js', 'Laravel', 'Tailwind CSS'],
-    link: 'khmaket.vercel.app',
+    link: 'https://khmaket.vercel.app',
     description:
       'This is a responsive e-commerce website built with Vue.js, Laravel, and Tailwind CSS. It features a modern UI design, product catalog, shopping cart, and checkout functionality. but it not ready 100% yet.',
   },
