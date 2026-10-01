@@ -21,7 +21,7 @@ const educations = [
     </div>
 
     <div class="relative space-y-4 sm:space-y-5">
-      <div class="absolute bottom-8 left-[5.45rem] top-8 hidden w-px bg-gradient-to-b from-cyan-300/60 via-slate-700 to-transparent sm:block"></div>
+      <div class="absolute bottom-8 left-[5.45rem] top-8 hidden w-px bg-linear-to-b from-cyan-300/60 via-slate-700 to-transparent sm:block"></div>
       <article
         v-for="(item, index) in educations"
         :key="item.year"

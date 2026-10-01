@@ -82,7 +82,7 @@ onBeforeUnmount(() => {
     @pointerleave="resetTilt"
   >
     <div
-      class="pointer-events-none absolute inset-0 -z-10 bg-gradient-to-br from-lime-400/[0.055] via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+      class="pointer-events-none absolute inset-0 -z-10 bg-linear-to-br from-lime-400/5.5 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100"
       aria-hidden="true"
     ></div>
 
@@ -97,13 +97,13 @@ onBeforeUnmount(() => {
 
     <div class="mt-6 grid gap-5 text-sm leading-7 text-zinc-300 sm:grid-cols-2 sm:gap-8">
       <section :aria-labelledby="`${idPrefix}-problem-heading`">
-        <h3 :id="`${idPrefix}-problem-heading`" class="font-mono text-xs font-semibold uppercase tracking-[0.1em] text-zinc-500">
+        <h3 :id="`${idPrefix}-problem-heading`" class="font-mono text-xs font-semibold uppercase tracking-widest text-zinc-500">
           Problem
         </h3>
         <p class="mt-2">{{ problem }}</p>
       </section>
       <section :aria-labelledby="`${idPrefix}-solution-heading`">
-        <h3 :id="`${idPrefix}-solution-heading`" class="font-mono text-xs font-semibold uppercase tracking-[0.1em] text-zinc-500">
+        <h3 :id="`${idPrefix}-solution-heading`" class="font-mono text-xs font-semibold uppercase tracking-widest text-zinc-500">
           Technical solution
         </h3>
         <p class="mt-2">{{ solution }}</p>
@@ -133,7 +133,7 @@ onBeforeUnmount(() => {
       <a
         v-if="caseStudyHref"
         :href="caseStudyHref"
-        class="case-study-link inline-flex min-h-11 items-center gap-2 text-sm font-semibold text-lime-300 transition-colors hover:text-lime-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-lime-400"
+        class="case-study-link inline-flex min-h-11 items-center gap-2 text-sm font-semibold text-lime-300 transition-colors hover:text-lime-200 focus-visible:outline focus-visible:outline-offset-4 focus-visible:outline-lime-400"
       >
         Read Case Study
         <ArrowUpRight :size="16" aria-hidden="true" />
@@ -143,7 +143,7 @@ onBeforeUnmount(() => {
         :href="sourceCodeHref"
         target="_blank"
         rel="noopener noreferrer"
-        class="case-study-link inline-flex min-h-11 items-center gap-2 text-sm font-semibold text-zinc-300 transition-colors hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-lime-400"
+        class="case-study-link inline-flex min-h-11 items-center gap-2 text-sm font-semibold text-zinc-300 transition-colors hover:text-white focus-visible:outline focus-visible:outline-offset-4 focus-visible:outline-lime-400"
       >
         <Code2 :size="16" aria-hidden="true" />
         Source Code

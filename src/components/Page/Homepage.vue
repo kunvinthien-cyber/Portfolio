@@ -122,7 +122,7 @@
      <header
        ref="headerElement"
        :class="{ 'nav-scrolled': hasScrolled }"
-       class="hero-nav relative flex min-h-[4.25rem] items-center justify-between gap-4 rounded-2xl border border-zinc-800/80 bg-zinc-950/55 px-4 shadow-lg shadow-black/10 backdrop-blur-md sm:px-5"
+       class="hero-nav relative flex min-h-17 items-center justify-between gap-4 rounded-2xl border border-zinc-800/80 bg-zinc-950/55 px-4 shadow-lg shadow-black/10 backdrop-blur-md sm:px-5"
      >
        <a
          href="#home"
@@ -154,7 +154,7 @@
        </nav>
 
        <div class="flex items-center gap-2">
-         <div class="hidden items-center rounded-full border border-white/10 bg-white/[0.03] p-1 text-xs sm:flex">
+         <div class="hidden items-center rounded-full border border-white/10 bg-white/3 p-1 text-xs sm:flex">
            <button
              type="button"
              class="preference-button"
@@ -261,7 +261,7 @@
              {{ props.t.hireMe }}
              <ArrowUpRight :size="14" aria-hidden="true" />
            </a>
-            <div class="flex items-center rounded-full border border-white/10 bg-white/[0.03] p-1 text-xs sm:hidden">
+            <div class="flex items-center rounded-full border border-white/10 bg-white/3 p-1 text-xs sm:hidden">
               <button
                 type="button"
                 class="preference-button"

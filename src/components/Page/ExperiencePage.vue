@@ -59,7 +59,7 @@ const experiences = [
               <p class="mt-1 font-medium text-cyan-200">{{ props.t.experienceCompanies[index] }}</p>
             </div>
             <div class="flex flex-wrap items-center gap-2 text-xs text-slate-400 sm:justify-end">
-              <span class="rounded-full border border-white/10 bg-white/[0.03] px-3 py-1">
+              <span class="rounded-full border border-white/10 bg-white/3 px-3 py-1">
                 {{ exp.period.replace('Present', props.t.present) }}
               </span>
               <span class="rounded-full border border-white/10 px-3 py-1">{{ props.t.experienceTypes[index] }}</span>
@@ -73,7 +73,7 @@ const experiences = [
             <span
               v-for="tag in exp.tags"
               :key="tag"
-              class="rounded-full border border-cyan-200/10 bg-cyan-200/[0.045] px-3 py-1 text-xs font-medium text-slate-300"
+              class="rounded-full border border-cyan-200/10 bg-cyan-200/4.5 px-3 py-1 text-xs font-medium text-slate-300"
             >
               {{ tag }}
             </span>

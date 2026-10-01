@@ -18,8 +18,8 @@ const props = defineProps({
       id="home"
       class="section-shell hero-section relative grid min-h-[min(760px,100svh)] grid-cols-1 scroll-mt-24 items-center gap-8 pb-12 pt-28 sm:gap-10 sm:pt-32 lg:grid-cols-[minmax(0,1.3fr)_minmax(17rem,0.7fr)] lg:gap-12 lg:py-24"
     >
-      <div class="hero-portrait reveal relative isolate order-1 mx-auto w-40 sm:w-48 lg:order-2 lg:w-full lg:max-w-[23rem]">
-        <div class="relative z-10 overflow-hidden rounded-[2rem] border border-lime-200/20 bg-slate-900/60 p-2 shadow-2xl shadow-lime-950/20">
+      <div class="hero-portrait reveal relative isolate order-1 mx-auto w-40 sm:w-48 lg:order-2 lg:w-full lg:max-w-92">
+        <div class="relative z-10 overflow-hidden rounded-4xl border border-lime-200/20 bg-slate-900/60 p-2 shadow-2xl shadow-lime-950/20">
           <img
             :src="profileImage"
             :alt="props.t.portraitAlt"
@@ -95,7 +95,7 @@ const props = defineProps({
       </div>
 
       <div class="hero-content reveal relative z-10 order-2 mx-auto max-w-5xl text-center lg:order-1 lg:mx-0 lg:text-left">
-        <p class="hero-eyebrow mx-auto inline-flex items-center gap-2 rounded-full border border-lime-400/20 bg-lime-400/[0.06] px-4 py-2 font-mono text-[0.68rem] font-semibold tracking-[0.12em] text-lime-300 sm:text-xs lg:mx-0">
+        <p class="hero-eyebrow mx-auto inline-flex items-center gap-2 rounded-full border border-lime-400/20 bg-lime-400/6 px-4 py-2 font-mono text-[0.68rem] font-semibold tracking-[0.12em] text-lime-300 sm:text-xs lg:mx-0">
           <span class="h-1.5 w-1.5 rounded-full bg-lime-400" aria-hidden="true"></span>
           {{ props.t.heroEyebrow }}
         </p>

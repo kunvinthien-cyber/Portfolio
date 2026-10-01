@@ -12,40 +12,9 @@ let sceneObserver
 const toggle = (index) => {
   expanded.value = expanded.value === index ? null : index
 }
-const projects = [
-  {
-    name: 'Personal Portfolio',
-    img: new URL('@/assets/IMG/product.jpg', import.meta.url).href,
-    skills: ['Vue.js', 'Tailwind CSS'],
-    link: 'https://thienweb.vercel.app',
-    description:
-      'This details my personal portfolio website, built with Vue.js and Tailwind CSS. It showcases my skills, projects, and experience as a web developer. The site features a modern design, smooth animations, and responsive layouts for an optimal user experience.',
-  },
-  {
-    name: 'E-commerce Website',
-    img: new URL('@/assets/IMG/e-com.jpg', import.meta.url).href,
-    skills: ['Vue.js', 'Laravel', 'Tailwind CSS'],
-    link: 'https://smart-khmer-frontend.vercel.app',
-    description:
-      'This is a responsive e-commerce website built with Vue.js, Laravel, and Tailwind CSS. It features a modern UI design, product catalog, shopping cart, and checkout functionality. but it not ready 100% yet.',
-  },
-  {
-    name: 'POS System',
-    img: new URL('@/assets/IMG/shoping.jpg', import.meta.url).href,
-    skills: ['Laravel', 'MySQL', 'Tailwind CSS'],
-    link: 'https://pos-system-l7b1.onrender.com',
-    description:
-      'This Project is a Point of Sale (POS) system built with Laravel and MySQL. It allows businesses to manage sales, inventory, and customer data efficiently. The system features a user-friendly interface and robust functionality for seamless operations. but it not to deploy yet.',
-  },
-  {
-    name: 'Team Assignment Project',
-    img: new URL('@/assets/IMG/shoping.jpg', import.meta.url).href,
-    skills: ['Nuxt.js', 'Supabase', 'Tailwind CSS'],
-    link: 'https://nuxt-profile-gamma.vercel.app',
-    description:
-      'This project is a collaborative team assignment built with Nuxt.js and Express.js. It showcases our ability to work together, implement features, and deliver a functional web application.',
-  },
-]
+const projectDescription = (project, index) =>
+  props.t.projectDescriptions[index] || project.description
+const projectStatus = (status) => props.t.projectStatuses[status] || status
 </script>
 
 <template>
@@ -62,13 +31,13 @@ const projects = [
 
     <div id="case-studies" class="scroll-mt-28">
     <div class="hidden gap-10 lg:grid lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]">
-      <div class="sticky top-28 flex h-[32rem] flex-col justify-center">
+      <div class="sticky top-28 flex h-128 flex-col justify-center">
         <div class="relative overflow-hidden rounded-3xl border border-white/10 bg-slate-950/30 p-3 shadow-2xl">
           <Transition name="project-visual" mode="out-in">
             <div
               :key="activeProject"
               :class="`project-stage-${projects[activeProject].visual}`"
-              class="project-visual-frame relative aspect-[4/3] overflow-hidden rounded-2xl"
+              class="project-visual-frame relative aspect-4/3 overflow-hidden rounded-2xl"
             >
               <ProjectArtwork
                 :project="projects[activeProject]"
@@ -111,13 +80,13 @@ const projects = [
           :data-index="index"
           :aria-current="activeProject === index ? 'step' : undefined"
           :class="{ 'is-active': activeProject === index }"
-          class="story-scene relative min-h-[25rem] pl-8"
+          class="story-scene relative min-h-100 pl-8"
         >
           <span class="story-dot"></span>
           <p class="story-kicker section-kicker">{{ props.t.projectLabel }} {{ String(index + 1).padStart(2, '0') }}</p>
           <h3 class="story-title mt-3 text-3xl font-bold tracking-[-0.04em] text-white">{{ project.name }}</h3>
           <p class="story-description mt-5 max-w-xl text-base leading-8 text-slate-300">{{ projectDescription(project, index) }}</p>
-          <p v-if="project.status" class="story-status mt-3 w-fit rounded-full border border-amber-200/15 bg-amber-200/[0.06] px-2.5 py-1 text-xs font-medium text-amber-100">
+          <p v-if="project.status" class="story-status mt-3 w-fit rounded-full border border-amber-200/15 bg-amber-200/6 px-2.5 py-1 text-xs font-medium text-amber-100">
             {{ projectStatus(project.status) }}
           </p>
           <p class="story-stack-label mt-5 text-[0.65rem] font-semibold uppercase tracking-[0.15em] text-slate-500">{{ props.t.technologies }}</p>
