@@ -1,19 +1,6 @@
 import posPreview from '@/assets/IMG/shoping.jpg'
 
-export type ProjectVisual = 'portfolio' | 'commerce' | 'pos' | 'team' | 'study'
-
-export interface Project {
-  name: string
-  preview: string | null
-  visual: ProjectVisual
-  icon: string
-  skills: string[]
-  link: string
-  status?: string
-  description: string
-}
-
-export const projects: Project[] = [
+export const projects = [
   {
     name: 'Personal Portfolio',
     preview: null,

@@ -5,9 +5,10 @@ import AboutPage from '@/components/Page/AboutPage.vue'
 import EducationPage from '@/components/Page/EducationPage.vue'
 import SkillsPage from '@/components/Page/SkillsPage.vue'
 import ExperiencePage from '@/components/Page/ExperiencePage.vue'
-import ProjectPage from '@/components/Page/ProjectPage.vue'
+import ProjectsList from '@/components/Page/ProjectsList.vue'
 import ContactPage from '@/components/Page/ContactPage.vue'
 import HeroCanvas from '@/components/3d/HeroCanvas.vue'
+import ChatBot from '@/components/ChatBot.vue'
 import { usePreferencesStore } from '@/stores/preferences'
 import { translations } from '@/data/translations'
 
@@ -80,12 +81,16 @@ onBeforeUnmount(() => {
         <ExperiencePage :t="t" />
       </section>
       <section id="projects" class="reveal w-full scroll-mt-24 py-6 sm:py-10">
-        <ProjectPage :t="t" />
+        <ProjectsList :t="t" />
       </section>
       <section id="contact" class="reveal w-full scroll-mt-24 py-6 sm:py-10">
         <ContactPage :t="t" />
       </section>
     </main>
+
+    <div id="chatbot">
+      <ChatBot />
+    </div>
 
     <footer class="site-footer mt-10 border-t border-white/10 bg-slate-950/50">
       <div class="section-shell flex flex-col gap-4 py-7 text-sm sm:flex-row sm:items-center sm:justify-between">

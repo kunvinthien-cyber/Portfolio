@@ -1,7 +1,7 @@
 <script setup>
 import { onBeforeUnmount, onMounted, ref } from 'vue'
 import ProjectArtwork from '@/components/Page/ProjectArtwork.vue'
-import { projects } from '@/data/projects'
+import { projects } from '@/data/projects.js'
 
 const props = defineProps({ t: { type: Object, required: true } })
 const projectRoot = ref(null)
