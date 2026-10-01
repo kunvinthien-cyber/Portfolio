@@ -20,7 +20,8 @@ export const translations = {
     theme: 'Theme',
     selectedWork: 'Selected work',
     featuredWork: 'Projects & case studies',
-    projectsIntro: 'A selection of projects that reflect how I approach interface design, engineering, and problem solving.',
+    projectsIntro:
+      'A selection of projects that reflect how I approach interface design, engineering, and problem solving.',
     projectLabel: 'Project',
     projectPreview: 'Authentic project preview',
     abstractVisual: 'Abstract visual concept',
@@ -64,7 +65,8 @@ export const translations = {
     aboutAvailability: 'Open to Opportunities',
     skillsKicker: 'Technologies I work with',
     skillsTitle: 'Skills',
-    skillsIntro: 'A practical toolkit across frontend development, backend fundamentals, and collaboration.',
+    skillsIntro:
+      'A practical toolkit across frontend development, backend fundamentals, and collaboration.',
     skillGroups: [
       { name: 'Frontend', summary: 'Interfaces, styling & interaction' },
       { name: 'Backend & data', summary: 'Application logic & persistence' },
@@ -73,13 +75,23 @@ export const translations = {
     skillDescriptions: {
       HTML: 'Proficient in HTML5, creating semantic and accessible web structures with a focus on responsive design and cross-browser compatibility.',
       CSS: 'Skilled in CSS3, creating visually appealing and responsive designs with a focus on modern styling techniques and browser compatibility.',
-      JavaScript: 'Skilled in JavaScript, building interactive and dynamic web applications with a focus on modern ES6+ features and best practices.',
-      'Vue.js': 'Proficient in Vue.js, creating maintainable and scalable single-page applications with a focus on component-based architecture.',
-      'Tailwind CSS': 'Experienced in Tailwind CSS, creating responsive and maintainable UI components with a focus on utility-first styling.',
+      JavaScript:
+        'Skilled in JavaScript, building interactive and dynamic web applications with a focus on modern ES6+ features and best practices.',
+      'Vue.js':
+        'Proficient in Vue.js, creating maintainable and scalable single-page applications with a focus on component-based architecture.',
+      'Tailwind CSS':
+        'Experienced in Tailwind CSS, creating responsive and maintainable UI components with a focus on utility-first styling.',
       php: 'Proficient in php, creating dynamic and interactive web applications with a focus on server-side programming and database integration.',
-      Laravel: 'Experienced in Laravel, building robust and scalable web applications with a focus on MVC architecture and best practices.',
-      MySQL: 'Proficient in MySQL, designing and implementing relational database solutions with a focus on performance and scalability.',
+      Laravel:
+        'Experienced in Laravel, building robust and scalable web applications with a focus on MVC architecture and best practices.',
+      MySQL:
+        'Proficient in MySQL, designing and implementing relational database solutions with a focus on performance and scalability.',
       Git: 'Proficient in Git, managing version control and collaborating effectively with team members.',
+      GitHub:
+        'Experienced in GitHub, managing version control and collaborating effectively with team members.',
+      VSCode:
+        'Proficient in VS Code, a source-code editor with features like debugging, syntax highlighting, intelligent code completion, snippets, code refactoring, and embedded Git.',
+      AITools: 'Proficient in AI tools for web development and digital content creation.',
     },
     experienceKicker: 'Where I have worked',
     experienceTitle: 'Experience',
@@ -89,13 +101,18 @@ export const translations = {
     active: 'Active',
     educationDegrees: ['Bachelor of Science in Computer Science', 'General Education'],
     experienceRoles: ['Web Developer', 'Frontend Developer', 'Backend Developer'],
-    experienceCompanies: ['Freelance / Personal Projects', 'Academic & Team Projects', 'University Lab Projects'],
+    experienceCompanies: [
+      'Freelance / Personal Projects',
+      'Academic & Team Projects',
+      'University Lab Projects',
+    ],
     experienceTypes: ['Full-time', 'Part-time', 'Internship'],
     phnomPenh: 'Phnom Penh, Cambodia',
     present: 'Present',
     contactKicker: 'Get in touch',
     contactTitle: "Let's build something useful together.",
-    contactIntro: "I'm open to collaborations, freelance work, and tech discussions. Feel free to contact me anytime.",
+    contactIntro:
+      "I'm open to collaborations, freelance work, and tech discussions. Feel free to contact me anytime.",
     contactEmail: 'Email',
     contactResponse: "I'll get back to you as soon as I can.",
     contactLocation: 'Phnom Penh, Cambodia',
@@ -117,7 +134,8 @@ export const translations = {
     role: 'Role',
     availability: 'Availability',
     aboutMe: 'About Me',
-    aboutText: "Hello! I'm KUN VINTHIEN, a passionate web developer with a love for creating dynamic, responsive, and user-friendly websites.",
+    aboutText:
+      "Hello! I'm KUN VINTHIEN, a passionate web developer with a love for creating dynamic, responsive, and user-friendly websites.",
     projectDescriptions: [],
     projectStatuses: {
       'In progress': 'In progress',
@@ -154,7 +172,8 @@ export const translations = {
     theme: 'រូបរាង',
     selectedWork: 'ស្នាដៃដែលបានជ្រើសរើស',
     featuredWork: 'គម្រោង និងករណីសិក្សា',
-    projectsIntro: 'គម្រោងទាំងនេះបង្ហាញពីវិធីដែលខ្ញុំគិតអំពីការរចនាចំណុចប្រទាក់ ការអភិវឌ្ឍ និងការដោះស្រាយបញ្ហា។',
+    projectsIntro:
+      'គម្រោងទាំងនេះបង្ហាញពីវិធីដែលខ្ញុំគិតអំពីការរចនាចំណុចប្រទាក់ ការអភិវឌ្ឍ និងការដោះស្រាយបញ្ហា។',
     projectLabel: 'គម្រោង',
     projectPreview: 'រូបភាពពិតនៃគម្រោង',
     abstractVisual: 'រូបភាពគំនិតអរូបី',
@@ -207,14 +226,24 @@ export const translations = {
     skillDescriptions: {
       HTML: 'មានជំនាញក្នុង HTML5 សម្រាប់បង្កើតរចនាសម្ព័ន្ធ Web តាមស្តង់ដារ និងងាយស្រួលប្រើ ដោយផ្តោតលើការរចនាឆ្លើយតប និងភាពឆបគ្នារវាង Browser។',
       CSS: 'មានជំនាញក្នុង CSS3 សម្រាប់បង្កើតការរចនាដែលទាក់ទាញ និងឆ្លើយតប ដោយប្រើបច្ចេកទេសរចនាប័ទ្មទំនើប និងគិតពីភាពឆបគ្នារបស់ Browser។',
-      JavaScript: 'ប្រើ JavaScript ដើម្បីបង្កើតកម្មវិធី Web ដែលមានអន្តរកម្ម ដោយផ្តោតលើមុខងារ ES6+ និងវិធីសាស្ត្រល្អៗ។',
-      'Vue.js': 'ប្រើ Vue.js ដើម្បីបង្កើត Single-page Application ដែលងាយថែទាំ និងពង្រីកបាន ដោយប្រើស្ថាបត្យកម្មផ្អែកលើ Component។',
-      'Tailwind CSS': 'ប្រើ Tailwind CSS ដើម្បីបង្កើត UI Component ដែលឆ្លើយតប និងងាយថែទាំ តាមរយៈ Utility-first styling។',
+      JavaScript:
+        'ប្រើ JavaScript ដើម្បីបង្កើតកម្មវិធី Web ដែលមានអន្តរកម្ម ដោយផ្តោតលើមុខងារ ES6+ និងវិធីសាស្ត្រល្អៗ។',
+      'Vue.js':
+        'ប្រើ Vue.js ដើម្បីបង្កើត Single-page Application ដែលងាយថែទាំ និងពង្រីកបាន ដោយប្រើស្ថាបត្យកម្មផ្អែកលើ Component។',
+      'Tailwind CSS':
+        'ប្រើ Tailwind CSS ដើម្បីបង្កើត UI Component ដែលឆ្លើយតប និងងាយថែទាំ តាមរយៈ Utility-first styling។',
       php: 'ប្រើ PHP ដើម្បីបង្កើតកម្មវិធី Web និងភ្ជាប់កម្មវិធីជាមួយមូលដ្ឋានទិន្នន័យតាមផ្នែក Server-side។',
-      Laravel: 'ប្រើ Laravel ដើម្បីបង្កើតកម្មវិធី Web ដែលរឹងមាំ និងអាចពង្រីកបាន ដោយផ្អែកលើ MVC និងវិធីសាស្ត្រល្អៗ។',
-      MySQL: 'ប្រើ MySQL ដើម្បីរចនា និងអនុវត្តដំណោះស្រាយមូលដ្ឋានទិន្នន័យ Relational ដោយគិតពីប្រសិទ្ធភាព និងការពង្រីក។',
+      Laravel:
+        'ប្រើ Laravel ដើម្បីបង្កើតកម្មវិធី Web ដែលរឹងមាំ និងអាចពង្រីកបាន ដោយផ្អែកលើ MVC និងវិធីសាស្ត្រល្អៗ។',
+      MySQL:
+        'ប្រើ MySQL ដើម្បីរចនា និងអនុវត្តដំណោះស្រាយមូលដ្ឋានទិន្នន័យ Relational ដោយគិតពីប្រសិទ្ធភាព និងការពង្រីក។',
       Git: 'ប្រើ Git សម្រាប់គ្រប់គ្រងកំណែកូដ និងសហការប្រកបដោយប្រសិទ្ធភាពជាមួយក្រុម។',
+      GitHub: 'ប្រើ GitHub សម្រាប់គ្រប់គ្រងកំណែកូដ និងសហការប្រកបដោយប្រសិទ្ធភាពជាមួយក្រុម។',
+      VSCode:
+        'ប្រើ VS Code ជាឧបករណ៍កែសម្រួលកូដ ដោយមានមុខងារដូចជា Debugging, Syntax Highlighting, Intelligent Code Completion, Snippets, Code Refactoring និង Embedded Git។',
+      AITools: 'ឧបករណ៍ AI សម្រាប់ការអភិវឌ្ឍន៍ Web និងការបង្កើតមាតិកាឌីជីថល។ ',
     },
+
     experienceKicker: 'កន្លែងដែលខ្ញុំបានធ្វើការ',
     experienceTitle: 'បទពិសោធន៍',
     experienceIntro: 'ដំណើរនៃការងារ គម្រោង និងការរីកចម្រើនរបស់ខ្ញុំក្នុងនាមជាអ្នកអភិវឌ្ឍន៍។',
@@ -223,13 +252,18 @@ export const translations = {
     active: 'កំពុងធ្វើការ',
     educationDegrees: ['បរិញ្ញាបត្រវិទ្យាសាស្ត្រកុំព្យូទ័រ', 'ការអប់រំទូទៅ'],
     experienceRoles: ['អ្នកអភិវឌ្ឍន៍', 'អ្នកអភិវឌ្ឍន៍ Frontend', 'អ្នកអភិវឌ្ឍន៍ Backend'],
-    experienceCompanies: ['ការងារឯករាជ្យ / គម្រោងផ្ទាល់ខ្លួន', 'គម្រោងសិក្សា និងការងារជាក្រុម', 'គម្រោងមន្ទីរពិសោធន៍សាកលវិទ្យាល័យ'],
+    experienceCompanies: [
+      'ការងារឯករាជ្យ / គម្រោងផ្ទាល់ខ្លួន',
+      'គម្រោងសិក្សា និងការងារជាក្រុម',
+      'គម្រោងមន្ទីរពិសោធន៍សាកលវិទ្យាល័យ',
+    ],
     experienceTypes: ['ពេញម៉ោង', 'ក្រៅម៉ោង', 'កម្មសិក្សា'],
     phnomPenh: 'ភ្នំពេញ ប្រទេសកម្ពុជា',
     present: 'បច្ចុប្បន្ន',
     contactKicker: 'ទាក់ទងមកខ្ញុំ',
     contactTitle: 'ចូរយើងបង្កើតអ្វីដែលមានប្រយោជន៍ជាមួយគ្នា។',
-    contactIntro: 'ខ្ញុំបើកចំហចំពោះការសហការ ការងារឯករាជ្យ និងការពិភាក្សាអំពីបច្ចេកវិទ្យា។ សូមទាក់ទងមកខ្ញុំបានគ្រប់ពេល។',
+    contactIntro:
+      'ខ្ញុំបើកចំហចំពោះការសហការ ការងារឯករាជ្យ និងការពិភាក្សាអំពីបច្ចេកវិទ្យា។ សូមទាក់ទងមកខ្ញុំបានគ្រប់ពេល។',
     contactEmail: 'អ៊ីមែល',
     contactResponse: 'ខ្ញុំនឹងឆ្លើយតបអ្នកឱ្យបានឆាប់តាមដែលអាចធ្វើទៅបាន។',
     contactLocation: 'ភ្នំពេញ ប្រទេសកម្ពុជា',
@@ -251,7 +285,8 @@ export const translations = {
     role: 'តួនាទី',
     availability: 'ឱកាសការងារ',
     aboutMe: 'អំពីខ្ញុំ',
-    aboutText: 'សួស្តី! ខ្ញុំឈ្មោះ KUN VINTHIEN ជាអ្នកអភិវឌ្ឍន៍ Web ដែលចូលចិត្តបង្កើតគេហទំព័រដែលមានអន្តរកម្ម ឆ្លើយតបតាមឧបករណ៍ និងងាយស្រួលប្រើ។',
+    aboutText:
+      'សួស្តី! ខ្ញុំឈ្មោះ KUN VINTHIEN ជាអ្នកអភិវឌ្ឍន៍ Web ដែលចូលចិត្តបង្កើតគេហទំព័រដែលមានអន្តរកម្ម ឆ្លើយតបតាមឧបករណ៍ និងងាយស្រួលប្រើ។',
     projectDescriptions: [
       'នេះជាព័ត៌មានលម្អិតអំពីគេហទំព័រ Portfolio ផ្ទាល់ខ្លួនរបស់ខ្ញុំ ដែលបង្កើតឡើងដោយប្រើ Vue.js និង Tailwind CSS។ វាបង្ហាញពីជំនាញ គម្រោង និងបទពិសោធន៍របស់ខ្ញុំក្នុងនាមជាអ្នកអភិវឌ្ឍន៍ Web។ គេហទំព័រនេះមានការរចនាទំនើប ចលនារលូន និងប្លង់ឆ្លើយតប ដើម្បីផ្តល់បទពិសោធន៍ប្រើប្រាស់ល្អបំផុត។',
       'នេះជាគេហទំព័រ E-commerce ដែលឆ្លើយតបតាមឧបករណ៍ និងបង្កើតឡើងដោយប្រើ Vue.js, Laravel និង Tailwind CSS។ វាមានការរចនា UI ទំនើប បញ្ជីផលិតផល កន្ត្រកទំនិញ និងមុខងារទូទាត់។ គម្រោងនេះមិនទាន់រួចរាល់ 100% នៅឡើយទេ។',

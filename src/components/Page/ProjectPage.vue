@@ -15,6 +15,38 @@ const toggle = (index) => {
 const projectDescription = (project, index) =>
   props.t.projectDescriptions[index] || project.description
 const projectStatus = (status) => props.t.projectStatuses[status] || status
+
+onMounted(() => {
+  if (!projectRoot.value || !('IntersectionObserver' in window)) return
+
+  sceneObserver = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        const index = Number(entry.target.dataset.index)
+        if (entry.isIntersecting) {
+          const sceneCenter = (entry.boundingClientRect.top + entry.boundingClientRect.bottom) / 2
+          intersectingScenes.set(index, Math.abs(sceneCenter - window.innerHeight / 2))
+        } else {
+          intersectingScenes.delete(index)
+        }
+      })
+
+      const closestScene = [...intersectingScenes.entries()].sort((a, b) => a[1] - b[1])[0]
+      if (closestScene) activeProject.value = closestScene[0]
+    },
+    {
+      rootMargin: '-35% 0px -35% 0px',
+      threshold: [0, 0.25, 0.5, 0.75, 1],
+    },
+  )
+
+  projectRoot.value.querySelectorAll('.story-scene').forEach((scene) => sceneObserver.observe(scene))
+})
+
+onBeforeUnmount(() => {
+  sceneObserver?.disconnect()
+  intersectingScenes.clear()
+})
 </script>
 
 <template>
@@ -91,7 +123,7 @@ const projectStatus = (status) => props.t.projectStatuses[status] || status
           </p>
           <p class="story-stack-label mt-5 text-[0.65rem] font-semibold uppercase tracking-[0.15em] text-slate-500">{{ props.t.technologies }}</p>
           <div class="story-tech mt-2 flex flex-wrap gap-2">
-            <span v-for="skill in project.skills" :key="skill" class="project-tech-chip rounded-full border border-cyan-100/10 bg-cyan-100/[0.045] px-3 py-1 text-xs font-medium text-cyan-100/90">{{ skill }}</span>
+            <span v-for="skill in project.skills" :key="skill" class="project-tech-chip rounded-full border border-cyan-100/10 bg-cyan-100/4.5 px-3 py-1 text-xs font-medium text-cyan-100/90">{{ skill }}</span>
           </div>
           <a :href="project.link" target="_blank" rel="noopener noreferrer" class="story-action button-secondary group mt-7">
             {{ props.t.openProject }}
@@ -116,7 +148,7 @@ const projectStatus = (status) => props.t.projectStatuses[status] || status
           <h3 class="text-lg font-semibold leading-snug text-white sm:text-xl">{{ project.name }}</h3>
           <p
             v-if="project.status"
-            class="mt-2 w-fit rounded-full border border-amber-200/15 bg-amber-200/[0.06] px-2.5 py-1 text-xs font-medium text-amber-100"
+            class="mt-2 w-fit rounded-full border border-amber-200/15 bg-amber-200/6 px-2.5 py-1 text-xs font-medium text-amber-100"
           >
             {{ projectStatus(project.status) }}
           </p>
@@ -143,7 +175,7 @@ const projectStatus = (status) => props.t.projectStatuses[status] || status
             <span
               v-for="skill in project.skills"
               :key="skill"
-              class="project-tech-chip rounded-full border border-cyan-100/10 bg-cyan-100/[0.045] px-3 py-1 text-xs font-medium text-cyan-100/90"
+              class="project-tech-chip rounded-full border border-cyan-100/10 bg-cyan-100/4.5 px-3 py-1 text-xs font-medium text-cyan-100/90"
             >
               {{ skill }}
             </span>

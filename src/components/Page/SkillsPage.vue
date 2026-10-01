@@ -60,6 +60,21 @@ const groups = [
         icon: 'fa-brands fa-git-alt',
         color: 'text-orange-300',
       },
+      {
+        name: 'GitHub',
+        icon: 'fa-brands fa-github',
+        color: 'text-slate-200',
+      },
+      {
+        name: 'VSCode',
+        icon: 'fa-brands fa-microsoft',
+        color: 'text-blue-300',
+      },
+      {
+        name: 'AITools',
+        icon: 'fa-solid fa-robot',
+        color: 'text-purple-300',
+      },
     ],
   },
 ]
@@ -83,7 +98,9 @@ const groups = [
         :aria-label="`${props.t.skillGroups[groupIndex].name} ${props.t.skillsTitle}`"
       >
         <div class="mb-5 border-b border-white/10 pb-4">
-          <h3 class="text-lg font-semibold text-white">{{ props.t.skillGroups[groupIndex].name }}</h3>
+          <h3 class="text-lg font-semibold text-white">
+            {{ props.t.skillGroups[groupIndex].name }}
+          </h3>
           <p class="mt-1 text-xs text-slate-500">{{ props.t.skillGroups[groupIndex].summary }}</p>
         </div>
         <ul class="space-y-2.5">
@@ -94,10 +111,16 @@ const groups = [
             :style="{ '--skill-delay': `${group.skills.indexOf(skill) * 55}ms` }"
           >
             <div class="flex items-center gap-3">
-              <i :class="[skill.icon, skill.color]" class="w-5 text-center text-lg" aria-hidden="true"></i>
+              <i
+                :class="[skill.icon, skill.color]"
+                class="w-5 text-center text-lg"
+                aria-hidden="true"
+              ></i>
               <h4 class="text-sm font-semibold text-slate-100">{{ skill.name }}</h4>
             </div>
-            <p class="mt-2 pl-8 text-xs leading-5 text-slate-400">{{ props.t.skillDescriptions[skill.name] }}</p>
+            <p class="mt-2 pl-8 text-xs leading-5 text-slate-400">
+              {{ props.t.skillDescriptions[skill.name] }}
+            </p>
           </li>
         </ul>
       </section>
