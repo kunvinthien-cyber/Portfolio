@@ -1,134 +1,85 @@
 <script setup>
+const props = defineProps({ t: { type: Object, required: true } })
+
 const experiences = [
   {
-    role: 'Frontend Developer',
-    company: 'Freelance / Personal Projects',
     period: '2023 - Present',
-    type: 'Full-time',
-    location: 'Phnom Penh, Cambodia',
-    description:
-      'Designed and developed multiple responsive web applications using Vue.js and Tailwind CSS. Focused on clean UI, performance optimization, and delivering great user experiences across all devices.',
     tags: ['Vue.js', 'Tailwind CSS', 'JavaScript', 'REST API'],
-    icon: 'fa-solid fa-laptop-code',
-    color: 'text-cyan-400',
-    active: true
+    icon: 'fa-laptop-code',
+    active: true,
   },
   {
-    role: 'Backend Developer',
-    company: 'Academic & Team Projects',
     period: '2022 - 2023',
-    type: 'Part-time',
-    location: 'Phnom Penh, Cambodia',
-    description:
-      'Built RESTful APIs and server-side logic using Laravel and MySQL. Integrated MongoDB databases and managed authentication systems for web applications developed during university coursework.',
     tags: ['PHP', 'MySQL', 'Laravel', 'CRUD API'],
-    icon: 'fa-solid fa-server',
-    color: 'text-purple-400',
-    active: false
+    icon: 'fa-server',
+    active: false,
   },
   {
-    role: 'Web Development Intern',
-    company: 'University Lab Projects',
     period: '2021 - 2022',
-    type: 'Internship',
-    location: 'Phnom Penh, Cambodia',
-    description:
-      'Collaborated with peers on web development projects. Gained hands-on experience in HTML, CSS, JavaScript, and version control using Git. Contributed to the front-end of a student management system.',
-    tags: ['HTML', 'CSS', 'JavaScript','Tailwind CSS', 'Git'],
-    icon: 'fa-solid fa-code',
-    color: 'text-green-400',
-    active: false
-  }
+    tags: ['HTML', 'CSS', 'JavaScript', 'Tailwind CSS', 'Git'],
+    icon: 'fa-code',
+    active: false,
+  },
 ]
 </script>
 
 <template>
-  <div class="w-full flex justify-center items-center px-4 py-10">
-    <div class="w-full max-w-4xl mx-auto">
+  <div class="section-shell">
+    <div class="mb-8 max-w-xl">
+      <p class="section-kicker">{{ props.t.experienceKicker }}</p>
+      <h2 class="section-title mt-2">{{ props.t.experienceTitle }}</h2>
+      <p class="mt-3 text-sm leading-7 text-slate-400 sm:text-base">
+        {{ props.t.experienceIntro }}
+      </p>
+    </div>
 
-      <!-- Header -->
-      <div class="text-center mb-10">
-        <h1 class="text-white text-3xl sm:text-4xl font-bold">Experience Project</h1>
-        <div class="w-16 h-1 bg-cyan-400 rounded-full mx-auto mt-2"></div>
-        <p class="text-zinc-400 mt-3 text-sm sm:text-base max-w-xl mx-auto">
-          A timeline of my professional journey, projects, and growth as a developer.
-        </p>
-      </div>
-
-      <!-- Timeline -->
-      <div class="relative">
-
-        <!-- Vertical line (hidden on mobile) -->
-        <div class="hidden sm:block absolute left-6 top-0 bottom-0 w-0.5 bg-zinc-700"></div>
-
-        <div class="flex flex-col gap-8">
-          <div
-            v-for="(exp, index) in experiences"
-            :key="index"
-            class="relative flex flex-col sm:flex-row gap-4 sm:gap-6"
-          >
-            <!-- Timeline dot -->
-            <div class="hidden sm:flex flex-shrink-0 w-12 h-12 rounded-full bg-zinc-800 border-2 border-zinc-600 items-center justify-center z-10">
-              <i :class="[exp.icon, exp.color]" class="text-lg"></i>
-            </div>
-
-            <!-- Card -->
-            <div class="flex-1 bg-zinc-800 rounded-2xl px-5 sm:px-7 py-5 shadow-lg border border-zinc-700 hover:border-cyan-500/40 transition-all duration-300 group">
-
-              <!-- Top Row -->
-              <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2 mb-3">
-                <div>
-                  <div class="flex items-center gap-2 mb-1">
-                    <!-- Mobile icon -->
-                    <i :class="[exp.icon, exp.color]" class="sm:hidden text-lg"></i>
-                    <h2 class="text-white text-lg sm:text-xl font-bold">{{ exp.role }}</h2>
-                    <span
-                      v-if="exp.active"
-                      class="text-[10px] bg-green-500/20 text-green-400 border border-green-500/30 px-2 py-0.5 rounded-full font-medium"
-                    >
-                      Active
-                    </span>
-                  </div>
-                  <p class="text-cyan-400 font-medium text-sm sm:text-base">{{ exp.company }}</p>
-                </div>
-
-                <!-- Period + Type badge -->
-                <div class="flex flex-row sm:flex-col items-start sm:items-end gap-2">
-                  <span class="text-zinc-400 text-xs sm:text-sm whitespace-nowrap">
-                    <i class="fa-regular fa-calendar mr-1"></i>{{ exp.period }}
-                  </span>
-                  <span class="text-xs bg-zinc-700 text-zinc-300 px-2 py-0.5 rounded-full">
-                    {{ exp.type }}
-                  </span>
-                </div>
-              </div>
-
-              <!-- Location -->
-              <p class="text-zinc-500 text-xs mb-3">
-                <i class="fa-solid fa-location-dot mr-1"></i>{{ exp.location }}
-              </p>
-
-              <!-- Description -->
-              <p class="text-zinc-300 text-sm sm:text-base leading-relaxed mb-4">
-                {{ exp.description }}
-              </p>
-
-              <!-- Tags -->
-              <div class="flex flex-wrap gap-2">
+    <div class="relative space-y-4 sm:space-y-5">
+      <div class="absolute bottom-8 left-5 top-8 hidden w-px bg-slate-700 sm:block"></div>
+      <article
+        v-for="(exp, index) in experiences"
+        :key="exp.period"
+        class="timeline-item relative grid gap-4 sm:grid-cols-[3rem_1fr] sm:gap-5"
+      >
+        <div class="z-10 hidden h-10 w-10 items-center justify-center rounded-full border border-cyan-200/30 bg-slate-900 text-cyan-200 sm:flex">
+          <i :class="['fa-solid', exp.icon]" aria-hidden="true"></i>
+        </div>
+        <div class="surface-card rounded-2xl p-5 sm:p-6">
+          <div class="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+            <div>
+              <div class="flex flex-wrap items-center gap-2">
+                <i :class="['fa-solid', exp.icon]" class="text-cyan-200 sm:hidden" aria-hidden="true"></i>
+                <h3 class="text-lg font-semibold text-white sm:text-xl">{{ props.t.experienceRoles[index] }}</h3>
                 <span
-                  v-for="tag in exp.tags"
-                  :key="tag"
-                  class="text-xs bg-zinc-700 group-hover:bg-cyan-500/10 group-hover:text-cyan-300 text-zinc-300 border border-zinc-600 group-hover:border-cyan-500/30 px-3 py-1 rounded-full transition-all duration-300"
+                  v-if="exp.active"
+                  class="rounded-full border border-emerald-300/20 bg-emerald-300/10 px-2.5 py-0.5 text-[0.68rem] font-semibold text-emerald-200"
                 >
-                  {{ tag }}
+                  {{ props.t.active }}
                 </span>
               </div>
-
+              <p class="mt-1 font-medium text-cyan-200">{{ props.t.experienceCompanies[index] }}</p>
+            </div>
+            <div class="flex flex-wrap items-center gap-2 text-xs text-slate-400 sm:justify-end">
+              <span class="rounded-full border border-white/10 bg-white/[0.03] px-3 py-1">
+                {{ exp.period.replace('Present', props.t.present) }}
+              </span>
+              <span class="rounded-full border border-white/10 px-3 py-1">{{ props.t.experienceTypes[index] }}</span>
             </div>
           </div>
+          <p class="mt-3 text-xs text-slate-500">
+            <i class="fa-solid fa-location-dot mr-1.5" aria-hidden="true"></i>{{ props.t.phnomPenh }}
+          </p>
+          <p class="mt-3 text-sm leading-7 text-slate-300">{{ props.t.experienceDescriptions[index] }}</p>
+          <div class="mt-4 flex flex-wrap gap-2">
+            <span
+              v-for="tag in exp.tags"
+              :key="tag"
+              class="rounded-full border border-cyan-200/10 bg-cyan-200/[0.045] px-3 py-1 text-xs font-medium text-slate-300"
+            >
+              {{ tag }}
+            </span>
+          </div>
         </div>
-
-      </div>
+      </article>
     </div>
   </div>
 </template>

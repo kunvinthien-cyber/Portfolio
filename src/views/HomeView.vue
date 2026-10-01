@@ -1,183 +1,109 @@
 <script setup>
-import Homepage from '@/components/Page/Homepage.vue'
+import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
+import HeroSection from '@/components/Page/HeroSection.vue'
 import AboutPage from '@/components/Page/AboutPage.vue'
 import EducationPage from '@/components/Page/EducationPage.vue'
 import SkillsPage from '@/components/Page/SkillsPage.vue'
 import ExperiencePage from '@/components/Page/ExperiencePage.vue'
 import ProjectPage from '@/components/Page/ProjectPage.vue'
 import ContactPage from '@/components/Page/ContactPage.vue'
+import HeroCanvas from '@/components/3d/HeroCanvas.vue'
+import { usePreferencesStore } from '@/stores/preferences'
+import { translations } from '@/data/translations'
 
-const skills = [
-  'HTML',
-  'CSS',
-  'JavaScript',
-  'Vue.js',
-  'Tailwind CSS',
-  'Git',
-  'php',
-  'Laravel',
-  'MySQL',
-  'AI Tools',
+const portfolio = ref(null)
+const preferences = usePreferencesStore()
+const t = computed(() => translations[preferences.language])
+const scrollProgress = ref(0)
+let revealObserver
+let scrollFrame = null
 
-]
+const updateScrollState = () => {
+  scrollFrame = null
+  const maxScroll = document.documentElement.scrollHeight - window.innerHeight
+  scrollProgress.value = maxScroll > 0 ? Math.min(window.scrollY / maxScroll, 1) : 0
+}
+
+const requestScrollState = () => {
+  if (!scrollFrame) scrollFrame = window.requestAnimationFrame(updateScrollState)
+}
+
+onMounted(() => {
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  if (portfolio.value && 'IntersectionObserver' in window && !reducedMotion) {
+    portfolio.value.classList.add('reveal-ready')
+    revealObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          entry.target.classList.toggle('is-visible', entry.isIntersecting)
+        })
+      },
+      { threshold: 0.04, rootMargin: '0px 0px -48px 0px' },
+    )
+
+    portfolio.value.querySelectorAll('.reveal').forEach((section) => revealObserver.observe(section))
+  }
+  updateScrollState()
+  window.addEventListener('scroll', requestScrollState, { passive: true })
+})
+
+onBeforeUnmount(() => {
+  revealObserver?.disconnect()
+  window.removeEventListener('scroll', requestScrollState)
+  if (scrollFrame) window.cancelAnimationFrame(scrollFrame)
+})
 </script>
 
 <template>
   <div
-    class="min-h-screen w-full flex flex-col bg-gradient-to-br from-slate-950 via-blue-950 to-slate-900 overflow-x-hidden"
+    ref="portfolio"
+    class="portfolio min-h-screen w-full overflow-x-clip"
+    :data-theme="preferences.theme"
+    :lang="preferences.language"
+    :class="{ 'font-khmer': preferences.isKhmer }"
   >
-    <!-- NAVBAR -->
-    <div
-      class="menu-bar fixed top-0 left-0 w-full z-50 bg-zinc-900 py-2 shadow-md"
-    >
-      <Homepage class="w-full" />
-    </div>
+    <HeroCanvas />
+    <div class="scroll-progress" aria-hidden="true" :style="{ transform: `scaleX(${scrollProgress})` }"></div>
+    <main class="w-full">
+      <HeroSection :t="t" />
 
-    <!-- BODY -->
-    <div class="pt-24 w-full flex flex-col">
+      <section id="about" class="reveal w-full scroll-mt-24 py-10 sm:py-14">
+        <AboutPage :t="t" />
+      </section>
+      <section id="education" class="reveal w-full scroll-mt-24 py-6 sm:py-10">
+        <EducationPage :t="t" />
+      </section>
+      <section id="skills" class="reveal w-full scroll-mt-24 py-6 sm:py-10">
+        <SkillsPage :t="t" />
+      </section>
+      <section id="experience" class="reveal w-full scroll-mt-24 py-6 sm:py-10">
+        <ExperiencePage :t="t" />
+      </section>
+      <section id="projects" class="reveal w-full scroll-mt-24 py-6 sm:py-10">
+        <ProjectPage :t="t" />
+      </section>
+      <section id="contact" class="reveal w-full scroll-mt-24 py-6 sm:py-10">
+        <ContactPage :t="t" />
+      </section>
+    </main>
 
-      <!-- HERO SECTION -->
-      <div
-        class="body-page w-full flex flex-col-reverse md:grid md:grid-cols-2 justify-center gap-6 md:gap-10 px-4 md:px-8"
-      >
-        <!-- LEFT -->
-        <div class="left w-full flex flex-col justify-center items-center md:items-start">
-          <div class="w-full max-w-lg rounded-3xl text-white px-5 py-4">
-
-            <!-- Badge -->
-            <div class="flex items-center gap-2">
-              <i class="fa-solid fa-circle text-red-500 text-[10px]"></i>
-              <h3 class="text-blue-600 text-[15px] font-bold">
-                Available now for work
-              </h3>
-            </div>
-
-            <!-- Text -->
-            <div class="mt-2 flex flex-col gap-2">
-
-              <div class="text-center md:text-left">
-                <h1 class="text-white text-2xl sm:text-3xl lg:text-4xl font-bold">
-                  Hello, I'm Kun Vinthien
-                </h1>
-                <h1 class="text-white text-lg sm:text-xl">Web Developer</h1>
-              </div>
-
-              <p
-                class="text-white text-sm sm:text-base lg:text-lg leading-relaxed text-center md:text-left"
-              >
-                I am a web developer with experience in building responsive and user-friendly
-                websites. I have a strong background in HTML, CSS, JavaScript, and Vue.js.
-                I am passionate about creating beautiful and functional web applications.
-              </p>
-
-              <!-- Buttons -->
-              <div class="flex justify-center md:justify-start mt-6 gap-3 flex-wrap">
-              <a href="#contact " class="px-5 py-2 rounded-3xl bg-blue-500 text-white hover:bg-blue-600 transition relative z-10">
-                  Contact Me
-                </a>
-
-                <a
-  href="https://github.com/kunvinthien-cyber?tab=overview&from=2026-04-01&to=2026-04-30"
-  target="_blank"
-  class="relative z-50 px-5 py-2 rounded-3xl bg-red-500 text-white"
->
-  GitHub
-</a>
-              </div>
-
-            </div>
-          </div>
+    <footer class="site-footer mt-10 border-t border-white/10 bg-slate-950/50">
+      <div class="section-shell flex flex-col gap-4 py-7 text-sm sm:flex-row sm:items-center sm:justify-between">
+        <div>
+          <p class="font-semibold tracking-wide text-white">KUN VINTHIEN</p>
+          <p class="mt-1 text-xs text-slate-400">{{ t.footerRole }}</p>
         </div>
-
-        <!-- RIGHT -->
-        <div class="right w-full flex justify-center items-center">
-          <img
-            src="@/assets/IMG/image.png"
-            class="w-48 h-48 sm:w-64 sm:h-64 md:w-80 md:h-80 lg:w-[400px] lg:h-[400px] object-cover rounded-full shadow-lg"
-          />
+        <div class="flex flex-wrap items-center gap-x-5 gap-y-2 text-slate-400">
+          <a
+            href="https://github.com/kunvinthien-cyber"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="transition-colors hover:text-cyan-200"
+          >GitHub</a>
+          <a href="#contact" class="transition-colors hover:text-cyan-200">{{ t.contact }}</a>
+          <span class="text-xs text-slate-400">© {{ new Date().getFullYear() }} Kun Vinthien. {{ t.footerRights }}</span>
         </div>
       </div>
-
-      <!-- SKILLS SCROLL -->
-      <div class="w-full flex justify-center mt-12 px-4">
-        <div
-          class="w-full max-w-6xl bg-gradient-to-r from-gray-900 via-black to-gray-900 rounded-3xl p-6 shadow-2xl border border-gray-800"
-        >
-          <div class="relative overflow-hidden">
-            <div class="flex w-max animate-scroll gap-4">
-
-              <div
-                v-for="(skill, index) in skills"
-                :key="'a' + index"
-                class="px-5 py-3 rounded-2xl bg-gray-800/80 border border-gray-700 hover:bg-blue-600 transition flex-shrink-0"
-              >
-                <h3 class="text-white font-semibold">
-                  {{ skill }}
-                </h3>
-              </div>
-
-              <div
-                v-for="(skill, index) in skills"
-                :key="'b' + index"
-                class="px-5 py-3 rounded-2xl bg-gray-800/80 border border-gray-700 hover:bg-blue-600 transition flex-shrink-0"
-              >
-                <h3 class="text-white font-semibold">
-                  {{ skill }}
-                </h3>
-              </div>
-
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- SECTIONS -->
-      <section class="w-full" id="about">
-        <AboutPage />
-      </section>
-
-      <section class="w-full " id="education">
-        <EducationPage />
-      </section>
-
-      <section class="w-full" id="skills">
-        <SkillsPage />
-      </section>
-
-      <section class="w-full" id="experience">
-        <ExperiencePage />
-      </section>
-
-      <section class="w-full" id="projects">
-        <ProjectPage />
-      </section>
-
-      <section class="w-full" id="contact">
-        <ContactPage />
-      </section>
-
-    </div>
+    </footer>
   </div>
 </template>
-
-<style scoped>
-.animate-scroll {
-  display: flex;
-  width: max-content;
-  animation: scroll 18s linear infinite;
-  will-change: transform;
-}
-
-@keyframes scroll {
-  from {
-    transform: translateX(0);
-  }
-  to {
-    transform: translateX(-50%);
-  }
-}
-
-html {
-  scroll-behavior: smooth;
-}
-</style>

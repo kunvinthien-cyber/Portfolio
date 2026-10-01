@@ -1,167 +1,106 @@
 <script setup>
-import { ref } from 'vue'
-const activeIndex = ref(0)
-const expanded = ref(null)
+const props = defineProps({ t: { type: Object, required: true } })
 
-const toggle = (index) => {
-  expanded.value = expanded.value === index ? null : index
-}
-const skills = [
+const groups = [
   {
-    name: 'HTML',
-    icon: 'fa-brands fa-html5',
-    color: 'text-orange-400',
-    rating: 100,
-    description: 'Proficient in HTML5, creating semantic and accessible web structures with a focus on responsive design and cross-browser compatibility.'
+    name: 'Frontend',
+    skills: [
+      {
+        name: 'HTML',
+        icon: 'fa-brands fa-html5',
+        color: 'text-orange-300',
+      },
+      {
+        name: 'CSS',
+        icon: 'fa-brands fa-css3-alt',
+        color: 'text-blue-300',
+      },
+      {
+        name: 'JavaScript',
+        icon: 'fa-brands fa-js',
+        color: 'text-yellow-300',
+      },
+      {
+        name: 'Vue.js',
+        icon: 'fa-brands fa-vuejs',
+        color: 'text-emerald-300',
+      },
+      {
+        name: 'Tailwind CSS',
+        icon: 'fa-solid fa-wind',
+        color: 'text-cyan-200',
+      },
+    ],
   },
   {
-    name: 'CSS',
-    icon: 'fa-brands fa-css3-alt',
-    color: 'text-blue-400',
-    rating: 90,
-    description: 'Skilled in CSS3, creating visually appealing and responsive designs with a focus on modern styling techniques and browser compatibility.'
+    name: 'Backend & data',
+    skills: [
+      {
+        name: 'php',
+        icon: 'fa-brands fa-php',
+        color: 'text-violet-300',
+      },
+      {
+        name: 'Laravel',
+        icon: 'fa-brands fa-laravel',
+        color: 'text-rose-300',
+      },
+      {
+        name: 'MySQL',
+        icon: 'fa-solid fa-database',
+        color: 'text-sky-200',
+      },
+    ],
   },
   {
-    name: 'JavaScript',
-    icon: 'fa-brands fa-js',
-    color: 'text-yellow-400',
-    rating: 80,
-    description: 'Skilled in JavaScript, building interactive and dynamic web applications with a focus on modern ES6+ features and best practices.'
-  },
-  {
-    name: 'Vue.js',
-    icon: 'fa-brands fa-vuejs',
-    color: 'text-green-400',
-    rating: 90,
-    description: 'Proficient in Vue.js, creating maintainable and scalable single-page applications with a focus on component-based architecture.'
-  },
-  {
-    name: 'Tailwind CSS',
-    icon: 'fa-solid fa-wind',
-    color: 'text-cyan-400',
-    rating: 80,
-    description: 'Experienced in Tailwind CSS, creating responsive and maintainable UI components with a focus on utility-first styling.'
-  },
-  {
-    name: 'Git',
-    icon: 'fa-brands fa-git-alt',
-    color: 'text-red-400',
-    rating: 100,
-    description: 'Proficient in Git, managing version control and collaborating effectively with team members.'
-  },
-  {
-    name: 'php',
-    icon: 'fa-brands fa-php',
-    color: 'text-purple-400',
-    rating: 80,
-    description: 'Proficient in php, creating dynamic and interactive web applications with a focus on server-side programming and database integration.'
-  },
-  {
-    name: 'Laravel',
-    icon: 'fa-brands fa-laravel',
-    color: 'text-red-600',
-    rating: 80,
-    description: 'Experienced in Laravel, building robust and scalable web applications with a focus on MVC architecture and best practices.'
-  },
-  {
-    name: 'MySQL',
-    icon: 'fa-solid fa-database',
-    color: 'text-green-400',
-    rating: 90,
-    description: 'Proficient in MySQL, designing and implementing relational database solutions with a focus on performance and scalability.'
+    name: 'Tools & workflow',
+    skills: [
+      {
+        name: 'Git',
+        icon: 'fa-brands fa-git-alt',
+        color: 'text-orange-300',
+      },
+    ],
   },
 ]
 </script>
 
 <template>
-  <div class="w-full flex justify-center items-center px-4 py-10">
-    <div class="w-full max-w-6xl mx-auto bg-zinc-800 text-white px-5 sm:px-8 py-8 rounded-3xl shadow-xl">
+  <div class="section-shell">
+    <div class="mb-8 max-w-xl">
+      <p class="section-kicker">{{ props.t.skillsKicker }}</p>
+      <h2 class="section-title mt-2">{{ props.t.skillsTitle }}</h2>
+      <p class="mt-3 text-sm leading-7 text-slate-400 sm:text-base">
+        {{ props.t.skillsIntro }}
+      </p>
+    </div>
 
-      <!-- Header -->
-      <div class="text-center mb-8">
-        <h1 class="text-white text-3xl sm:text-4xl font-bold">Skills</h1>
-        <div class="w-16 h-1 bg-cyan-400 rounded-full mx-auto mt-2"></div>
-      </div>
-
-      <!-- Skills Grid -->
-      <div class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-        <div
-          v-for="(skill, index) in skills"
-          :key="index"
-          @pointermove="activeIndex = index"
-          class="skill-card flex flex-col gap-3 bg-zinc-700 p-5 sm:p-6 rounded-2xl border-l-4 border-b-2 transition-all duration-300 cursor-default"
-          :class="activeIndex === index ? 'active-card' : 'border-white/10'"
-        >
-          <!-- Icon + Name -->
-          <div class="flex items-center gap-3">
-            <i :class="[skill.icon, skill.color]" class="text-2xl sm:text-3xl"></i>
-            <h2 class="text-lg sm:text-xl font-bold text-white">{{ skill.name }}</h2>
-          </div>
-
-          <!-- Description -->
-          <div class="description grid grid-cols-[70%_auto] items-end gap-2 mb-4 ">
-            <p
-  class="text-gray-400 text-sm leading-relaxed transition-all duration-300"
-  :class="expanded === index ? '' : 'line-clamp-3'"
->
-  {{ skill.description }}
-</p>
-
-<button
-  @click="toggle(index)"
-  class="text-blue-400 text-[10px] mt-2 hover:underline"
->
-  {{ expanded === index ? 'Show Less' : 'See More...' }}
-</button>
-</div>
-
-          <!-- Progress Bar -->
-          <div>
-            <div class="flex justify-between text-xs text-zinc-400 mb-1">
-              <span>Proficiency</span>
-              <span>{{ skill.rating }}%</span>
-            </div>
-            <div class="h-2 bg-zinc-600 rounded-full overflow-hidden">
-              <div
-                class="h-full bg-cyan-400 rounded-full transition-all duration-700"
-                :style="{ width: skill.rating + '%' }"
-              ></div>
-            </div>
-          </div>
-
+    <div class="grid gap-4 lg:grid-cols-3">
+      <section
+        v-for="(group, groupIndex) in groups"
+        :key="group.name"
+        class="surface-card rounded-2xl p-5 sm:p-6"
+        :aria-label="`${props.t.skillGroups[groupIndex].name} ${props.t.skillsTitle}`"
+      >
+        <div class="mb-5 border-b border-white/10 pb-4">
+          <h3 class="text-lg font-semibold text-white">{{ props.t.skillGroups[groupIndex].name }}</h3>
+          <p class="mt-1 text-xs text-slate-500">{{ props.t.skillGroups[groupIndex].summary }}</p>
         </div>
-      </div>
-
+        <ul class="space-y-2.5">
+          <li
+            v-for="skill in group.skills"
+            :key="skill.name"
+            class="skill-item group rounded-xl border border-transparent px-3 py-3 transition-colors duration-200 hover:border-white/10 hover:bg-white/[0.035]"
+            :style="{ '--skill-delay': `${group.skills.indexOf(skill) * 55}ms` }"
+          >
+            <div class="flex items-center gap-3">
+              <i :class="[skill.icon, skill.color]" class="w-5 text-center text-lg" aria-hidden="true"></i>
+              <h4 class="text-sm font-semibold text-slate-100">{{ skill.name }}</h4>
+            </div>
+            <p class="mt-2 pl-8 text-xs leading-5 text-slate-400">{{ props.t.skillDescriptions[skill.name] }}</p>
+          </li>
+        </ul>
+      </section>
     </div>
   </div>
 </template>
-
-<style scoped>
-.active-card {
-  animation: borderFlow 3s linear infinite;
-  background: rgba(255, 255, 255, 0.05);
-}
-
-@keyframes borderFlow {
-  0% {
-    border-left-color: #06b6d4;
-    border-bottom-color: #06b6d4;
-    box-shadow: 0 0 10px #06b6d4;
-  }
-  33% {
-    border-left-color: #8b5cf6;
-    border-bottom-color: #8b5cf6;
-    box-shadow: 0 0 15px #8b5cf6;
-  }
-  66% {
-    border-left-color: #ec4899;
-    border-bottom-color: #ec4899;
-    box-shadow: 0 0 15px #ec4899;
-  }
-  100% {
-    border-left-color: #06b6d4;
-    border-bottom-color: #06b6d4;
-    box-shadow: 0 0 10px #06b6d4;
-  }
-}
-</style>
