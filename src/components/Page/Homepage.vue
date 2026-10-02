@@ -8,8 +8,9 @@
  const githubUrl =
    'https://github.com/kunvinthien-cyber?tab=overview&from=2026-04-01&to=2026-04-30'
  const navItems = [
-   { id: 'projects', label: 'projects' },
-   { id: 'case-studies', label: 'caseStudies' },
+   { id: 'about', label: 'about' },
+   { id:'education', label:'education'},
+   { id: 'projects', label: 'caseStudies' },
    { id: 'skills', label: 'stack' },
    { id: 'experience', label: 'experience' },
    { id: 'contact', label: 'contact' },
@@ -118,11 +119,11 @@
  </script>
 
  <template>
-   <div class="mx-auto w-full max-w-6xl px-3 sm:px-6">
+   <div class="w-full max-w-6xl px-3 mx-auto sm:px-6">
      <header
        ref="headerElement"
        :class="{ 'nav-scrolled': hasScrolled }"
-       class="hero-nav relative flex min-h-17 items-center justify-between gap-4 rounded-2xl border border-zinc-800/80 bg-zinc-950/55 px-4 shadow-lg shadow-black/10 backdrop-blur-md sm:px-5"
+       class="relative flex items-center justify-between gap-4 px-4 border shadow-lg hero-nav min-h-17 rounded-2xl border-zinc-800/80 bg-zinc-950/55 shadow-black/10 backdrop-blur-md sm:px-5"
      >
        <a
          href="#home"
@@ -135,7 +136,7 @@
          </span>
        </a>
 
-       <nav :aria-label="props.t.mainNavigation" class="hidden items-center gap-1 lg:flex">
+       <nav :aria-label="props.t.mainNavigation" class="items-center hidden gap-1 lg:flex">
          <a
            v-for="item in navItems"
            :key="item.id"
@@ -154,7 +155,7 @@
        </nav>
 
        <div class="flex items-center gap-2">
-         <div class="hidden items-center rounded-full border border-white/10 bg-white/3 p-1 text-xs sm:flex">
+         <div class="items-center hidden p-1 text-xs border rounded-full border-white/10 bg-white/3 sm:flex">
            <button
              type="button"
              class="preference-button"
@@ -176,7 +177,7 @@
          </div>
          <button
            type="button"
-           class="theme-toggle hidden sm:inline-flex"
+           class="hidden theme-toggle sm:inline-flex"
            :aria-label="`${props.t.theme}: ${preferences.theme === 'dark' ? 'light' : 'dark'}`"
            @click="preferences.toggleTheme()"
          >
@@ -186,12 +187,12 @@
            :href="githubUrl"
            target="_blank"
            rel="noopener noreferrer"
-           class="button-secondary hidden min-h-10 px-4 text-sm sm:inline-flex"
+           class="hidden px-4 text-sm button-secondary min-h-10 sm:inline-flex"
          >
            <i class="fa-brands fa-github" aria-hidden="true"></i>
            <span>GitHub</span>
          </a>
-         <a href="#contact" class="hire-button hidden sm:inline-flex" @click.prevent="scrollToSection('contact')">
+         <a href="#contact" class="hidden hire-button sm:inline-flex" @click.prevent="scrollToSection('contact')">
            {{ props.t.hireMe }}
            <ArrowUpRight :size="14" aria-hidden="true" />
          </a>
@@ -199,7 +200,7 @@
          <button
            ref="menuToggle"
            type="button"
-           class="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 text-slate-200 transition-colors hover:bg-white/10 lg:hidden"
+           class="flex items-center justify-center w-10 h-10 transition-colors border rounded-full border-white/10 text-slate-200 hover:bg-white/10 lg:hidden"
            :aria-expanded="isOpen"
            aria-controls="mobile-navigation"
            :aria-label="isOpen ? props.t.closeMenu : props.t.openMenu"
@@ -240,7 +241,7 @@
              {{ props.t[item.label] }}
              <i
                v-if="activeSection === item.id"
-               class="fa-solid fa-arrow-right text-xs"
+               class="text-xs fa-solid fa-arrow-right"
                aria-hidden="true"
              ></i>
            </a>
@@ -248,20 +249,20 @@
              :href="githubUrl"
              target="_blank"
              rel="noopener noreferrer"
-             class="mt-1 flex items-center gap-2 rounded-xl border-t border-white/10 px-4 py-3 text-sm text-slate-300"
+             class="flex items-center gap-2 px-4 py-3 mt-1 text-sm border-t rounded-xl border-white/10 text-slate-300"
            >
              <i class="fa-brands fa-github" aria-hidden="true"></i>
              {{ props.t.viewGitHub }}
            </a>
            <a
              href="#contact"
-             class="hire-button mt-2 flex w-full"
+             class="flex w-full mt-2 hire-button"
              @click.prevent="scrollToSection('contact')"
            >
              {{ props.t.hireMe }}
              <ArrowUpRight :size="14" aria-hidden="true" />
            </a>
-            <div class="flex items-center rounded-full border border-white/10 bg-white/3 p-1 text-xs sm:hidden">
+            <div class="flex items-center p-1 text-xs border rounded-full border-white/10 bg-white/3 sm:hidden">
               <button
                 type="button"
                 class="preference-button"

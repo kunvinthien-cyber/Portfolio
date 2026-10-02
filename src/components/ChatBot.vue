@@ -61,29 +61,29 @@ const clearConversation = () => {
 </script>
 
 <template>
-  <div class="chat-widget fixed bottom-4 right-4 z-50 sm:bottom-6 sm:right-6">
+  <div class="fixed z-50 chat-widget bottom-4 right-4 sm:bottom-6 sm:right-6">
     <Transition
       enter-active-class="transition duration-200 ease-out"
-      enter-from-class="translate-y-3 scale-95 opacity-0"
-      enter-to-class="translate-y-0 scale-100 opacity-100"
+      enter-from-class="scale-95 translate-y-3 opacity-0"
+      enter-to-class="scale-100 translate-y-0 opacity-100"
       leave-active-class="transition duration-150 ease-in"
-      leave-from-class="translate-y-0 scale-100 opacity-100"
-      leave-to-class="translate-y-3 scale-95 opacity-0"
+      leave-from-class="scale-100 translate-y-0 opacity-100"
+      leave-to-class="scale-95 translate-y-3 opacity-0"
     >
       <section
         v-if="isOpen"
         class="flex h-[min(39rem,calc(100dvh-8rem))] w-[min(24rem,calc(100vw-2rem))] flex-col overflow-hidden rounded-[1.75rem] border border-white/10 bg-slate-950/95 shadow-[0_24px_90px_-24px_rgba(0,0,0,0.8)] ring-1 ring-white/4 backdrop-blur-2xl"
         :aria-label="isKhmer ? 'ជជែកជាមួយ Vinthien' : 'Chat with Vinthien'"
       >
-        <header class="relative isolate flex shrink-0 items-center gap-3 overflow-hidden border-b border-white/10 bg-linear-to-br from-slate-900 via-slate-900 to-cyan-950/70 px-4 py-4">
-          <div class="pointer-events-none absolute -right-10 -top-20 -z-10 h-40 w-40 rounded-full bg-cyan-400/15 blur-3xl"></div>
-          <div class="relative grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-linear-to-br from-cyan-300 to-blue-500 text-sm font-black tracking-wide text-slate-950 shadow-lg shadow-cyan-950/40">
+        <header class="relative flex items-center gap-3 px-4 py-4 overflow-hidden border-b isolate shrink-0 border-white/10 bg-linear-to-br from-slate-900 via-slate-900 to-cyan-950/70">
+          <div class="absolute w-40 h-40 rounded-full pointer-events-none -right-10 -top-20 -z-10 bg-cyan-400/15 blur-3xl"></div>
+          <div class="relative grid w-12 h-12 text-sm font-black tracking-wide shadow-lg shrink-0 place-items-center rounded-2xl bg-linear-to-br from-cyan-300 to-blue-500 text-slate-950 shadow-cyan-950/40">
             KV
             <span class="absolute -bottom-1 -right-1 h-3.5 w-3.5 rounded-full border-[3px] border-slate-900 bg-emerald-400"></span>
           </div>
 
-          <div class="min-w-0 flex-1">
-            <h2 class="truncate text-sm font-bold text-white">
+          <div class="flex-1 min-w-0">
+            <h2 class="text-sm font-bold text-white truncate">
               {{ isKhmer ? 'ជជែកជាមួយ Vinthien' : 'Chat with Vinthien' }}
             </h2>
             <p class="mt-0.5 flex items-center gap-1.5 text-xs text-slate-400">
@@ -96,7 +96,7 @@ const clearConversation = () => {
             <button
               v-if="messages.length"
               type="button"
-              class="grid h-9 w-9 place-items-center rounded-xl text-slate-400 transition hover:bg-white/10 hover:text-white focus-visible:outline-2 focus-visible:outline-cyan-300"
+              class="grid transition h-9 w-9 place-items-center rounded-xl text-slate-400 hover:bg-white/10 hover:text-white focus-visible:outline-2 focus-visible:outline-cyan-300"
               :aria-label="isKhmer ? 'សម្អាតការសន្ទនា' : 'Clear conversation'"
               :title="isKhmer ? 'សម្អាតការសន្ទនា' : 'Clear conversation'"
               @click="clearConversation"
@@ -107,21 +107,21 @@ const clearConversation = () => {
             </button>
             <button
               type="button"
-              class="grid h-9 w-9 place-items-center rounded-xl text-slate-400 transition hover:bg-white/10 hover:text-white focus-visible:outline-2 focus-visible:outline-cyan-300"
+              class="grid transition h-9 w-9 place-items-center rounded-xl text-slate-400 hover:bg-white/10 hover:text-white focus-visible:outline-2 focus-visible:outline-cyan-300"
               :aria-label="isKhmer ? 'បង្រួមការជជែក' : 'Minimize chat'"
               @click="isOpen = false"
             >
-              <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+              <svg viewBox="0 0 24 24" class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
                 <path stroke-linecap="round" d="M5 12h14" />
               </svg>
             </button>
           </div>
         </header>
 
-        <div ref="messageList" class="chat-scroll min-h-0 flex-1 overflow-y-auto px-4 py-5 sm:px-5">
-          <div v-if="!messages.length" class="flex min-h-full flex-col justify-center">
-            <div class="mb-5 grid h-12 w-12 place-items-center rounded-2xl border border-cyan-300/15 bg-cyan-300/8 text-cyan-200">
-              <svg viewBox="0 0 24 24" class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
+        <div ref="messageList" class="flex-1 min-h-0 px-4 py-5 overflow-y-auto chat-scroll sm:px-5">
+          <div v-if="!messages.length" class="flex flex-col justify-center min-h-full">
+            <div class="grid w-12 h-12 mb-5 border place-items-center rounded-2xl border-cyan-300/15 bg-cyan-300/8 text-cyan-200">
+              <svg viewBox="0 0 24 24" class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M8 10h8M8 14h5m-1 7-4-4H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-5l-4 4Z" />
               </svg>
             </div>
@@ -135,7 +135,7 @@ const clearConversation = () => {
               {{ isKhmer ? 'សួរខ្ញុំអំពីគម្រោង ជំនាញ ឬបទពិសោធន៍របស់ខ្ញុំ។' : 'Ask me about my projects, skills, or experience.' }}
             </p>
 
-            <div class="mt-6 flex flex-col gap-2">
+            <div class="flex flex-col gap-2 mt-6">
               <button
                 v-for="suggestion in suggestions"
                 :key="suggestion"
@@ -188,7 +188,7 @@ const clearConversation = () => {
         </div>
 
         <div class="shrink-0 border-t border-white/8 bg-slate-950/70 p-3.5 sm:p-4">
-          <p v-if="error" role="alert" class="mb-2 rounded-xl border border-rose-400/15 bg-rose-400/7 px-3 py-2 text-xs leading-5 text-rose-200">
+          <p v-if="error" role="alert" class="px-3 py-2 mb-2 text-xs leading-5 border rounded-xl border-rose-400/15 bg-rose-400/7 text-rose-200">
             {{ chatErrorMessage }}
           </p>
 
@@ -207,13 +207,13 @@ const clearConversation = () => {
             <button
               type="submit"
               :disabled="isLoading || !input.trim()"
-              class="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-linear-to-br from-cyan-300 to-blue-500 text-slate-950 shadow-md shadow-cyan-950/30 transition hover:brightness-110 focus-visible:outline-2 focus-visible:outline-cyan-200 disabled:cursor-not-allowed disabled:opacity-40"
+              class="grid w-10 h-10 transition shadow-md shrink-0 place-items-center rounded-xl bg-linear-to-br from-cyan-300 to-blue-500 text-slate-950 shadow-cyan-950/30 hover:brightness-110 focus-visible:outline-2 focus-visible:outline-cyan-200 disabled:cursor-not-allowed disabled:opacity-40"
               :aria-label="isKhmer ? 'ផ្ញើសារ' : 'Send message'"
             >
               <svg v-if="!isLoading" viewBox="0 0 24 24" class="h-4.5 w-4.5" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
                 <path stroke-linecap="round" stroke-linejoin="round" d="m5 12 14-7-4 14-3-6-7-1Zm7 1 7-8" />
               </svg>
-              <span v-else class="h-4 w-4 animate-spin rounded-full border-2 border-slate-950/25 border-t-slate-950" aria-hidden="true"></span>
+              <span v-else class="w-4 h-4 border-2 rounded-full animate-spin border-slate-950/25 border-t-slate-950" aria-hidden="true"></span>
             </button>
           </form>
           <p class="mt-2.5 text-center text-[10px] tracking-wide text-slate-600">
@@ -226,11 +226,11 @@ const clearConversation = () => {
     <button
       v-if="!isOpen"
       type="button"
-      class="group relative grid h-14 w-14 place-items-center rounded-2xl bg-linear-to-br from-cyan-300 to-blue-500 text-slate-950 shadow-xl shadow-cyan-950/40 transition duration-200 hover:-translate-y-1 hover:shadow-2xl hover:shadow-cyan-950/50 focus-visible:outline-2 focus-visible:outline-cyan-200 focus-visible:outline-offset-4"
+      class="relative grid transition duration-200 shadow-xl group h-14 w-14 place-items-center rounded-2xl bg-linear-to-br from-cyan-300 to-blue-500 text-slate-950 shadow-cyan-950/40 hover:-translate-y-1 hover:shadow-2xl hover:shadow-cyan-950/50 focus-visible:outline-2 focus-visible:outline-cyan-200 focus-visible:outline-offset-4"
       :aria-label="isKhmer ? 'បើកការជជែក' : 'Open chat'"
       @click="isOpen = true"
     >
-      <svg viewBox="0 0 24 24" class="h-6 w-6 transition-transform group-hover:scale-110" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+      <svg viewBox="0 0 24 24" class="w-6 h-6 transition-transform group-hover:scale-110" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
         <path stroke-linecap="round" stroke-linejoin="round" d="M8 10h8M8 14h5m-1 7-4-4H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-5l-4 4Z" />
       </svg>
       <span class="absolute -right-1 -top-1 h-3.5 w-3.5 rounded-full border-[3px] border-slate-950 bg-emerald-400"></span>

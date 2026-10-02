@@ -156,7 +156,7 @@ export const translations = {
     about: 'អំពីខ្ញុំ',
     skills: 'ជំនាញ',
     projects: 'គម្រោង',
-    caseStudies: 'ករណីសិក្សា',
+    caseStudies: 'គម្រោង និងករណីសិក្សា',
     stack: 'ជំនាញ',
     experience: 'បទពិសោធន៍',
     education: 'ការសិក្សា',

@@ -5,7 +5,7 @@ import { defineConfig, loadEnv } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import vueDevTools from 'vite-plugin-vue-devtools'
 import tailwindcss from '@tailwindcss/vite'
-import { handleChatRequest } from './server/chat.post.ts'
+import { handleChatRequest } from './server/api/chat.post.ts'
 
 const telegramProxy = {
   '/telegram': {
