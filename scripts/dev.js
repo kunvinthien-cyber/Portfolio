@@ -23,10 +23,21 @@ const stopChildren = (exitCode = 0) => {
 for (const child of children) {
   child.on('error', (error) => {
     console.error('Failed to start development process:', error)
-    stopChildren(1)
+    if (child === children[1]) stopChildren(1)
   })
   child.on('exit', (code, signal) => {
-    if (!stopping) stopChildren(code ?? (signal ? 1 : 0))
+    if (stopping) return
+
+    if (child === children[0]) {
+      if (code !== 0) {
+        console.error(
+          'The local chat API did not start. Vite will continue; check whether API_PORT is already in use.',
+        )
+      }
+      return
+    }
+
+    stopChildren(code ?? (signal ? 1 : 0))
   })
 }
 

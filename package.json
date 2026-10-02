@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "node --env-file-if-exists=.env scripts/dev.js",
     "build": "vite build",
-    "preview": "vite preview",
+    "preview": "node --env-file-if-exists=.env scripts/dev.js preview --host 127.0.0.1 --port 4173",
     "test:e2e": "playwright test",
     "format": "prettier --write --experimental-cli src/"
   },

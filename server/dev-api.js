@@ -55,7 +55,7 @@ const server = createServer(async (request, response) => {
         : []
     const result = await handleChatRequest(
       history,
-      process.env.GEMINI_API_KEY,
+      process.env.GEMINI_API_KEY || process.env.GOOGLE_GENERATIVE_AI_API_KEY,
       typeof body.message === 'string' ? body.message : undefined,
     )
 
@@ -73,4 +73,9 @@ const server = createServer(async (request, response) => {
 
 server.listen(port, '127.0.0.1', () => {
   console.log(`Local chat API listening on http://127.0.0.1:${port}`)
+})
+
+server.on('error', (error) => {
+  console.error(`Unable to start the local chat API on port ${port}:`, error.message)
+  process.exitCode = 1
 })

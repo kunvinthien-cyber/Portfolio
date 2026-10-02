@@ -126,12 +126,15 @@ export async function handleChatRequest(messages, apiKey, currentMessage) {
     console.error("Gemini API error:", error);
 
     const isTemporarilyUnavailable = error?.status === 503;
+    const quotaExceeded = error?.status === 429;
     return new Response(JSON.stringify({
       error: isTemporarilyUnavailable
         ? "Gemini is temporarily busy. Please wait a moment and try again."
-        : "Unable to process your message.",
+        : quotaExceeded
+          ? "The AI chat has reached its Gemini API usage limit. Please try again after the quota resets, or contact Kun directly."
+          : "Unable to process your message.",
     }), {
-      status: isTemporarilyUnavailable ? 503 : 500,
+      status: isTemporarilyUnavailable ? 503 : quotaExceeded ? 429 : 500,
       headers: { "Content-Type": "application/json" },
     });
   }

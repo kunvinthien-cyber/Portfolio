@@ -179,7 +179,9 @@ const askGemini = async (message, history) => {
   if (!response.ok) {
     const error =
       typeof data?.error === "string" ? data.error : data?.error?.message;
-    throw new Error(error || `Chat request failed (${response.status}).`);
+    const requestError = new Error(error || `Chat request failed (${response.status}).`);
+    requestError.status = response.status;
+    throw requestError;
   }
 
   if (typeof data.reply !== "string" || !data.reply.trim()) {
@@ -226,7 +228,7 @@ const sendMessage = async (quickMessage = null) => {
     messages.value.push({
       role: "assistant",
       content:
-        error.message?.includes("temporarily busy")
+        error.status === 429 || error.message?.includes("temporarily busy")
           ? error.message
           : "Sorry, I couldn't process your message right now. Please use the contact section to reach Kun directly.",
     });
