@@ -11,7 +11,7 @@
       <section
         v-if="isOpen"
         class="mb-4 flex h-[min(640px,calc(100dvh-6rem))] w-[min(390px,calc(100vw-2.5rem))] flex-col overflow-hidden rounded-[1.75rem] border border-white/70 bg-white shadow-[0_24px_80px_-20px_rgba(15,23,42,0.38)] ring-1 ring-black/5 dark:border-white/10 dark:bg-slate-950 dark:ring-white/10"
-        aria-label="AI Assistant chat"
+        aria-label="Portfolio assistant chat"
       >
         <header class="relative shrink-0 overflow-hidden bg-slate-950 px-5 py-5 text-white">
           <div class="absolute -right-8 -top-12 h-36 w-36 rounded-full bg-indigo-500/30 blur-3xl"></div>
@@ -22,7 +22,7 @@
                 <span class="absolute -bottom-1 -right-1 h-3.5 w-3.5 rounded-full border-2 border-slate-950 bg-emerald-400"></span>
               </div>
               <div class="min-w-0">
-                <h3 class="truncate text-sm font-semibold tracking-wide">Kun's AI Assistant</h3>
+                <h3 class="truncate text-sm font-semibold tracking-wide">Kun's Portfolio Assistant</h3>
                 <p class="mt-1 flex items-center gap-1.5 text-xs text-slate-300">
                   <span class="h-1.5 w-1.5 rounded-full bg-emerald-400"></span>
                   Here to help
@@ -51,7 +51,7 @@
               👋 Hi, I'm Kun's assistant.
             </p>
             <p class="mt-1.5 text-xs leading-relaxed text-slate-500 dark:text-slate-400">
-              Ask me about Kun's skills, projects, or experience.
+              Ask me about Kun's background, projects, skills, or contact details.
             </p>
             <div class="mt-4 space-y-2">
               <button
@@ -73,7 +73,7 @@
             :class="message.role === 'user' ? 'justify-end' : 'justify-start'"
           >
             <div
-              class="max-w-[88%] whitespace-pre-wrap break-words rounded-2xl px-4 py-3 text-sm leading-relaxed shadow-sm"
+              class="max-w-[88%] whitespace-pre-wrap wrap-break-word rounded-2xl px-4 py-3 text-sm leading-relaxed shadow-sm"
               :class="
                 message.role === 'user'
                   ? 'rounded-br-md bg-indigo-600 text-white'
@@ -121,7 +121,7 @@
               </svg>
             </button>
           </div>
-          <p class="mt-2 text-center text-[10px] text-slate-400">AI can make mistakes. Check important information.</p>
+          <p class="mt-2 text-center text-[10px] text-slate-400">Answers are based on the information in this portfolio.</p>
         </form>
       </section>
     </Transition>
@@ -130,111 +130,146 @@
       v-if="!isOpen"
       @click="isOpen = true"
       class="group relative flex h-14 items-center gap-2.5 rounded-full bg-slate-950 px-4 text-white shadow-[0_12px_32px_-8px_rgba(15,23,42,0.6)] transition duration-200 hover:-translate-y-0.5 hover:bg-indigo-700 hover:shadow-[0_16px_36px_-8px_rgba(79,70,229,0.55)] focus:outline-none focus-visible:ring-4 focus-visible:ring-indigo-400/40"
-      aria-label="Open AI assistant"
+      aria-label="Open portfolio assistant"
     >
       <span class="flex h-8 w-8 items-center justify-center rounded-full bg-white/10 text-lg transition group-hover:rotate-12" aria-hidden="true">✦</span>
-      <span class="pr-1 text-sm font-semibold">Ask AI</span>
+      <span class="pr-1 text-sm font-semibold">Ask me</span>
     </button>
   </div>
 </template>
 
 <script setup>
-import { nextTick, ref } from "vue";
+import { nextTick, ref } from 'vue'
 
-const isOpen = ref(false);
-const isLoading = ref(false);
-const input = ref("");
-const messages = ref([]);
-const messagesContainer = ref(null);
+const isOpen = ref(false)
+const isLoading = ref(false)
+const input = ref('')
+const messages = ref([])
+const messagesContainer = ref(null)
+
+const KNOWLEDGE_BASE = {
+  about: {
+    keywords: ['about', 'background', 'who is kun', 'who are you', 'developer', 'career', 'experience', 'education', 'location', 'phnom penh'],
+    answer:
+      "Kun Vinthien is a web developer based in Phnom Penh, Cambodia. He holds a Bachelor's degree in Computer Science and enjoys building responsive, user-friendly web experiences. His portfolio highlights personal, academic, and collaborative development work, and he is open to new opportunities.",
+  },
+  projects: {
+    keywords: ['project', 'projects', 'portfolio', 'ecommerce', 'e-commerce', 'online store', 'pos', 'point of sale', 'chillstudy', 'chill study', 'team assignment', 'work', 'built'],
+    answer:
+      'Kun’s portfolio features several projects:\n\n• Personal Portfolio — a responsive Vue.js and Tailwind CSS site presenting his work.\n• E-commerce Website — a Vue.js, Laravel, and Tailwind CSS storefront; it is still in progress.\n• POS System — a Laravel, MySQL, and Tailwind CSS project for sales and inventory; it is still in progress.\n• Team Assignment Project — a collaborative Nuxt.js, Express.js, and Supabase project.\n• ChillStudy — a Nuxt.js and Supabase project marked as coming soon.\n\nYou can explore the project cards on this page for more details and links.',
+  },
+  skills: {
+    keywords: ['skill', 'skills', 'technology', 'technologies', 'tech stack', 'stack', 'frontend', 'front end', 'backend', 'back end', 'vue', 'javascript', 'html', 'css', 'tailwind', 'php', 'laravel', 'mysql', 'git', 'github', 'tools'],
+    answer:
+      'Kun’s toolkit covers frontend development with HTML, CSS, JavaScript, Vue.js, and Tailwind CSS; backend and data work with PHP, Laravel, and MySQL; and collaboration tools including Git, GitHub, and VS Code. His projects also include Nuxt.js, Supabase, and Express.js.',
+  },
+  contact: {
+    keywords: ['contact', 'email', 'reach', 'hire', 'opportunity', 'opportunities', 'collaborate', 'linkedin', 'github profile', 'get in touch'],
+    answer:
+      'Kun is open to opportunities, freelance work, and collaboration. You can reach him at kunvinthien@gmail.com, or use the contact form on this page. His GitHub profile is github.com/kunvinthien-cyber.',
+  },
+}
+
+const FALLBACK_RESPONSE =
+  "I can help with questions about Kun’s background, projects, skills, and contact details. Try asking about one of those topics, or use the contact form for anything else."
 
 const quickQuestions = [
-  "What skills does Kun have?",
-  "Tell me about his projects.",
-  "What kind of developer is Kun?",
-  "How can I contact Kun?",
-];
+  'What skills does Kun have?',
+  'Tell me about his projects.',
+  'What kind of developer is Kun?',
+  'How can I contact Kun?',
+]
+
+const normalizeText = (value) =>
+  value
+    .toLocaleLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-z0-9]+/g, ' ')
+    .trim()
+
+const editDistance = (left, right) => {
+  const row = Array.from({ length: right.length + 1 }, (_, index) => index)
+
+  for (let leftIndex = 1; leftIndex <= left.length; leftIndex += 1) {
+    let diagonal = row[0]
+    row[0] = leftIndex
+
+    for (let rightIndex = 1; rightIndex <= right.length; rightIndex += 1) {
+      const previous = row[rightIndex]
+      row[rightIndex] = Math.min(
+        row[rightIndex] + 1,
+        row[rightIndex - 1] + 1,
+        diagonal + (left[leftIndex - 1] === right[rightIndex - 1] ? 0 : 1),
+      )
+      diagonal = previous
+    }
+  }
+
+  return row[right.length]
+}
+
+const keywordMatchScore = (query, keyword) => {
+  const normalizedKeyword = normalizeText(keyword)
+  if (query.includes(normalizedKeyword)) return 2
+
+  const keywordWords = normalizedKeyword.split(' ')
+  const queryWords = query.split(' ')
+  let matches = 0
+
+  for (const keywordWord of keywordWords) {
+    const found = queryWords.some((queryWord) => {
+      if (queryWord === keywordWord) return true
+      if (Math.min(queryWord.length, keywordWord.length) < 4) return false
+
+      const distance = editDistance(queryWord, keywordWord)
+      return distance <= 1 && distance / Math.max(queryWord.length, keywordWord.length) <= 0.25
+    })
+
+    if (!found) return 0
+    matches += 1
+  }
+
+  return matches ? 1 + matches / keywordWords.length : 0
+}
+
+const findAnswer = (message) => {
+  const query = normalizeText(message)
+  let bestMatch = null
+  let bestScore = 0
+
+  for (const entry of Object.values(KNOWLEDGE_BASE)) {
+    const score = Math.max(...entry.keywords.map((keyword) => keywordMatchScore(query, keyword)))
+    if (score > bestScore) {
+      bestMatch = entry
+      bestScore = score
+    }
+  }
+
+  return bestMatch?.answer || FALLBACK_RESPONSE
+}
 
 const scrollToBottom = async () => {
-  await nextTick();
+  await nextTick()
 
   if (messagesContainer.value) {
-    messagesContainer.value.scrollTop =
-      messagesContainer.value.scrollHeight;
+    messagesContainer.value.scrollTop = messagesContainer.value.scrollHeight
   }
-};
-
-const askGemini = async (message, history) => {
-  const response = await fetch("/api/chat", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ message, history }),
-  });
-  let data;
-  try {
-    data = await response.json();
-  } catch {
-    throw new Error(`The chat service returned an invalid response (${response.status}).`);
-  }
-
-  if (!response.ok) {
-    const error =
-      typeof data?.error === "string" ? data.error : data?.error?.message;
-    const requestError = new Error(error || `Chat request failed (${response.status}).`);
-    requestError.status = response.status;
-    throw requestError;
-  }
-
-  if (typeof data.reply !== "string" || !data.reply.trim()) {
-    throw new Error("The chat service returned an empty response.");
-  }
-
-  return data.reply;
-};
+}
 
 const sendMessage = async (quickMessage = null) => {
-  const message = (quickMessage || input.value).trim();
+  const message = (quickMessage || input.value).trim()
+  if (!message || isLoading.value) return
 
-  if (!message || isLoading.value) {
-    return;
-  }
+  messages.value.push({ role: 'user', content: message })
+  input.value = ''
+  isLoading.value = true
+  await scrollToBottom()
 
-  messages.value.push({
-    role: "user",
-    content: message,
-  });
-
-  input.value = "";
-  isLoading.value = true;
-
-  await scrollToBottom();
-
-  try {
-    const history = messages.value
-      .slice(-10)
-      .map((item) => ({
-        role: item.role === "user" ? "user" : "model",
-        content: item.content,
-      }));
-
-    const reply = await askGemini(message, history.slice(0, -1));
-
-    messages.value.push({
-      role: "assistant",
-      content: reply,
-    });
-  } catch (error) {
-    console.error(error);
-
-    messages.value.push({
-      role: "assistant",
-      content:
-        error.status === 429 || error.message?.includes("temporarily busy")
-          ? error.message
-          : "Sorry, I couldn't process your message right now. Please use the contact section to reach Kun directly.",
-    });
-  } finally {
-    isLoading.value = false;
-    await scrollToBottom();
-  }
-};
+  // A brief local delay keeps the existing typing indicator and chat rhythm.
+  await new Promise((resolve) => setTimeout(resolve, 450))
+  messages.value.push({ role: 'assistant', content: findAnswer(message) })
+  isLoading.value = false
+  await scrollToBottom()
+}
 </script>
