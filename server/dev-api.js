@@ -55,7 +55,7 @@ const server = createServer(async (request, response) => {
         : []
     const result = await handleChatRequest(
       history,
-      process.env.GEMINI_API_KEY || process.env.GOOGLE_GENERATIVE_AI_API_KEY,
+      process.env.GROQ_API_KEY,
       typeof body.message === 'string' ? body.message : undefined,
     )
 

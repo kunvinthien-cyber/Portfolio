@@ -33,7 +33,7 @@ export default async function handler(request: VercelRequest, response: ServerRe
 
   const result = await handleChatRequest(
     (body as { messages?: unknown; history?: unknown }).messages ?? (body as { history?: unknown }).history ?? [],
-    process.env.GEMINI_API_KEY ?? process.env.GOOGLE_GENERATIVE_AI_API_KEY,
+    process.env.GROQ_API_KEY,
     typeof (body as { message?: unknown }).message === 'string' ? (body as { message: string }).message : undefined,
   )
   response.statusCode = result.status
