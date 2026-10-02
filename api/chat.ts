@@ -1,19 +1,42 @@
+import { Readable } from 'node:stream'
+import type { IncomingMessage, ServerResponse } from 'node:http'
 import { handleChatRequest } from '../server/api/chat.post.ts'
 
-export default async function handler(request: Request): Promise<Response> {
+type VercelRequest = IncomingMessage & { body?: unknown }
+
+export default async function handler(request: VercelRequest, response: ServerResponse) {
   if (request.method !== 'POST') {
-    return new Response('Method Not Allowed', {
-      status: 405,
-      headers: { Allow: 'POST' },
-    })
+    response.statusCode = 405
+    response.setHeader('Allow', 'POST')
+    response.end('Method Not Allowed')
+    return
   }
 
-  let body: { messages?: unknown }
+  let body: unknown = request.body
   try {
-    body = await request.json()
+    if (typeof body === 'string' || Buffer.isBuffer(body)) {
+      body = JSON.parse(body.toString())
+    }
   } catch {
-    return Response.json({ error: 'Request body must be valid JSON.' }, { status: 400 })
+    response.statusCode = 400
+    response.setHeader('Content-Type', 'application/json')
+    response.end(JSON.stringify({ error: 'Request body must be valid JSON.' }))
+    return
   }
 
-  return handleChatRequest(body?.messages, process.env.GOOGLE_GENERATIVE_AI_API_KEY)
+  if (body === null || typeof body !== 'object' || Array.isArray(body)) {
+    response.statusCode = 400
+    response.setHeader('Content-Type', 'application/json')
+    response.end(JSON.stringify({ error: 'Request body must be a JSON object.' }))
+    return
+  }
+
+  const result = await handleChatRequest(
+    (body as { messages?: unknown }).messages,
+    process.env.GOOGLE_GENERATIVE_AI_API_KEY,
+  )
+  response.statusCode = result.status
+  result.headers.forEach((value, name) => response.setHeader(name, value))
+  if (result.body) Readable.fromWeb(result.body).pipe(response)
+  else response.end()
 }
