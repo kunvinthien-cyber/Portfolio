@@ -226,7 +226,9 @@ const sendMessage = async (quickMessage = null) => {
     messages.value.push({
       role: "assistant",
       content:
-        "Sorry, I couldn't process your message right now. Please use the contact section to reach Kun directly.",
+        error.message?.includes("temporarily busy")
+          ? error.message
+          : "Sorry, I couldn't process your message right now. Please use the contact section to reach Kun directly.",
     });
   } finally {
     isLoading.value = false;

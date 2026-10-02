@@ -108,7 +108,14 @@ export async function handleChatRequest(messages, apiKey, currentMessage) {
       }));
 
     const chat = model.startChat({ history });
-    const result = await chat.sendMessage(derivedMessage);
+    let result;
+    try {
+      result = await chat.sendMessage(derivedMessage);
+    } catch (error) {
+      if (error?.status !== 503) throw error;
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      result = await chat.sendMessage(derivedMessage);
+    }
     const reply = result.response.text();
 
     return new Response(JSON.stringify({ reply }), {
@@ -118,8 +125,13 @@ export async function handleChatRequest(messages, apiKey, currentMessage) {
   } catch (error) {
     console.error("Gemini API error:", error);
 
-    return new Response(JSON.stringify({ error: "Unable to process your message." }), {
-      status: 500,
+    const isTemporarilyUnavailable = error?.status === 503;
+    return new Response(JSON.stringify({
+      error: isTemporarilyUnavailable
+        ? "Gemini is temporarily busy. Please wait a moment and try again."
+        : "Unable to process your message.",
+    }), {
+      status: isTemporarilyUnavailable ? 503 : 500,
       headers: { "Content-Type": "application/json" },
     });
   }
