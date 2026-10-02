@@ -1,7 +1,7 @@
 import { portfolioContext } from '../ai-context.js'
 
 const GROQ_CHAT_COMPLETIONS_URL = 'https://api.groq.com/openai/v1/chat/completions'
-const GROQ_MODEL = 'llama-3.3-70b-versatile'
+const GROQ_MODEL = 'openai/gpt-oss-120b'
 
 const createSystemInstruction = () => `
 You are the AI assistant on Kun Vinthien's professional developer portfolio.
