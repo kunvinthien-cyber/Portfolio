@@ -49,7 +49,7 @@ export const projects = [
     visual: 'study',
     icon: 'fa-book-open',
     skills: ['Nuxt.js', 'Supabase', 'Tailwind CSS'],
-    link: 'https://nuxt-profile-gamma.vercel.app',
+    link: 'https://chill-study-cam-pro.vercel.app',
     status: 'Coming soon',
     description:
       'This project is a collaborative team assignment built with Nuxt.js and Express.js. It showcases our ability to work together, implement features, and deliver a functional web application.',
