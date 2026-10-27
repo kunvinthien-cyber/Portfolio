@@ -33,16 +33,16 @@ export const projects = [
     description:
       'This Project is a Point of Sale (POS) system built with Laravel and MySQL. It allows businesses to manage sales, inventory, and customer data efficiently. The system features a user-friendly interface and robust functionality for seamless operations. but it not to deploy yet.',
   },
-  {
-    name: 'Team Assignment Project',
-    preview: null,
-    visual: 'team',
-    icon: 'fa-people-group',
-    skills: ['Nuxt.js', 'Supabase', 'Tailwind CSS'],
-    link: 'https://nuxt-profile-gamma.vercel.app',
-    description:
-      'This project is a collaborative team assignment built with Nuxt.js and Express.js. It showcases our ability to work together, implement features, and deliver a functional web application.',
-  },
+  // {
+  //   name: 'Team Assignment Project',
+  //   preview: null,
+  //   visual: 'team',
+  //   icon: 'fa-people-group',
+  //   skills: ['Nuxt.js', 'Supabase', 'Tailwind CSS'],
+  //   link: 'https://nuxt-profile-gamma.vercel.app',
+  //   description:
+  //     'This project is a collaborative team assignment built with Nuxt.js and Express.js. It showcases our ability to work together, implement features, and deliver a functional web application.',
+  // },
   {
     name: 'ChillStudy (Coming Soon)',
     preview: null,
