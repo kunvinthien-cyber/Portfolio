@@ -43,7 +43,7 @@ const experiences = [
         <div class="z-10 hidden h-10 w-10 items-center justify-center rounded-full border border-cyan-200/30 bg-slate-900 text-cyan-200 sm:flex">
           <i :class="['fa-solid', exp.icon]" aria-hidden="true"></i>
         </div>
-        <div class="surface-card rounded-2xl p-5 sm:p-6">
+        <div class="experience-entry border-b border-white/10 pb-6 sm:pb-7">
           <div class="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
             <div>
               <div class="flex flex-wrap items-center gap-2">

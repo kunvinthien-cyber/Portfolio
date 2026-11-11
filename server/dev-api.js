@@ -1,11 +1,15 @@
 import { createServer } from 'node:http'
-import { handleChatRequest } from './api/chat.js'
+import { getChatClientId, handleChatRequest, isChatRateLimited } from './api/chat.js'
 
 const port = Number(process.env.API_PORT || 3001)
 const maxBodyBytes = 32 * 1024
 
-const sendJson = (response, status, body) => {
-  response.writeHead(status, { 'Content-Type': 'application/json' })
+const sendJson = (response, status, body, extraHeaders = {}) => {
+  response.writeHead(status, {
+    'Cache-Control': 'no-store',
+    'Content-Type': 'application/json',
+    ...extraHeaders,
+  })
   response.end(JSON.stringify(body))
 }
 
@@ -19,6 +23,16 @@ const server = createServer(async (request, response) => {
   if (request.method !== 'POST') {
     response.writeHead(405, { Allow: 'POST' })
     response.end('Method Not Allowed')
+    return
+  }
+
+  if (isChatRateLimited(getChatClientId(request))) {
+    sendJson(
+      response,
+      429,
+      { error: 'Too many requests. Please wait a moment and try again.' },
+      { 'Retry-After': '60' },
+    )
     return
   }
 
@@ -57,6 +71,7 @@ const server = createServer(async (request, response) => {
       history,
       process.env.GROQ_API_KEY,
       typeof body.message === 'string' ? body.message : undefined,
+      body.language === 'kh' ? 'kh' : 'en',
     )
 
     response.writeHead(result.status, Object.fromEntries(result.headers))

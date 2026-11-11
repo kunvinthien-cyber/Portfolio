@@ -36,11 +36,8 @@ const sendMessage = async () => {
 <template>
   <div class="section-shell">
     <div
-      class="contact-panel relative isolate overflow-hidden rounded-3xl border border-white/10 bg-slate-900/75 p-6 shadow-2xl shadow-black/20 sm:p-8 lg:p-10"
+      class="contact-panel relative isolate overflow-hidden rounded-2xl border border-white/10 bg-slate-900/75 p-6 shadow-xl shadow-black/15 sm:p-8 lg:p-10"
     >
-      <div class="pointer-events-none absolute -right-20 -top-32 -z-10 h-80 w-80 rounded-full bg-cyan-400/10 blur-3xl"></div>
-      <div class="pointer-events-none absolute -bottom-40 left-1/3 -z-10 h-80 w-80 rounded-full bg-blue-500/10 blur-3xl"></div>
-
       <div class="grid gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:gap-14">
         <div>
           <p class="section-kicker">{{ props.t.contactKicker }}</p>

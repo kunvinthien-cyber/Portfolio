@@ -61,6 +61,11 @@ onBeforeUnmount(() => {
       </p>
     </div>
 
+    <p class="carousel-hint mb-3 flex items-center justify-end gap-2 text-xs text-slate-500 sm:hidden">
+      <span aria-hidden="true">&lt; &gt;</span>
+      {{ props.t.carouselHint }}
+    </p>
+
     <div id="case-studies" class="scroll-mt-28">
     <div class="hidden gap-10 lg:grid lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]">
       <div class="sticky top-28 flex h-128 flex-col justify-center">
@@ -125,25 +130,42 @@ onBeforeUnmount(() => {
           <div class="story-tech mt-2 flex flex-wrap gap-2">
             <span v-for="skill in project.skills" :key="skill" class="project-tech-chip rounded-full border border-cyan-100/10 bg-cyan-100/4.5 px-3 py-1 text-xs font-medium text-cyan-100/90">{{ skill }}</span>
           </div>
-          <a :href="project.link" target="_blank" rel="noopener noreferrer" class="story-action button-secondary group mt-7">
-            {{ props.t.openProject }}
-            <i class="fa-solid fa-arrow-up-right-from-square text-xs transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" aria-hidden="true"></i>
-          </a>
+          <div class="mt-7 flex flex-wrap items-center gap-3">
+            <a :href="project.link" target="_blank" rel="noopener noreferrer" class="story-action button-secondary group">
+              {{ props.t.openProject }}
+              <i class="fa-solid fa-arrow-up-right-from-square text-xs transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" aria-hidden="true"></i>
+            </a>
+            <a
+              v-if="project.repo"
+              :href="project.repo"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="story-action button-secondary group border-white/10 bg-white/5 text-slate-200 hover:border-cyan-200/30 hover:bg-cyan-200/10 hover:text-cyan-100"
+            >
+              {{ props.t.sourceCode }}
+              <i class="fa-brands fa-github text-xs transition-transform group-hover:-translate-y-0.5" aria-hidden="true"></i>
+            </a>
+          </div>
         </article>
       </div>
     </div>
 
-    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:hidden">
+    <div
+      class="project-carousel mobile-card-track lg:hidden"
+      role="region"
+      :aria-label="props.t.featuredWork"
+      tabindex="0"
+    >
       <article
         v-for="(project, index) in projects"
         :key="project.name"
-        class="group surface-card overflow-hidden rounded-2xl transition duration-300 hover:-translate-y-1 hover:border-cyan-200/25 hover:shadow-xl hover:shadow-cyan-950/15"
+        class="reveal project-card project-carousel-card group surface-card overflow-hidden rounded-2xl transition duration-300 hover:-translate-y-1 hover:border-cyan-200/25 hover:shadow-xl hover:shadow-cyan-950/15"
       >
         <div class="h-48 overflow-hidden border-b border-white/10 sm:h-52">
           <ProjectArtwork :project="project" :index="index" :t="props.t" compact class="transition-transform duration-300 group-hover:scale-[1.015]" />
         </div>
 
-        <div class="flex min-w-0 flex-col p-5 sm:p-6">
+        <div class="project-card-content flex min-w-0 flex-col p-5 sm:p-6">
           <p class="mb-2 font-mono text-xs font-semibold tracking-[0.12em] text-cyan-200">{{ props.t.projectLabel }} {{ String(index + 1).padStart(2, '0') }}</p>
           <h3 class="text-lg font-semibold leading-snug text-white sm:text-xl">{{ project.name }}</h3>
           <p
@@ -181,15 +203,27 @@ onBeforeUnmount(() => {
             </span>
           </div>
 
-          <a
-            :href="project.link"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="mt-5 inline-flex min-h-10 w-fit items-center gap-2 rounded-full border border-white/15 px-4 py-2 text-sm font-semibold text-slate-100 transition-colors hover:border-cyan-200/40 hover:bg-cyan-200/10 hover:text-cyan-100"
-          >
-            {{ props.t.openProject }}
-            <i class="fa-solid fa-arrow-up-right-from-square text-xs transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" aria-hidden="true"></i>
-          </a>
+          <div class="mt-5 flex flex-wrap items-center gap-2">
+            <a
+              :href="project.link"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="inline-flex min-h-10 w-fit items-center gap-2 rounded-full border border-white/15 px-4 py-2 text-sm font-semibold text-slate-100 transition-colors hover:border-cyan-200/40 hover:bg-cyan-200/10 hover:text-cyan-100"
+            >
+              {{ props.t.openProject }}
+              <i class="fa-solid fa-arrow-up-right-from-square text-xs transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" aria-hidden="true"></i>
+            </a>
+            <a
+              v-if="project.repo"
+              :href="project.repo"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="inline-flex min-h-10 w-fit items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm font-semibold text-slate-200 transition-colors hover:border-cyan-200/30 hover:bg-cyan-200/10 hover:text-cyan-100"
+            >
+              {{ props.t.sourceCode }}
+              <i class="fa-brands fa-github text-xs" aria-hidden="true"></i>
+            </a>
+          </div>
         </div>
       </article>
     </div>

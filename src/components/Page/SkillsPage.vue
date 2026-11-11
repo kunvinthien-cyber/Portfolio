@@ -90,11 +90,21 @@ const groups = [
       </p>
     </div>
 
-    <div class="grid gap-4 lg:grid-cols-3">
+    <p class="carousel-hint mb-3 flex items-center justify-end gap-2 text-xs text-slate-500 lg:hidden">
+      <span aria-hidden="true">&lt; &gt;</span>
+      {{ props.t.carouselHint }}
+    </p>
+
+    <div
+      class="skills-carousel mobile-card-track grid gap-4 lg:grid-cols-3"
+      role="region"
+      :aria-label="props.t.skillsTitle"
+      tabindex="0"
+    >
       <section
         v-for="(group, groupIndex) in groups"
         :key="group.name"
-        class="surface-card rounded-2xl p-5 sm:p-6"
+        class="skills-group skills-carousel-card border-t border-cyan-300/25 pt-4 sm:pt-5"
         :aria-label="`${props.t.skillGroups[groupIndex].name} ${props.t.skillsTitle}`"
       >
         <div class="mb-5 border-b border-white/10 pb-4">

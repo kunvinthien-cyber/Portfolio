@@ -36,7 +36,9 @@ onMounted(() => {
     revealObserver = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
-          entry.target.classList.toggle('is-visible', entry.isIntersecting)
+          if (!entry.isIntersecting) return
+          entry.target.classList.add('is-visible')
+          revealObserver.unobserve(entry.target)
         })
       },
       { threshold: 0.04, rootMargin: '0px 0px -48px 0px' },
@@ -60,7 +62,7 @@ onBeforeUnmount(() => {
     ref="portfolio"
     class="portfolio min-h-screen w-full overflow-x-clip"
     :data-theme="preferences.theme"
-    :lang="preferences.language"
+    :lang="preferences.isKhmer ? 'km' : 'en'"
     :class="{ 'font-khmer': preferences.isKhmer }"
   >
     <HeroCanvas />
@@ -89,7 +91,7 @@ onBeforeUnmount(() => {
     </main>
 
     <div id="chatbot">
-      <ChatBot />
+      <ChatBot :t="t" />
     </div>
 
     <footer class="site-footer mt-10 border-t border-white/10 bg-slate-950/50">

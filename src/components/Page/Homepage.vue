@@ -39,7 +39,8 @@
    const target = document.getElementById(section)
    if (target) {
      window.history.pushState(null, '', `#${section}`)
-     target.scrollIntoView({ behavior: 'smooth' })
+     const behavior = window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth'
+     target.scrollIntoView({ behavior })
    }
    closeMenu()
  }
@@ -160,6 +161,7 @@
              type="button"
              class="preference-button"
              :class="{ 'preference-button-active': preferences.language === 'en' }"
+             :aria-pressed="preferences.language === 'en'"
              :aria-label="`${props.t.language}: English`"
              @click="setLanguage('en')"
            >
@@ -169,6 +171,7 @@
              type="button"
              class="preference-button"
              :class="{ 'preference-button-active': preferences.language === 'kh' }"
+             :aria-pressed="preferences.language === 'kh'"
              :aria-label="`${props.t.language}: Khmer`"
              @click="setLanguage('kh')"
            >
@@ -178,6 +181,7 @@
          <button
            type="button"
            class="hidden theme-toggle sm:inline-flex"
+           :aria-pressed="preferences.theme === 'light'"
            :aria-label="`${props.t.theme}: ${preferences.theme === 'dark' ? 'light' : 'dark'}`"
            @click="preferences.toggleTheme()"
          >
@@ -267,6 +271,7 @@
                 type="button"
                 class="preference-button"
                 :class="{ 'preference-button-active': preferences.language === 'en' }"
+                :aria-pressed="preferences.language === 'en'"
                 aria-label="English"
                 @click="setLanguage('en')"
               >
@@ -276,6 +281,7 @@
                 type="button"
                 class="preference-button"
                 :class="{ 'preference-button-active': preferences.language === 'kh' }"
+                :aria-pressed="preferences.language === 'kh'"
                 aria-label="Khmer"
                 @click="setLanguage('kh')"
               >

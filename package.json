@@ -8,6 +8,7 @@
     "build": "vite build",
     "preview": "node --env-file-if-exists=.env scripts/dev.js preview --host 127.0.0.1 --port 4173",
     "test:e2e": "playwright test",
+    "test:api": "node --test server/api/chat.test.js",
     "format": "prettier --write --experimental-cli src/"
   },
   "dependencies": {

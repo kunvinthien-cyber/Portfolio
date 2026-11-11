@@ -67,7 +67,7 @@ defineProps({
 
     <template v-else-if="project.visual === 'team'">
       <div class="team-board" aria-hidden="true">
-        <div class="team-board-top"><span>Nuxt.js</span><span>Supabase</span></div>
+        <div class="team-board-top"><span>Vue.js</span><span>Laravel</span></div>
         <div class="team-flow">
           <span class="team-node"><i class="fa-solid fa-code"></i></span>
           <span class="team-connector"></span>

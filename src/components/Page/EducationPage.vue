@@ -25,13 +25,13 @@ const educations = [
       <article
         v-for="(item, index) in educations"
         :key="item.year"
-        class="relative grid gap-3 sm:grid-cols-[9rem_1fr] sm:gap-6"
+        class="timeline-item education-entry relative grid gap-3 border-b border-white/10 pb-6 sm:grid-cols-[9rem_1fr] sm:gap-6 sm:pb-7"
       >
         <div class="flex items-center gap-3 sm:justify-end sm:gap-0">
           <span class="h-2.5 w-2.5 rounded-full border-2 border-cyan-200 bg-slate-950 sm:absolute sm:left-[5.15rem]"></span>
           <p class="text-sm font-semibold text-cyan-200 sm:pr-8">{{ item.year }}</p>
         </div>
-        <div class="surface-card rounded-2xl p-5 sm:p-6">
+        <div class="py-1 sm:py-2">
           <div class="flex flex-col gap-1 sm:flex-row sm:items-start sm:justify-between">
             <h3 class="text-lg font-semibold leading-snug text-white">{{ item.school }}</h3>
             <i class="fa-solid fa-graduation-cap hidden text-lg text-cyan-200 sm:block" aria-hidden="true"></i>

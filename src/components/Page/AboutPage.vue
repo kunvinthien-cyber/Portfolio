@@ -23,7 +23,7 @@ const details = [
     </div>
 
     <div class="grid gap-5 lg:grid-cols-[1.15fr_0.85fr] lg:gap-8">
-      <div class="surface-card rounded-3xl p-6 sm:p-8">
+      <div class="about-copy border-l border-cyan-300/50 pl-5 sm:pl-8">
         <p
           v-for="(paragraph, index) in props.t.aboutParagraphs"
           :key="index"
@@ -38,9 +38,9 @@ const details = [
         <article
           v-for="(detail, index) in details"
           :key="index"
-          class="surface-card flex items-center gap-4 rounded-2xl px-5 py-4 transition-transform duration-200 hover:-translate-y-0.5"
+          class="about-detail flex items-center gap-4 border-b border-white/10 py-4 transition-colors duration-200"
         >
-          <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-cyan-300/10 text-cyan-200">
+          <span class="flex h-10 w-10 shrink-0 items-center justify-center text-cyan-200">
             <i :class="['fa-solid', detail.icon]" aria-hidden="true"></i>
           </span>
           <div class="min-w-0">

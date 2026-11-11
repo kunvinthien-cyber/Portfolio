@@ -8,7 +8,7 @@ A modern and responsive personal portfolio website built with **Vue 3** and **Vi
 
 ## 📌 Overview
 
-This portfolio website was created to present my work as a **Junior Front-End Developer** and provide an overview of my technical skills, projects, and professional background.
+This portfolio website was created to present my work as a **Junior Web Developer** with a focus on front-end and full-stack development, and to provide an overview of my technical skills, projects, and professional background.
 
 The project focuses on a clean, responsive, and user-friendly interface that works across desktop and mobile devices.
 
@@ -98,6 +98,14 @@ Run tests using Chromium:
 npm run test:e2e -- --project=chromium
 ```
 
+## AI Portfolio Assistant
+
+The portfolio assistant sends requests from the browser to the server-side `/api/chat` endpoint, which calls Groq using `openai/gpt-oss-120b`. Configure `GROQ_API_KEY` only in the server or deployment environment; never expose it through a `VITE_` variable.
+
+The endpoint limits each message to 2,000 characters, includes up to 8 history messages from completed user/assistant turns (up to 1,000 characters each and 6,000 characters total), and caps generated output at 400 tokens. Conversation history is sent with each request and is not stored by the application.
+
+The current rate limiter allows 12 requests per client per minute **per running server process**. Its in-memory counters reset when a process restarts and are not shared across instances. This is best-effort protection for a single-instance deployment, not a global quota for serverless or horizontally scaled deployments. No shared Redis service is currently configured, so the project intentionally does not add a Redis dependency; configure shared rate-limit infrastructure before relying on a global production limit.
+
 ## 🎯 Project Goals
 
 This project demonstrates my ability to:
@@ -113,7 +121,7 @@ This project demonstrates my ability to:
 
 **Kun Vinthien**
 
-Junior Front-End Developer | Computer Science Graduate
+Junior Web Developer | Front-End & Full-Stack Development
 
 * GitHub: https://github.com/kunvinthien-cyber
 * Portfolio: https://thienweb.vercel.app
