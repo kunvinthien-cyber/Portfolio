@@ -21,15 +21,15 @@ const educations = [
     </div>
 
     <div class="relative space-y-4 sm:space-y-5">
-      <div class="absolute bottom-8 left-[5.45rem] top-8 hidden w-px bg-linear-to-b from-cyan-300/60 via-slate-700 to-transparent sm:block"></div>
+      <div class="timeline-rail absolute bottom-8 left-[5.45rem] top-8 hidden w-px bg-linear-to-b from-cyan-300/60 via-slate-700 to-transparent sm:block"></div>
       <article
         v-for="(item, index) in educations"
         :key="item.year"
         class="timeline-item education-entry relative grid gap-3 border-b border-white/10 pb-6 sm:grid-cols-[9rem_1fr] sm:gap-6 sm:pb-7"
       >
         <div class="flex items-center gap-3 sm:justify-end sm:gap-0">
-          <span class="h-2.5 w-2.5 rounded-full border-2 border-cyan-200 bg-slate-950 sm:absolute sm:left-[5.15rem]"></span>
-          <p class="text-sm font-semibold text-cyan-200 sm:pr-8">{{ item.year }}</p>
+          <span class="timeline-marker h-2.5 w-2.5 rounded-full border-2 sm:absolute sm:left-[5.15rem]"></span>
+          <p class="timeline-date-badge rounded-full border px-3 py-1 text-sm font-semibold sm:mr-8">{{ item.year }}</p>
         </div>
         <div class="py-1 sm:py-2">
           <div class="flex flex-col gap-1 sm:flex-row sm:items-start sm:justify-between">

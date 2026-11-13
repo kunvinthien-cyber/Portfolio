@@ -6,12 +6,13 @@ import profileImage from '@/assets/IMG/image.png'
 const props = defineProps({
   t: { type: Object, required: true },
 })
+const emit = defineEmits(['motion-change'])
 </script>
 
 <template>
   <div>
     <div class="fixed inset-x-0 top-0 z-50 py-2 sm:py-3">
-      <Homepage :t="props.t" />
+      <Homepage :t="props.t" @motion-change="emit('motion-change')" />
     </div>
 
     <section
@@ -38,7 +39,7 @@ const props = defineProps({
         </p>
 
         <div class="mt-7 flex flex-wrap items-center justify-center gap-3 lg:justify-start">
-          <a href="#projects" class="hero-primary group">
+          <a href="#projects" class="hero-primary btn-3d group">
             {{ props.t.exploreProjects }}
             <ArrowRight :size="16" aria-hidden="true" class="transition-transform group-hover:translate-x-1" />
           </a>
@@ -76,5 +77,6 @@ const props = defineProps({
         <div class="pointer-events-none absolute -bottom-4 -left-4 -z-10 h-24 w-24 rounded-full bg-sky-400/10 blur-2xl"></div>
       </div>
     </section>
+
   </div>
 </template>

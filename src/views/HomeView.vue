@@ -16,7 +16,10 @@ const portfolio = ref(null)
 const preferences = usePreferencesStore()
 const t = computed(() => translations[preferences.language])
 const scrollProgress = ref(0)
+const revealReady = ref(false)
+const featuredSkills = ['HTML', 'CSS', 'JavaScript', 'Tailwind CSS', 'Vue.js', 'Laravel', 'MySQL', 'Git']
 let revealObserver
+let motionPreference
 let scrollFrame = null
 
 const updateScrollState = () => {
@@ -26,49 +29,91 @@ const updateScrollState = () => {
 }
 
 const requestScrollState = () => {
-  if (!scrollFrame) scrollFrame = window.requestAnimationFrame(updateScrollState)
+  if (scrollFrame === null) scrollFrame = window.requestAnimationFrame(updateScrollState)
+}
+
+const setupRevealObserver = () => {
+  revealObserver?.disconnect()
+  revealObserver = undefined
+  if (!portfolio.value) return
+
+  const sections = portfolio.value.querySelectorAll('.reveal')
+  if (!preferences.motionEnabled || !('IntersectionObserver' in window)) {
+    revealReady.value = false
+    sections.forEach((section) => section.classList.remove('is-visible'))
+    return
+  }
+
+  sections.forEach((section) => section.classList.remove('is-visible'))
+  revealReady.value = true
+  revealObserver = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        entry.target.classList.toggle('is-visible', entry.isIntersecting)
+      })
+    },
+    { threshold: 0.08, rootMargin: '0px 0px -40px 0px' },
+  )
+
+  sections.forEach((section) => revealObserver.observe(section))
+}
+
+const handleMotionPreferenceChange = (event) => {
+  preferences.syncMotionPreference(event.matches)
+  setupRevealObserver()
 }
 
 onMounted(() => {
-  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-  if (portfolio.value && 'IntersectionObserver' in window && !reducedMotion) {
-    portfolio.value.classList.add('reveal-ready')
-    revealObserver = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (!entry.isIntersecting) return
-          entry.target.classList.add('is-visible')
-          revealObserver.unobserve(entry.target)
-        })
-      },
-      { threshold: 0.04, rootMargin: '0px 0px -48px 0px' },
-    )
-
-    portfolio.value.querySelectorAll('.reveal').forEach((section) => revealObserver.observe(section))
-  }
+  motionPreference = window.matchMedia('(prefers-reduced-motion: reduce)')
+  motionPreference.addEventListener('change', handleMotionPreferenceChange)
+  setupRevealObserver()
   updateScrollState()
   window.addEventListener('scroll', requestScrollState, { passive: true })
+  window.addEventListener('resize', requestScrollState, { passive: true })
 })
 
 onBeforeUnmount(() => {
   revealObserver?.disconnect()
+  motionPreference?.removeEventListener('change', handleMotionPreferenceChange)
   window.removeEventListener('scroll', requestScrollState)
-  if (scrollFrame) window.cancelAnimationFrame(scrollFrame)
+  window.removeEventListener('resize', requestScrollState)
+  if (scrollFrame !== null) window.cancelAnimationFrame(scrollFrame)
 })
 </script>
 
 <template>
   <div
     ref="portfolio"
-    class="portfolio min-h-screen w-full overflow-x-clip"
+    class="portfolio min-h-screen w-full"
     :data-theme="preferences.theme"
     :lang="preferences.isKhmer ? 'km' : 'en'"
-    :class="{ 'font-khmer': preferences.isKhmer }"
+    :class="{
+      'font-khmer': preferences.isKhmer,
+      'motion-enabled': preferences.motionEnabled,
+      'reveal-ready': revealReady,
+    }"
   >
     <HeroCanvas />
     <div class="scroll-progress" aria-hidden="true" :style="{ transform: `scaleX(${scrollProgress})` }"></div>
     <main class="w-full">
-      <HeroSection :t="t" />
+      <HeroSection :t="t" @motion-change="setupRevealObserver" />
+
+      <div class="skills-marquee" aria-hidden="true">
+        <div class="skills-marquee-viewport">
+          <div class="skills-marquee-track">
+            <ul class="skills-marquee-set">
+              <li v-for="skill in featuredSkills" :key="skill" class="skills-marquee-item">
+                {{ skill }}
+              </li>
+            </ul>
+            <ul class="skills-marquee-set" aria-hidden="true">
+              <li v-for="skill in featuredSkills" :key="skill" class="skills-marquee-item">
+                {{ skill }}
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
 
       <section id="about" class="reveal w-full scroll-mt-24 py-10 sm:py-14">
         <AboutPage :t="t" />

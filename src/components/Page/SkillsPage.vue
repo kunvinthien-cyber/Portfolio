@@ -107,7 +107,7 @@ const groups = [
         class="skills-group skills-carousel-card border-t border-cyan-300/25 pt-4 sm:pt-5"
         :aria-label="`${props.t.skillGroups[groupIndex].name} ${props.t.skillsTitle}`"
       >
-        <div class="mb-5 border-b border-white/10 pb-4">
+        <div class="skill-group-heading mb-5 border-b border-white/10 pb-4">
           <h3 class="text-lg font-semibold text-white">
             {{ props.t.skillGroups[groupIndex].name }}
           </h3>
@@ -121,14 +121,16 @@ const groups = [
             :style="{ '--skill-delay': `${group.skills.indexOf(skill) * 55}ms` }"
           >
             <div class="flex items-center gap-3">
-              <i
-                :class="[skill.icon, skill.color]"
-                class="w-5 text-center text-lg"
-                aria-hidden="true"
-              ></i>
-              <h4 class="text-sm font-semibold text-slate-100">{{ skill.name }}</h4>
+              <span class="skill-icon flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border">
+                <i
+                  :class="[skill.icon, skill.color]"
+                  class="text-base"
+                  aria-hidden="true"
+                ></i>
+              </span>
+              <h4 class="min-w-0 text-sm font-semibold text-slate-100">{{ skill.name }}</h4>
             </div>
-            <p class="mt-2 pl-8 text-xs leading-5 text-slate-400">
+            <p class="mt-2 pl-12 text-xs leading-5 text-slate-400">
               {{ props.t.skillDescriptions[skill.name] }}
             </p>
           </li>

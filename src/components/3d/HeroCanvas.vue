@@ -19,10 +19,10 @@ let resizeHandler
 let resizeObserver
 let pointerMoveHandler
 let pointerOutHandler
-let motionPreference
 
 const pointer = { x: 0, y: 0 }
 const lerpSpeed = 0.05
+const particleParallaxSpeed = 0.035
 
 function resizeCanvas() {
   if (!renderer || !camera) return
@@ -36,6 +36,12 @@ function resizeCanvas() {
 }
 
 function updatePointer(event) {
+  if (event.pointerType !== 'mouse') {
+    pointer.x = 0
+    pointer.y = 0
+    return
+  }
+
   const bounds = canvasElement.value?.getBoundingClientRect()
   if (!bounds) return
   pointer.x = Math.max(-1, Math.min(1, ((event.clientX - bounds.left) / Math.max(bounds.width, 1)) * 2 - 1))
@@ -59,7 +65,6 @@ function disposeScene() {
   if (resizeHandler) window.removeEventListener('resize', resizeHandler)
   if (pointerMoveHandler) window.removeEventListener('pointermove', pointerMoveHandler)
   if (pointerOutHandler) window.removeEventListener('pointerout', pointerOutHandler)
-  if (motionPreference) motionPreference.removeEventListener('change', handleMotionChange)
 
   scene?.clear()
   objectGeometry?.dispose()
@@ -81,29 +86,6 @@ function disposeScene() {
   particleTexture = undefined
 }
 
-function renderStaticFrame() {
-  if (!renderer || !scene || !camera) return
-  renderer.render(scene, camera)
-}
-
-function handleMotionChange() {
-  if (motionPreference?.matches) {
-    if (animationFrame !== null) {
-      window.cancelAnimationFrame(animationFrame)
-      animationFrame = null
-    }
-    if (object) {
-      object.rotation.set(0, 0, 0)
-      object.position.y = 0
-    }
-    if (particles) particles.rotation.set(0, 0, 0)
-    if (camera) camera.rotation.set(0, 0, 0)
-    renderStaticFrame()
-  } else if (animationFrame === null) {
-    animationFrame = window.requestAnimationFrame(animate)
-  }
-}
-
 let previousTime = 0
 
 function animate(time) {
@@ -118,7 +100,13 @@ function animate(time) {
     object.rotation.y += delta * 0.16
     object.position.y = Math.sin(elapsed * 0.55) * 0.16
   }
-  if (particles) particles.rotation.y += delta * 0.018
+  if (particles) {
+    particles.rotation.y += delta * 0.018
+    particles.position.x += pointer.x * 0.22 * particleParallaxSpeed
+      - particles.position.x * particleParallaxSpeed
+    particles.position.y += -pointer.y * 0.16 * particleParallaxSpeed
+      - particles.position.y * particleParallaxSpeed
+  }
 
   camera.rotation.x += pointer.y * 0.08 * lerpSpeed - camera.rotation.x * lerpSpeed
   camera.rotation.y += pointer.x * 0.12 * lerpSpeed - camera.rotation.y * lerpSpeed
@@ -151,15 +139,18 @@ async function initializeCanvas() {
     renderer.domElement.setAttribute('role', 'presentation')
 
     scene.add(new THREE.AmbientLight(0xffffff, 0.35))
-    const keyLight = new THREE.PointLight(0x84cc16, 22, 20)
+    const keyLight = new THREE.PointLight(0x67e8f9, 24, 20)
     keyLight.position.set(3, 2, 5)
     scene.add(keyLight)
+    const fillLight = new THREE.PointLight(0x818cf8, 12, 24)
+    fillLight.position.set(-4, -2, 3)
+    scene.add(fillLight)
 
     objectGeometry = new THREE.IcosahedronGeometry(1.65, 1)
     objectMaterial = new THREE.MeshStandardMaterial({
-      color: 0x84cc16,
-      emissive: 0x84cc16,
-      emissiveIntensity: 0.65,
+      color: 0x67e8f9,
+      emissive: 0x22d3ee,
+      emissiveIntensity: 0.85,
       metalness: 0.3,
       roughness: 0.4,
       transparent: true,
@@ -190,15 +181,15 @@ async function initializeCanvas() {
     if (!context) throw new Error('Could not create the particle texture canvas context.')
     const gradient = context.createRadialGradient(32, 32, 0, 32, 32, 32)
     gradient.addColorStop(0, 'rgba(255, 255, 255, 1)')
-    gradient.addColorStop(0.18, 'rgba(210, 255, 120, 0.9)')
-    gradient.addColorStop(1, 'rgba(132, 204, 22, 0)')
+    gradient.addColorStop(0.18, 'rgba(186, 230, 253, 0.9)')
+    gradient.addColorStop(1, 'rgba(103, 232, 249, 0)')
     context.fillStyle = gradient
     context.fillRect(0, 0, 64, 64)
 
     particleTexture = new THREE.CanvasTexture(textureCanvas)
     particleGeometry.computeBoundingSphere()
     particleMaterial = new THREE.PointsMaterial({
-      color: 0x84cc16,
+      color: 0xa5f3fc,
       map: particleTexture,
       size: 0.12,
       sizeAttenuation: true,
@@ -221,12 +212,7 @@ async function initializeCanvas() {
     window.addEventListener('pointermove', pointerMoveHandler, { passive: true })
     window.addEventListener('pointerout', pointerOutHandler, { passive: true })
 
-    motionPreference = window.matchMedia('(prefers-reduced-motion: reduce)')
-    motionPreference.addEventListener('change', handleMotionChange)
-    renderStaticFrame()
-    if (!motionPreference.matches) {
-      animationFrame = window.requestAnimationFrame(animate)
-    }
+    animationFrame = window.requestAnimationFrame(animate)
   } catch (error) {
     disposeScene()
     console.error('Failed to initialize the 3D hero canvas.', error)

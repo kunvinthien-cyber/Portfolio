@@ -1,9 +1,10 @@
  <script setup>
  import { nextTick, onBeforeUnmount, onMounted, ref } from 'vue'
- import { ArrowUpRight } from 'lucide-vue-next'
+ import { ArrowUpRight, Sparkles } from 'lucide-vue-next'
  import { usePreferencesStore } from '@/stores/preferences'
 
  const props = defineProps({ t: { type: Object, required: true } })
+ const emit = defineEmits(['motion-change'])
  const preferences = usePreferencesStore()
  const githubUrl =
    'https://github.com/kunvinthien-cyber?tab=overview&from=2026-04-01&to=2026-04-30'
@@ -19,10 +20,16 @@
  const isOpen = ref(false)
  const activeSection = ref('')
  const hasScrolled = ref(false)
+ const isNavHidden = ref(false)
  const headerElement = ref(null)
  const menuToggle = ref(null)
+ const mobileNavigation = ref(null)
  let sectionObserver
  let sectionResizeFrame = null
+ let scrollFrame = null
+ let previousScrollY = 0
+ let lastScrollDirection = 0
+ let directionDistance = 0
 
  const closeMenu = (restoreFocus = false) => {
    if (!isOpen.value) return
@@ -32,21 +39,52 @@
 
  const toggleMenu = () => {
    if (isOpen.value) closeMenu()
-   else isOpen.value = true
+   else {
+     isOpen.value = true
+     isNavHidden.value = false
+     nextTick(() => {
+       const firstItem = mobileNavigation.value?.querySelector('a[href], button:not([disabled])')
+       firstItem?.focus()
+     })
+   }
  }
 
  const scrollToSection = (section) => {
    const target = document.getElementById(section)
    if (target) {
      window.history.pushState(null, '', `#${section}`)
-     const behavior = window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth'
+     const behavior = preferences.motionEnabled ? 'smooth' : 'auto'
      target.scrollIntoView({ behavior })
    }
    closeMenu()
  }
 
- const closeOnEscape = (event) => {
-   if (event.key === 'Escape') closeMenu(true)
+ const handleMenuKeydown = (event) => {
+   if (event.key === 'Escape') {
+     closeMenu(true)
+     return
+   }
+
+   if (event.key !== 'Tab' || !isOpen.value) return
+
+   const focusableItems = Array.from(
+     mobileNavigation.value?.querySelectorAll('a[href], button:not([disabled])') || [],
+   ).filter((item) => item.getClientRects().length > 0)
+   if (!focusableItems.length) return
+
+   const firstItem = focusableItems[0]
+   const lastItem = focusableItems[focusableItems.length - 1]
+   if (!mobileNavigation.value.contains(document.activeElement)) {
+     event.preventDefault()
+     if (event.shiftKey) lastItem.focus()
+     else firstItem.focus()
+   } else if (event.shiftKey && document.activeElement === firstItem) {
+     event.preventDefault()
+     lastItem.focus()
+   } else if (!event.shiftKey && document.activeElement === lastItem) {
+     event.preventDefault()
+     firstItem.focus()
+   }
  }
 
  const closeOnOutsideClick = (event) => {
@@ -54,11 +92,45 @@
  }
 
  const updateNavState = () => {
-   hasScrolled.value = window.scrollY > 24
+   scrollFrame = null
+   const currentScrollY = Math.max(window.scrollY, 0)
+   const delta = currentScrollY - previousScrollY
+   hasScrolled.value = currentScrollY > 24
+
+   if (currentScrollY < 80) {
+     isNavHidden.value = false
+     directionDistance = 0
+   } else if (delta !== 0) {
+     const direction = Math.sign(delta)
+     if (direction !== lastScrollDirection) {
+       lastScrollDirection = direction
+       directionDistance = 0
+     }
+     directionDistance += Math.abs(delta)
+
+     if (directionDistance >= 12) {
+       isNavHidden.value = direction > 0
+       directionDistance = 0
+     }
+   }
+
+   if (isOpen.value || headerElement.value?.contains(document.activeElement)) {
+     isNavHidden.value = false
+   }
+   previousScrollY = currentScrollY
+ }
+
+ const scheduleNavStateUpdate = () => {
+   if (scrollFrame === null) scrollFrame = window.requestAnimationFrame(updateNavState)
  }
 
  const setLanguage = (language) => {
    preferences.setLanguage(language)
+ }
+
+ const toggleMotion = () => {
+   preferences.toggleMotion()
+   emit('motion-change')
  }
 
  const observeSections = () => {
@@ -101,10 +173,11 @@
  }
 
  onMounted(() => {
+   previousScrollY = window.scrollY
    observeSections()
-   window.addEventListener('keydown', closeOnEscape)
+   window.addEventListener('keydown', handleMenuKeydown)
    document.addEventListener('pointerdown', closeOnOutsideClick)
-   window.addEventListener('scroll', updateNavState, { passive: true })
+   window.addEventListener('scroll', scheduleNavStateUpdate, { passive: true })
    window.addEventListener('resize', scheduleSectionObserver, { passive: true })
    updateNavState()
  })
@@ -113,9 +186,10 @@
    sectionObserver?.disconnect()
    window.removeEventListener('resize', scheduleSectionObserver)
    if (sectionResizeFrame) window.cancelAnimationFrame(sectionResizeFrame)
-   window.removeEventListener('keydown', closeOnEscape)
+   window.removeEventListener('scroll', scheduleNavStateUpdate)
+   if (scrollFrame !== null) window.cancelAnimationFrame(scrollFrame)
+   window.removeEventListener('keydown', handleMenuKeydown)
    document.removeEventListener('pointerdown', closeOnOutsideClick)
-   window.removeEventListener('scroll', updateNavState)
  })
  </script>
 
@@ -123,8 +197,8 @@
    <div class="w-full max-w-6xl px-3 mx-auto sm:px-6">
      <header
        ref="headerElement"
-       :class="{ 'nav-scrolled': hasScrolled }"
-       class="relative flex items-center justify-between gap-4 px-4 border shadow-lg hero-nav min-h-17 rounded-2xl border-zinc-800/80 bg-zinc-950/55 shadow-black/10 backdrop-blur-md sm:px-5"
+       :class="{ 'nav-scrolled': hasScrolled, 'nav-hidden': isNavHidden && !isOpen }"
+       class="relative flex items-center justify-between gap-3 px-4 border shadow-lg hero-nav min-h-17 rounded-2xl border-zinc-800/80 bg-zinc-950/55 shadow-black/10 backdrop-blur-md sm:gap-4 sm:px-5"
      >
        <a
          href="#home"
@@ -137,7 +211,7 @@
          </span>
        </a>
 
-       <nav :aria-label="props.t.mainNavigation" class="items-center hidden gap-1 lg:flex">
+       <nav :aria-label="props.t.mainNavigation" class="items-center hidden gap-0.5 xl:gap-1 lg:flex">
          <a
            v-for="item in navItems"
            :key="item.id"
@@ -155,7 +229,7 @@
          </a>
        </nav>
 
-       <div class="flex items-center gap-2">
+       <div class="flex shrink-0 items-center gap-1.5 sm:gap-2">
          <div class="items-center hidden p-1 text-xs border rounded-full border-white/10 bg-white/3 sm:flex">
            <button
              type="button"
@@ -180,6 +254,19 @@
          </div>
          <button
            type="button"
+           class="theme-toggle motion-toggle inline-flex gap-1.5 px-2"
+           :aria-pressed="preferences.motionEnabled"
+           :aria-label="preferences.motionEnabled ? props.t.disableAnimations : props.t.enableAnimations"
+           :title="preferences.motionEnabled ? props.t.disableAnimations : props.t.enableAnimations"
+           @click="toggleMotion"
+         >
+           <Sparkles :size="16" aria-hidden="true" />
+           <span class="text-xs lg:hidden">
+             {{ preferences.motionEnabled ? props.t.animationsOn : props.t.animationsOff }}
+           </span>
+         </button>
+         <button
+           type="button"
            class="hidden theme-toggle sm:inline-flex"
            :aria-pressed="preferences.theme === 'light'"
            :aria-label="`${props.t.theme}: ${preferences.theme === 'dark' ? 'light' : 'dark'}`"
@@ -191,12 +278,12 @@
            :href="githubUrl"
            target="_blank"
            rel="noopener noreferrer"
-           class="hidden px-4 text-sm button-secondary min-h-10 sm:inline-flex"
+           class="hidden min-h-10 px-3 text-sm button-secondary xl:px-4 sm:inline-flex"
          >
            <i class="fa-brands fa-github" aria-hidden="true"></i>
            <span>GitHub</span>
          </a>
-         <a href="#contact" class="hidden hire-button sm:inline-flex" @click.prevent="scrollToSection('contact')">
+         <a href="#contact" class="btn-3d hidden hire-button sm:inline-flex" @click.prevent="scrollToSection('contact')">
            {{ props.t.hireMe }}
            <ArrowUpRight :size="14" aria-hidden="true" />
          </a>
@@ -227,6 +314,7 @@
            v-if="isOpen"
            id="mobile-navigation"
            :aria-label="props.t.mobileNavigation"
+           ref="mobileNavigation"
            class="absolute left-0 right-0 top-[calc(100%+0.5rem)] z-50 rounded-2xl border border-white/10 bg-slate-950/95 p-2 shadow-2xl backdrop-blur-xl lg:hidden"
          >
            <a
@@ -260,7 +348,7 @@
            </a>
            <a
              href="#contact"
-             class="flex w-full mt-2 hire-button"
+             class="btn-3d flex w-full mt-2 hire-button"
              @click.prevent="scrollToSection('contact')"
            >
              {{ props.t.hireMe }}

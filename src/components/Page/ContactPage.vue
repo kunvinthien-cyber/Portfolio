@@ -51,7 +51,7 @@ const sendMessage = async () => {
           <div class="mt-7 space-y-4 text-sm">
             <a
               href="mailto:kunvinthien@gmail.com"
-              class="group flex w-fit items-center gap-3 text-slate-200 transition-colors hover:text-cyan-100"
+              class="contact-email-link group flex w-fit items-center gap-3 text-slate-200 transition-colors hover:text-cyan-100"
             >
               <i class="fa-solid fa-envelope w-5 text-center text-cyan-200" aria-hidden="true"></i>
               <span>kunvinthien@gmail.com</span>
@@ -230,10 +230,15 @@ const sendMessage = async () => {
 }
 
 .social-btn:hover {
-  transform: translateY(-2px);
   border-color: rgb(103 232 249 / 40%);
   color: #a5f3fc;
   background: rgb(34 211 238 / 8%);
+}
+
+@media (hover: hover) {
+  .social-btn:hover {
+    transform: translateY(-2px);
+  }
 }
 
 </style>

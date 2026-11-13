@@ -53,6 +53,10 @@ test('English conversations retain context and the assistant admits unknown deta
     },
   ])
   expect(requests[2].history).toHaveLength(4)
+  await page.getByRole('button', { name: 'Close chat' }).click()
+  await expect(page.locator('.chat-panel')).toBeHidden()
+  await page.getByRole('button', { name: 'Open AI portfolio assistant' }).click()
+  await expect(page.locator('.chat-panel')).toBeVisible()
   expect(pageErrors).toEqual([])
   expect(consoleErrors).toEqual([])
 })

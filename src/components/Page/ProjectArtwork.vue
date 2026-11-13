@@ -10,13 +10,13 @@ defineProps({
 <template>
   <div
     v-if="project.preview"
-    class="project-artwork project-artwork-real relative flex h-full min-h-44 items-center justify-center overflow-hidden rounded-2xl bg-slate-950 p-3 sm:p-5"
+    class="project-artwork project-artwork-real relative flex h-full min-h-44 items-center justify-center overflow-hidden rounded-2xl bg-slate-950"
   >
     <img
       :src="project.preview"
       :alt="`${project.name} — ${t.projectPreview}`"
       loading="lazy"
-      class="project-real-preview max-h-full max-w-full rounded-lg object-contain shadow-2xl"
+      class="project-real-preview h-full w-full object-cover shadow-2xl"
     />
     <span class="project-preview-label absolute left-3 top-3 rounded-full border border-white/15 bg-slate-950/85 px-3 py-1 text-[0.65rem] font-semibold text-slate-100 backdrop-blur">
       {{ t.projectPreview }}

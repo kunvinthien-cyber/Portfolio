@@ -34,13 +34,13 @@ const experiences = [
     </div>
 
     <div class="relative space-y-4 sm:space-y-5">
-      <div class="absolute bottom-8 left-5 top-8 hidden w-px bg-slate-700 sm:block"></div>
+      <div class="timeline-rail absolute bottom-8 left-5 top-8 hidden w-px sm:block"></div>
       <article
         v-for="(exp, index) in experiences"
         :key="exp.period"
         class="timeline-item relative grid gap-4 sm:grid-cols-[3rem_1fr] sm:gap-5"
       >
-        <div class="z-10 hidden h-10 w-10 items-center justify-center rounded-full border border-cyan-200/30 bg-slate-900 text-cyan-200 sm:flex">
+        <div class="timeline-marker z-10 hidden h-10 w-10 items-center justify-center rounded-full border sm:flex">
           <i :class="['fa-solid', exp.icon]" aria-hidden="true"></i>
         </div>
         <div class="experience-entry border-b border-white/10 pb-6 sm:pb-7">
@@ -59,10 +59,10 @@ const experiences = [
               <p class="mt-1 font-medium text-cyan-200">{{ props.t.experienceCompanies[index] }}</p>
             </div>
             <div class="flex flex-wrap items-center gap-2 text-xs text-slate-400 sm:justify-end">
-              <span class="rounded-full border border-white/10 bg-white/3 px-3 py-1">
+              <span class="timeline-date-badge rounded-full border px-3 py-1">
                 {{ exp.period.replace('Present', props.t.present) }}
               </span>
-              <span class="rounded-full border border-white/10 px-3 py-1">{{ props.t.experienceTypes[index] }}</span>
+              <span class="timeline-date-badge rounded-full border px-3 py-1">{{ props.t.experienceTypes[index] }}</span>
             </div>
           </div>
           <p class="mt-3 text-xs text-slate-500">

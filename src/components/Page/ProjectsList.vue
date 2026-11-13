@@ -4,61 +4,202 @@ import ProjectArtwork from '@/components/Page/ProjectArtwork.vue'
 import { projects } from '@/data/projects.js'
 
 const props = defineProps({ t: { type: Object, required: true } })
-const projectRoot = ref(null)
 const expanded = ref(null)
-const activeProject = ref(0)
-const intersectingScenes = new Map()
-let sceneObserver
+const cardStyles = ref({})
+const desktopStack = ref(false)
+const projectTrack = ref(null)
+const activeProjectIndex = ref(0)
+const projectScrollProgress = ref(0)
+let pointerFrame = null
+let stackFrame = null
+let pendingPointer = null
+const tiltResetTimers = new Map()
+
 const toggle = (index) => {
   expanded.value = expanded.value === index ? null : index
 }
+
+const clearTiltResetTimer = (index) => {
+  const timer = tiltResetTimers.get(index)
+  if (timer !== undefined) {
+    window.clearTimeout(timer)
+    tiltResetTimers.delete(index)
+  }
+}
+
+const resetCardTilt = (index, delay = 120) => {
+  clearTiltResetTimer(index)
+  if (delay > 0) {
+    tiltResetTimers.set(
+      index,
+      window.setTimeout(() => resetCardTilt(index, 0), delay),
+    )
+    return
+  }
+
+  if (pointerFrame !== null && pendingPointer?.index === index) {
+    window.cancelAnimationFrame(pointerFrame)
+    pointerFrame = null
+    pendingPointer = null
+  }
+  delete cardStyles.value[index]
+}
+
+const resetAllCardTilts = (delay = 120) => {
+  Object.keys(cardStyles.value).forEach((index) => resetCardTilt(index, delay))
+}
+
+const updateCardTilt = () => {
+  pointerFrame = null
+  if (!pendingPointer) return
+
+  const { index, x, y, width, height } = pendingPointer
+  const normalizedX = (x / width) * 2 - 1
+  const normalizedY = (y / height) * 2 - 1
+  const maxTilt = 7
+
+  cardStyles.value[index] = {
+    '--card-rotate-x': `${-normalizedY * maxTilt}deg`,
+    '--card-rotate-y': `${normalizedX * maxTilt}deg`,
+    '--card-glare-x': `${normalizedX * 50 + 50}%`,
+    '--card-glare-y': `${normalizedY * 50 + 50}%`,
+  }
+  pendingPointer = null
+}
+
+const updateDesktopStack = () => {
+  desktopStack.value = window.matchMedia('(min-width: 1100px)').matches
+}
+
+const updateStackDepth = () => {
+  stackFrame = null
+  const track = projectTrack.value
+  if (!track || !desktopStack.value) return
+
+  const cards = [...track.querySelectorAll('.project-carousel-card')]
+  const viewportHeight = window.innerHeight
+  const trackTop = track.getBoundingClientRect().top + window.scrollY
+  const trackStyles = window.getComputedStyle(track)
+  const trackPaddingTop = Number.parseFloat(trackStyles.paddingTop) || 0
+  const rowGap = Number.parseFloat(trackStyles.rowGap) || 0
+  let stackedHeight = 0
+
+  const progress = cards.map((card, index) => {
+    const stickyTop = 88 + index * 24
+    const travelDistance = Math.max(viewportHeight - stickyTop, 1)
+    const naturalTop = trackTop + trackPaddingTop + stackedHeight + rowGap * index
+    const cardTop = naturalTop - window.scrollY
+    stackedHeight += card.offsetHeight
+    return Math.max(0, Math.min(1, (viewportHeight - cardTop) / travelDistance))
+  })
+
+  let activeIndex = 0
+  let overallProgress = 0
+  progress.forEach((value, index) => {
+    if (value >= 0.5) activeIndex = index
+    if (value > 0) overallProgress = Math.max(overallProgress, (index + value) / cards.length)
+  })
+
+  activeProjectIndex.value = activeIndex
+  projectScrollProgress.value = overallProgress
+
+  cards.forEach((card, index) => {
+    const nextCardProgress = progress[index + 1] || 0
+    card.style.setProperty('--stack-scale', `${1 - nextCardProgress * 0.065}`)
+    card.style.setProperty('--stack-depth-y', `${-nextCardProgress * 14}px`)
+    card.style.setProperty('--stack-depth-rotate', `${-nextCardProgress * 2}deg`)
+  })
+}
+
+const scheduleStackDepthUpdate = () => {
+  if (stackFrame === null) stackFrame = window.requestAnimationFrame(updateStackDepth)
+}
+
+const handleWindowResize = () => {
+  resetAllCardTilts(0)
+  updateDesktopStack()
+  scheduleStackDepthUpdate()
+}
+
+const handleWindowScroll = () => {
+  resetAllCardTilts()
+  scheduleStackDepthUpdate()
+}
+
+const handleCardPointerMove = (event, index) => {
+  if (event.pointerType !== 'mouse') return
+  clearTiltResetTimer(index)
+  if (event.target instanceof Element && event.target.closest('a, button')) {
+    resetCardTilt(index)
+    return
+  }
+
+  const bounds = event.currentTarget.getBoundingClientRect()
+  if (!bounds.width || !bounds.height) return
+
+  pendingPointer = {
+    index,
+    x: event.clientX - bounds.left,
+    y: event.clientY - bounds.top,
+    width: bounds.width,
+    height: bounds.height,
+  }
+  if (pointerFrame === null) pointerFrame = window.requestAnimationFrame(updateCardTilt)
+}
+
 const projectDescription = (project, index) =>
   props.t.projectDescriptions[index] || project.description
 const projectStatus = (status) => props.t.projectStatuses[status] || status
 
 onMounted(() => {
-  if (!projectRoot.value || !('IntersectionObserver' in window)) return
-
-  sceneObserver = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
-        const index = Number(entry.target.dataset.index)
-        if (entry.isIntersecting) {
-          const sceneCenter = (entry.boundingClientRect.top + entry.boundingClientRect.bottom) / 2
-          intersectingScenes.set(index, Math.abs(sceneCenter - window.innerHeight / 2))
-        } else {
-          intersectingScenes.delete(index)
-        }
-      })
-
-      const closestScene = [...intersectingScenes.entries()].sort((a, b) => a[1] - b[1])[0]
-      if (closestScene) activeProject.value = closestScene[0]
-    },
-    {
-      rootMargin: '-35% 0px -35% 0px',
-      threshold: [0, 0.25, 0.5, 0.75, 1],
-    },
-  )
-
-  projectRoot.value.querySelectorAll('.story-scene').forEach((scene) => sceneObserver.observe(scene))
+  updateDesktopStack()
+  scheduleStackDepthUpdate()
+  window.addEventListener('scroll', handleWindowScroll, { passive: true })
+  window.addEventListener('resize', handleWindowResize, { passive: true })
 })
 
 onBeforeUnmount(() => {
-  sceneObserver?.disconnect()
-  intersectingScenes.clear()
+  if (pointerFrame !== null) window.cancelAnimationFrame(pointerFrame)
+  if (stackFrame !== null) window.cancelAnimationFrame(stackFrame)
+  tiltResetTimers.forEach((timer) => window.clearTimeout(timer))
+  tiltResetTimers.clear()
+  window.removeEventListener('scroll', handleWindowScroll)
+  window.removeEventListener('resize', handleWindowResize)
 })
 </script>
 
 <template>
-  <div ref="projectRoot" class="section-shell">
+  <div class="section-shell">
     <div class="mb-8 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
       <div>
         <p class="section-kicker">{{ props.t.selectedWork }}</p>
         <h2 class="section-title mt-2">{{ props.t.featuredWork }}</h2>
       </div>
-      <p class="max-w-md text-sm leading-6 text-slate-400 sm:text-right">
-        {{ props.t.projectsIntro }}
-      </p>
+        <div class="project-heading-aside">
+          <p class="max-w-md text-sm leading-6 text-slate-400 sm:text-right">
+            {{ props.t.projectsIntro }}
+          </p>
+          <div
+            v-if="desktopStack"
+            class="project-progress"
+            role="progressbar"
+            :aria-label="props.t.featuredWork"
+            :aria-valuemin="0"
+            :aria-valuemax="100"
+            :aria-valuenow="Math.round(projectScrollProgress * 100)"
+            :aria-valuetext="`${props.t.projectLabel} ${String(activeProjectIndex + 1).padStart(2, '0')} / ${String(projects.length).padStart(2, '0')}`"
+          >
+            <span class="project-progress-current">
+              {{ String(activeProjectIndex + 1).padStart(2, '0') }}
+            </span>
+            <span class="project-progress-track" aria-hidden="true">
+              <span :style="{ transform: `scaleX(${projectScrollProgress})` }"></span>
+            </span>
+            <span class="project-progress-total">
+              / {{ String(projects.length).padStart(2, '0') }}
+            </span>
+          </div>
+        </div>
     </div>
 
     <p class="carousel-hint mb-3 flex items-center justify-end gap-2 text-xs text-slate-500 sm:hidden">
@@ -66,92 +207,9 @@ onBeforeUnmount(() => {
       {{ props.t.carouselHint }}
     </p>
 
-    <div id="case-studies" class="scroll-mt-28">
-    <div class="hidden gap-10 lg:grid lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]">
-      <div class="sticky top-28 flex h-128 flex-col justify-center">
-        <div class="relative overflow-hidden rounded-3xl border border-white/10 bg-slate-950/30 p-3 shadow-2xl">
-          <Transition name="project-visual" mode="out-in">
-            <div
-              :key="activeProject"
-              :class="`project-stage-${projects[activeProject].visual}`"
-              class="project-visual-frame relative aspect-4/3 overflow-hidden rounded-2xl"
-            >
-              <ProjectArtwork
-                :project="projects[activeProject]"
-                :index="activeProject"
-                :t="props.t"
-                class="story-image"
-              />
-              <div class="absolute inset-x-5 bottom-5 flex items-center justify-between">
-                <span class="rounded-full border border-white/15 bg-slate-950/75 px-3 py-1.5 text-xs font-semibold text-cyan-100 backdrop-blur">
-                  {{ props.t.projectLabel }} {{ String(activeProject + 1).padStart(2, '0') }}
-                </span>
-                <span v-if="projects[activeProject].status" class="rounded-full bg-slate-950/75 px-3 py-1.5 text-xs text-amber-100 backdrop-blur">
-                  {{ projectStatus(projects[activeProject].status) }}
-                </span>
-              </div>
-            </div>
-          </Transition>
-        </div>
-        <div class="mt-5 flex items-center justify-between">
-          <ol class="flex gap-2" :aria-label="props.t.projectProgress">
-            <li v-for="(_, index) in projects" :key="index" :aria-current="index === activeProject ? 'step' : undefined">
-              <span
-                :class="['block h-1 rounded-full transition-all duration-300', index === activeProject ? 'w-10 bg-cyan-300' : 'w-4 bg-slate-700']"
-              ></span>
-            </li>
-          </ol>
-          <span class="font-mono text-xs tabular-nums text-slate-400" aria-live="polite">
-            {{ String(activeProject + 1).padStart(2, '0') }}
-            <span class="text-slate-600">/</span>
-            {{ String(projects.length).padStart(2, '0') }}
-          </span>
-        </div>
-      </div>
-
-      <div class="relative space-y-4 py-4">
-        <div class="story-line"></div>
-        <article
-          v-for="(project, index) in projects"
-          :key="`story-${project.name}`"
-          :data-index="index"
-          :aria-current="activeProject === index ? 'step' : undefined"
-          :class="{ 'is-active': activeProject === index }"
-          class="story-scene relative min-h-100 pl-8"
-        >
-          <span class="story-dot"></span>
-          <p class="story-kicker section-kicker">{{ props.t.projectLabel }} {{ String(index + 1).padStart(2, '0') }}</p>
-          <h3 class="story-title mt-3 text-3xl font-bold tracking-[-0.04em] text-white">{{ project.name }}</h3>
-          <p class="story-description mt-5 max-w-xl text-base leading-8 text-slate-300">{{ projectDescription(project, index) }}</p>
-          <p v-if="project.status" class="story-status mt-3 w-fit rounded-full border border-amber-200/15 bg-amber-200/6 px-2.5 py-1 text-xs font-medium text-amber-100">
-            {{ projectStatus(project.status) }}
-          </p>
-          <p class="story-stack-label mt-5 text-[0.65rem] font-semibold uppercase tracking-[0.15em] text-slate-500">{{ props.t.technologies }}</p>
-          <div class="story-tech mt-2 flex flex-wrap gap-2">
-            <span v-for="skill in project.skills" :key="skill" class="project-tech-chip rounded-full border border-cyan-100/10 bg-cyan-100/4.5 px-3 py-1 text-xs font-medium text-cyan-100/90">{{ skill }}</span>
-          </div>
-          <div class="mt-7 flex flex-wrap items-center gap-3">
-            <a :href="project.link" target="_blank" rel="noopener noreferrer" class="story-action button-secondary group">
-              {{ props.t.openProject }}
-              <i class="fa-solid fa-arrow-up-right-from-square text-xs transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" aria-hidden="true"></i>
-            </a>
-            <a
-              v-if="project.repo"
-              :href="project.repo"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="story-action button-secondary group border-white/10 bg-white/5 text-slate-200 hover:border-cyan-200/30 hover:bg-cyan-200/10 hover:text-cyan-100"
-            >
-              {{ props.t.sourceCode }}
-              <i class="fa-brands fa-github text-xs transition-transform group-hover:-translate-y-0.5" aria-hidden="true"></i>
-            </a>
-          </div>
-        </article>
-      </div>
-    </div>
-
     <div
-      class="project-carousel mobile-card-track lg:hidden"
+      ref="projectTrack"
+      class="project-carousel mobile-card-track grid grid-cols-1 gap-6 md:grid-cols-2 md:gap-8"
       role="region"
       :aria-label="props.t.featuredWork"
       tabindex="0"
@@ -159,15 +217,33 @@ onBeforeUnmount(() => {
       <article
         v-for="(project, index) in projects"
         :key="project.name"
-        class="reveal project-card project-carousel-card group surface-card overflow-hidden rounded-2xl transition duration-300 hover:-translate-y-1 hover:border-cyan-200/25 hover:shadow-xl hover:shadow-cyan-950/15"
+        :style="[cardStyles[index], { '--stack-index': index, '--stack-layer': index + 1 }]"
+        :class="{
+          'is-tilted': Boolean(cardStyles[index]),
+          'is-stack-positioned': desktopStack,
+        }"
+        class="reveal project-card project-3d-card project-carousel-card group glass-panel-3d overflow-hidden rounded-2xl"
+        @pointermove="handleCardPointerMove($event, index)"
+        @pointerleave="resetCardTilt(index)"
       >
-        <div class="h-48 overflow-hidden border-b border-white/10 sm:h-52">
-          <ProjectArtwork :project="project" :index="index" :t="props.t" compact class="transition-transform duration-300 group-hover:scale-[1.015]" />
+        <div class="project-card-glare" aria-hidden="true"></div>
+        <div class="project-card-art h-48 overflow-hidden border-b border-white/10 sm:h-52">
+          <ProjectArtwork
+            :project="project"
+            :index="index"
+            :t="props.t"
+            compact
+            class="project-artwork-preview transition-transform duration-300"
+          />
         </div>
 
         <div class="project-card-content flex min-w-0 flex-col p-5 sm:p-6">
-          <p class="mb-2 font-mono text-xs font-semibold tracking-[0.12em] text-cyan-200">{{ props.t.projectLabel }} {{ String(index + 1).padStart(2, '0') }}</p>
-          <h3 class="text-lg font-semibold leading-snug text-white sm:text-xl">{{ project.name }}</h3>
+          <p class="mb-2 font-mono text-xs font-semibold tracking-[0.12em] text-cyan-200">
+            {{ props.t.projectLabel }} {{ String(index + 1).padStart(2, '0') }}
+          </p>
+          <h3 class="text-lg font-semibold leading-snug text-white sm:text-xl">
+            {{ project.name }}
+          </h3>
           <p
             v-if="project.status"
             class="mt-2 w-fit rounded-full border border-amber-200/15 bg-amber-200/6 px-2.5 py-1 text-xs font-medium text-amber-100"
@@ -208,17 +284,20 @@ onBeforeUnmount(() => {
               :href="project.link"
               target="_blank"
               rel="noopener noreferrer"
-              class="inline-flex min-h-10 w-fit items-center gap-2 rounded-full border border-white/15 px-4 py-2 text-sm font-semibold text-slate-100 transition-colors hover:border-cyan-200/40 hover:bg-cyan-200/10 hover:text-cyan-100"
+              class="btn-3d inline-flex min-h-10 w-fit items-center gap-2 rounded-full border border-white/15 px-4 py-2 text-sm font-semibold text-slate-100 transition-colors hover:border-cyan-200/40 hover:bg-cyan-200/10 hover:text-cyan-100"
             >
               {{ props.t.openProject }}
-              <i class="fa-solid fa-arrow-up-right-from-square text-xs transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" aria-hidden="true"></i>
+              <i
+                class="project-external-arrow fa-solid fa-arrow-up-right-from-square text-xs"
+                aria-hidden="true"
+              ></i>
             </a>
             <a
               v-if="project.repo"
               :href="project.repo"
               target="_blank"
               rel="noopener noreferrer"
-              class="inline-flex min-h-10 w-fit items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm font-semibold text-slate-200 transition-colors hover:border-cyan-200/30 hover:bg-cyan-200/10 hover:text-cyan-100"
+              class="btn-3d inline-flex min-h-10 w-fit items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm font-semibold text-slate-200 transition-colors hover:border-cyan-200/30 hover:bg-cyan-200/10 hover:text-cyan-100"
             >
               {{ props.t.sourceCode }}
               <i class="fa-brands fa-github text-xs" aria-hidden="true"></i>
@@ -226,7 +305,6 @@ onBeforeUnmount(() => {
           </div>
         </div>
       </article>
-    </div>
     </div>
   </div>
 </template>
